@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_04</title>
+<style>
+  :root {
+    --bg: #f4f8fb;
+    --panel: #ffffff;
+    --ink: #18324a;
+    --muted: #5c7287;
+    --line: #d7e3ee;
+    --blue: #2c7be5;
+    --blue-soft: #eaf3ff;
+    --green: #2d9d78;
+    --green-soft: #e9f8f1;
+    --gold: #f5b301;
+    --gold-soft: #fff7df;
+    --coral: #e45b5b;
+    --coral-soft: #fff1f1;
+    --purple: #7a63d2;
+    --shadow: 0 10px 30px rgba(21, 59, 95, 0.10);
+    --radius: 22px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(180deg, #edf6ff 0%, #f8fbff 42%, #eef7f3 100%);
+    color: var(--ink);
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    min-height: 100%;
+  }
+  body { padding: 18px; }
+  button {
+    font: inherit;
+  }
+  .app {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .top-strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 12px 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+  }
+  .demerit-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .demerit-label {
+    font-weight: 800;
+    font-size: 15px;
+    color: var(--ink);
+  }
+  .demerit-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .leaf {
+    width: 42px;
+    height: 42px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    background: var(--green-soft);
+    border: 2px solid #bfe6d6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+  .leaf.used {
+    background: #eef2f6;
+    border-color: #d0dbe4;
+    opacity: 0.55;
+    transform: rotate(-20deg);
+    filter: grayscale(0.9);
+  }
+  .top-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .control-btn, .main-btn, .small-btn, .chip-btn {
+    border: none;
+    border-radius: 16px;
+    padding: 12px 16px;
+    background: var(--blue-soft);
+    color: var(--ink);
+    font-weight: 800;
+    cursor: pointer;
+    min-height: 48px;
+  }
+  .control-btn:hover, .main-btn:hover, .small-btn:hover, .chip-btn:hover {
+    transform: translateY(-1px);
+  }
+  .toggle-on {
+    background: #173b62;
+    color: #fff;
+  }
+  .shell {
+    background: rgba(255,255,255,0.92);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .header-band {
+    padding: 18px 22px 8px;
+  }
+  .title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .title-row h1 {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 30px);
+    color: #12324b;
+  }
+  .progress-wrap {
+    margin-top: 12px;
+  }
+  .progress-label {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    height: 12px;
+    background: #e6eef6;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue), #4ea6ff);
+    transition: width 0.35s ease;
+  }
+  .screen {
+    padding: 6px 22px 22px;
+  }
+  .instruction {
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.15;
+    margin: 8px 0 14px;
+    color: #102c44;
+    font-weight: 900;
+  }
+  .subtext {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+  .work-area {
+    display: grid;
+    gap: 16px;
+  }
+  .card, .visual-card, .feedback, .question-panel, .mini-popup, .retry-table, .summary-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 16px;
+  }
+  .visual-card {
+    background: linear-gradient(180deg, #fcfeff 0%, #f8fbff 100%);
+  }
+  .feedback {
+    min-height: 72px;
+    font-size: 18px;
+    line-height: 1.45;
+    display: none;
+  }
+  .feedback.show {
+    display: block;
+  }
+  .feedback.ok {
+    background: var(--green-soft);
+    border-color: #bfe6d6;
+  }
+  .feedback.bad {
+    background: var(--coral-soft);
+    border-color: #f1c0c0;
+  }
+  .choices {
+    display: grid;
+    gap: 12px;
+  }
+  .option-btn {
+    width: 100%;
+    text-align: left;
+    border: 2px solid #d7e6f4;
+    background: #fff;
+    border-radius: 18px;
+    padding: 16px;
+    min-height: 64px;
+    font-size: 18px;
+    line-height: 1.35;
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--ink);
+    transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+  }
+  .option-btn:hover {
+    transform: translateY(-1px);
+    border-color: #9cc5f2;
+  }
+  .option-btn.selected {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+  }
+  .option-btn.correct {
+    border-color: var(--green);
+    background: var(--green-soft);
+  }
+  .option-btn.wrong {
+    border-color: var(--coral);
+    background: var(--coral-soft);
+  }
+  .option-label {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #edf4fb;
+    margin-right: 12px;
+    font-weight: 900;
+    color: #24435f;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .diagram-frame {
+    background: linear-gradient(180deg, #f9fbff 0%, #f4fbf7 100%);
+    border: 1px solid #d9e8f1;
+    border-radius: 20px;
+    padding: 16px;
+    overflow: hidden;
+  }
+  .tiny-note {
+    color: var(--muted);
+    font-size: 15px;
+    margin-top: 10px;
+    line-height: 1.35;
+  }
+  .panel-toggle {
+    border: 2px solid #d9e7f2;
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-weight: 800;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    min-height: 52px;
+  }
+  .question-content {
+    margin-top: 12px;
+    display: grid;
+    gap: 12px;
+  }
+  .question-box {
+    border: 1px solid var(--line);
+    background: #fbfdff;
+    border-radius: 18px;
+    padding: 16px;
+    line-height: 1.45;
+    font-size: 17px;
+  }
+  .hl {
+    background: #fff5c2;
+    border-radius: 7px;
+    padding: 0 4px;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+  .question-table, .mini-answer-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  .question-table th, .question-table td,
+  .mini-answer-table th, .mini-answer-table td {
+    border: 1px solid #c8d8e8;
+    padding: 8px;
+    text-align: center;
+  }
+  .question-table th, .mini-answer-table th {
+    background: #f0f7ff;
+  }
+  .source-wrap img {
+    width: 100%;
+    height: auto;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    display: block;
+    background: #fff;
+  }
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 18px;
+  }
+  .main-btn {
+    background: linear-gradient(180deg, #2b7be6 0%, #1f67ca 100%);
+    color: #fff;
+    min-width: 132px;
+    padding: 14px 18px;
+    font-size: 18px;
+  }
+  .main-btn[disabled] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .small-btn {
+    background: #fff;
+    border: 2px solid #d9e7f2;
+  }
+  .helper-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .legend-pills {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .legend-pill {
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .legend-human { background: #edf4ff; color: #22496b; }
+  .legend-plant { background: #edf9f0; color: #236246; }
+  .legend-both { background: #fff5df; color: #7b5b00; }
+  .svg-wrap {
+    width: 100%;
+    min-height: 180px;
+  }
+  .flow-arrow {
+    stroke-dasharray: 12 8;
+    animation: dashMove 8s linear infinite;
+  }
+  .gentle-float {
+    animation: floaty 3s ease-in-out infinite;
+    transform-origin: center;
+  }
+  .gentle-float.delay {
+    animation-delay: 1s;
+  }
+  .fade-in {
+    animation: fadeIn 0.5s ease;
+  }
+  .fusion-dot-left {
+    animation: moveRight 2.8s ease-in-out infinite;
+  }
+  .fusion-dot-right {
+    animation: moveLeft 2.8s ease-in-out infinite;
+  }
+  .screen-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .mini-popup {
+    border-style: dashed;
+    background: #fffdf6;
+  }
+  .mini-popup h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+  }
+  .sort-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+  }
+  .sort-table th {
+    font-size: 15px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .sort-row-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 12px;
+  }
+  .sort-statement {
+    font-weight: 800;
+    line-height: 1.35;
+    margin-bottom: 10px;
+  }
+  .toggle-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .toggle-chip {
+    min-width: 116px;
+    padding: 12px 14px;
+    border: 2px solid #d7e6f4;
+    border-radius: 16px;
+    background: #fff;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .toggle-chip.on {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+  }
+  .toggle-chip.mismatch {
+    border-color: var(--coral);
+    background: var(--coral-soft);
+  }
+  .check-btn {
+    background: linear-gradient(180deg, #2ea37b 0%, #258966 100%);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    padding: 14px 16px;
+    min-height: 52px;
+    font-size: 18px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+  .answer-card-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .answer-card {
+    border: 2px solid #d7e6f4;
+    border-radius: 20px;
+    padding: 14px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+  }
+  .answer-card.selected {
+    border-color: var(--blue);
+    background: var(--blue-soft);
+  }
+  .answer-card.correct {
+    border-color: var(--green);
+    background: var(--green-soft);
+  }
+  .answer-card.wrong {
+    border-color: var(--coral);
+    background: var(--coral-soft);
+  }
+  .answer-card-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-weight: 900;
+  }
+  .answer-card-grid.two {
+    grid-template-columns: 1fr 1fr;
+  }
+  .retry-row-btn {
+    width: 100%;
+    border: 2px solid #d7e6f4;
+    border-radius: 16px;
+    background: #fff;
+    padding: 12px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .retry-row-btn.selected {
+    background: var(--blue-soft);
+    border-color: var(--blue);
+  }
+  .retry-row-btn.correct {
+    background: var(--green-soft);
+    border-color: var(--green);
+  }
+  .retry-row-btn.wrong {
+    background: var(--coral-soft);
+    border-color: var(--coral);
+  }
+  .summary-card {
+    background: linear-gradient(180deg, #fbfffe 0%, #f3fbff 100%);
+  }
+  .summary-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .summary-item {
+    border: 1px solid #d8e6f2;
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 18px;
+    background: #fff;
+    line-height: 1.35;
+  }
+  .footer-note {
+    color: var(--muted);
+    font-size: 14px;
+    text-align: center;
+    padding: 0 20px 20px;
+  }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+  .modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(8, 27, 43, 0.55);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 20;
+  }
+  .modal.show { display: flex; }
+  .modal-box {
+    max-width: 520px;
+    width: 100%;
+    background: #fff;
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+  .modal-box h2 {
+    margin-top: 0;
+    font-size: 32px;
+  }
+  .modal-box p {
+    font-size: 18px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .pill-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: #f2f7fc;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 800;
+    color: #2a4964;
+  }
+  @keyframes dashMove {
+    from { stroke-dashoffset: 160; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes moveRight {
+    0%, 100% { transform: translateX(0px); }
+    50% { transform: translateX(22px); }
+  }
+  @keyframes moveLeft {
+    0%, 100% { transform: translateX(0px); }
+    50% { transform: translateX(-22px); }
+  }
+  @media (max-width: 860px) {
+    .screen-grid, .two-col, .answer-card-grid.two {
+      grid-template-columns: 1fr;
+    }
+    .instruction {
+      font-size: 30px;
+    }
+  }
+  @media (max-width: 560px) {
+    body { padding: 10px; }
+    .screen, .header-band { padding-left: 14px; padding-right: 14px; }
+    .option-btn, .toggle-chip, .main-btn, .small-btn, .control-btn, .panel-toggle {
+      font-size: 17px;
+    }
+    .instruction { font-size: 26px; }
+    .subtext { font-size: 17px; }
+    .leaf {
+      width: 36px;
+      height: 36px;
+      font-size: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="top-strip" aria-label="Top controls">
+    <div class="demerit-block">
+      <div class="demerit-label">Focus leaves</div>
+      <div class="demerit-row" id="demeritRow" aria-live="polite"></div>
+    </div>
+    <div class="top-controls">
+      <button class="control-btn" id="toggleAutoRead" type="button" aria-pressed="false">Read aloud: Off</button>
+      <button class="control-btn" id="readNowBtn" type="button">Read this screen</button>
+      <button class="control-btn" id="restartBtn" type="button">Restart</button>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="header-band">
+      <div class="title-row">
+        <h1>Sexual reproduction in humans and plants</h1>
+        <div class="pill-row">
+          <div class="pill" id="screenPill">Screen 1 of 11</div>
+          <div class="pill">Average ability • age 10–11</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-label">Progress</div>
+        <div class="progress-bar" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+    </div>
+
+    <div class="screen" id="screenRoot"></div>
+    <div class="footer-note">Large tap targets. Read-aloud is available and starts off. The full question stays inside the interactive.</div>
+  </div>
+</div>
+
+<div class="modal" id="gameOverModal" aria-hidden="true">
+  <div class="modal-box">
+    <h2>Focus leaves finished</h2>
+    <p>The whole activity will restart so the learning path stays clear and fair.</p>
+    <p><strong>Restarting now…</strong></p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const sourceImage = "data:image/png;base64,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";
+
+  const screens = [
+    "intro", "task", "A", "B", "C", "D", "build", "match", "retry", "transfer", "done"
+  ];
+
+  const state = {
+    screenIndex: 0,
+    demeritsUsed: 0,
+    demeritsMax: 4,
+    autoRead: false,
+    questionOpen: false,
+    sourceOpen: false,
+    popupA: false,
+    popupB: false,
+    gameOver: false,
+    answered: {},
+    feedback: {},
+    nextUnlocked: {},
+    shuffles: {},
+    build: {
+      A: { human: false, plant: false },
+      B: { human: false, plant: false },
+      C: { human: false, plant: false },
+      D: { human: false, plant: false }
+    },
+    buildChecked: false,
+    buildSuccess: false,
+    buildClue: "",
+    currentSpeech: ""
+  };
+
+  const correctBuild = {
+    A: { human: false, plant: false },
+    B: { human: true, plant: true },
+    C: { human: true, plant: false },
+    D: { human: true, plant: true }
+  };
+
+  const screenRoot = document.getElementById("screenRoot");
+  const progressFill = document.getElementById("progressFill");
+  const screenPill = document.getElementById("screenPill");
+  const demeritRow = document.getElementById("demeritRow");
+  const toggleAutoReadBtn = document.getElementById("toggleAutoRead");
+  const readNowBtn = document.getElementById("readNowBtn");
+  const restartBtn = document.getElementById("restartBtn");
+  const gameOverModal = document.getElementById("gameOverModal");
+
+  const questionHTML = `
+    <div class="question-box">
+      <p><strong>Donna made some statements about sexual reproduction in humans and plants.</strong></p>
+      <p><strong>A:</strong> The ovule becomes the fruit after fertilisation.<br>
+      <strong>B:</strong> The female reproductive cell is found in the ovary.<br>
+      <strong>C:</strong> The male reproductive cells are produced in the testis.<br>
+      <strong>D:</strong> The male and female reproductive cells fuse during fertilisation.</p>
+      <p><strong>Which of the above statements are correct about each reproductive system?</strong></p>
+      <table class="question-table" aria-label="Original answer table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Reproduction in Humans</th>
+            <th>Reproduction in Plants</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>(1)</td><td>B, D</td><td>A, C</td></tr>
+          <tr><td>(2)</td><td>B, C, D</td><td>B, D</td></tr>
+          <tr><td>(3)</td><td>A, B, C</td><td>A, B, D</td></tr>
+          <tr><td>(4)</td><td>A, B, C, D</td><td>A, C, D</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const introQuestionHTML = `
+    <div class="question-box">
+      <p><strong>Donna made some statements about <span class="hl">sexual reproduction in humans and plants</span>.</strong></p>
+      <p><strong>A:</strong> The ovule becomes the fruit after fertilisation.<br>
+      <strong>B:</strong> The female reproductive cell is found in the ovary.<br>
+      <strong>C:</strong> The male reproductive cells are produced in the testis.<br>
+      <strong>D:</strong> The male and female reproductive cells fuse during fertilisation.</p>
+      <p><strong><span class="hl">Which of the above statements</span> are correct about each reproductive system?</strong></p>
+      <table class="question-table" aria-label="Original answer table">
+        <thead>
+          <tr>
+            <th></th>
+            <th><span class="hl">Reproduction in Humans</span></th>
+            <th><span class="hl">Reproduction in Plants</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>(1)</td><td>B, D</td><td>A, C</td></tr>
+          <tr><td>(2)</td><td>B, C, D</td><td>B, D</td></tr>
+          <tr><td>(3)</td><td>A, B, C</td><td>A, B, D</td></tr>
+          <tr><td>(4)</td><td>A, B, C, D</td><td>A, C, D</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  const matchCards = [
+    { id: "pattern_1", humans: "B, D", plants: "A, C" },
+    { id: "pattern_2", humans: "B, C, D", plants: "B, D" },
+    { id: "pattern_3", humans: "A, B, C", plants: "A, B, D" },
+    { id: "pattern_4", humans: "A, B, C, D", plants: "A, C, D" }
+  ];
+
+  const transferOptions = [
+    { id: "t1", text: "Male reproductive cells are produced in the testis.", correct: true },
+    { id: "t2", text: "The ovary becomes the fruit after fertilisation.", correct: false },
+    { id: "t3", text: "Male and female reproductive cells fuse during fertilisation.", correct: false },
+    { id: "t4", text: "The female reproductive cell is found in the ovary.", correct: false }
+  ];
+
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function fisherYates(items) {
+    const arr = items.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function shuffledOnce(key, items, avoidOriginal = true) {
+    if (state.shuffles[key]) return state.shuffles[key];
+    const original = items.map(item => item.id).join("|");
+    let shuffled = items.slice();
+    if (items.length > 1) {
+      do {
+        shuffled = fisherYates(items);
+      } while (avoidOriginal && shuffled.map(item => item.id).join("|") === original);
+    }
+    state.shuffles[key] = shuffled;
+    return shuffled;
+  }
+
+  function setSpeech(text) {
+    state.currentSpeech = text;
+    if (state.autoRead) {
+      speakNow();
+    }
+  }
+
+  function speakNow() {
+    if (!("speechSynthesis" in window) || !state.currentSpeech) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(state.currentSpeech);
+    utterance.rate = 0.95;
+    utterance.pitch = 1.02;
+    window.speechSynthesis.speak(utterance);
+  }
+
+  function updateTopStrip() {
+    demeritRow.innerHTML = "";
+    for (let i = 0; i < state.demeritsMax; i++) {
+      const leaf = document.createElement("span");
+      leaf.className = "leaf" + (i < state.demeritsUsed ? " used" : "");
+      leaf.setAttribute("aria-hidden", "true");
+      leaf.textContent = i < state.demeritsUsed ? "🍂" : "🌿";
+      demeritRow.appendChild(leaf);
+    }
+    const remaining = Math.max(0, state.demeritsMax - state.demeritsUsed);
+    demeritRow.setAttribute("aria-label", remaining + " focus leaves left");
+    toggleAutoReadBtn.textContent = "Read aloud: " + (state.autoRead ? "On" : "Off");
+    toggleAutoReadBtn.classList.toggle("toggle-on", state.autoRead);
+    toggleAutoReadBtn.setAttribute("aria-pressed", state.autoRead ? "true" : "false");
+  }
+
+  function addDemerit() {
+    state.demeritsUsed += 1;
+    updateTopStrip();
+    if (state.demeritsUsed >= state.demeritsMax) {
+      triggerGameOver();
+    }
+  }
+
+  function triggerGameOver() {
+    state.gameOver = true;
+    gameOverModal.classList.add("show");
+    gameOverModal.setAttribute("aria-hidden", "false");
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    setTimeout(() => {
+      resetApp();
+      gameOverModal.classList.remove("show");
+      gameOverModal.setAttribute("aria-hidden", "true");
+    }, 1800);
+  }
+
+  function resetApp() {
+    state.screenIndex = 0;
+    state.demeritsUsed = 0;
+    state.questionOpen = false;
+    state.sourceOpen = false;
+    state.popupA = false;
+    state.popupB = false;
+    state.gameOver = false;
+    state.answered = {};
+    state.feedback = {};
+    state.nextUnlocked = {};
+    state.shuffles = {};
+    state.build = {
+      A: { human: false, plant: false },
+      B: { human: false, plant: false },
+      C: { human: false, plant: false },
+      D: { human: false, plant: false }
+    };
+    state.buildChecked = false;
+    state.buildSuccess = false;
+    state.buildClue = "";
+    state.currentSpeech = "";
+    updateTopStrip();
+    render();
+  }
+
+  function feedbackBox(key) {
+    const info = state.feedback[key];
+    if (!info) return `<div class="feedback"></div>`;
+    return `<div class="feedback show ${info.type === "ok" ? "ok" : "bad"} fade-in">${info.text}</div>`;
+  }
+
+  function setFeedback(key, type, text) {
+    state.feedback[key] = { type, text };
+  }
+
+  function questionPanel() {
+    return `
+      <div class="question-panel">
+        <button class="panel-toggle" type="button" id="questionToggle" aria-expanded="${state.questionOpen ? "true" : "false"}">
+          ${state.questionOpen ? "Hide" : "Show"} full question
+        </button>
+        ${state.questionOpen ? `
+          <div class="question-content fade-in">
+            ${questionHTML}
+            <button class="panel-toggle" type="button" id="sourceToggle" aria-expanded="${state.sourceOpen ? "true" : "false"}">
+              ${state.sourceOpen ? "Hide" : "Show"} original screenshot
+            </button>
+            ${state.sourceOpen ? `
+              <div class="source-wrap fade-in">
+                <img src="${sourceImage}" alt="Original science question screenshot">
+              </div>
+            ` : ""}
+          </div>
+        ` : ""}
+      </div>
+    `;
+  }
+
+  function nextButtonHtml() {
+    const disabled = !state.nextUnlocked[screens[state.screenIndex]];
+    return `<button class="main-btn" id="nextBtn" type="button" ${disabled ? "disabled" : ""}>Next</button>`;
+  }
+
+  function renderChoiceButtons(config) {
+    const selected = state.answered[config.key];
+    const order = shuffledOnce(config.key, config.options);
+    return `
+      <div class="choices" role="group" aria-label="${escapeHtml(config.instruction)}">
+        ${order.map((option, index) => {
+          let classes = ["option-btn"];
+          if (selected === option.id) classes.push("selected");
+          const info = state.feedback[config.key];
+          if (info && selected === option.id) {
+            classes.push(option.correct ? "correct" : "wrong");
+          }
+          const label = String.fromCharCode(65 + index);
+          return `
+            <button class="${classes.join(" ")}" type="button" data-screen="${config.key}" data-option-id="${option.id}">
+              <span class="option-label">${label}</span>${escapeHtml(option.text)}
+            </button>
+          `;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  function handleSingleChoice(screenKey, optionId, demeritApplies = true) {
+    const config = singleChoiceConfigs[screenKey];
+    state.answered[screenKey] = optionId;
+    const choice = config.options.find(opt => opt.id === optionId);
+    if (!choice) return;
+    if (choice.correct) {
+      state.nextUnlocked[screenKey] = true;
+      setFeedback(screenKey, "ok", config.correctFeedback);
+    } else {
+      setFeedback(screenKey, "bad", config.wrongFeedback);
+      if (demeritApplies) addDemerit();
+    }
+    render();
+  }
+
+  function handleExactChoice(screenKey, optionId, correctId, goodText, badText, demeritApplies = false) {
+    state.answered[screenKey] = optionId;
+    if (optionId === correctId) {
+      state.nextUnlocked[screenKey] = true;
+      setFeedback(screenKey, "ok", goodText);
+    } else {
+      setFeedback(screenKey, "bad", badText);
+      if (demeritApplies) addDemerit();
+    }
+    render();
+  }
+
+  function toggleBuild(statement, group) {
+    state.buildChecked = false;
+    state.build[statement][group] = !state.build[statement][group];
+    render();
+  }
+
+  function clueForBuild() {
+    const mismatches = [];
+    for (const statement of ["A", "B", "C", "D"]) {
+      for (const group of ["human", "plant"]) {
+        if (state.build[statement][group] !== correctBuild[statement][group]) {
+          mismatches.push(`${statement}-${group}`);
+        }
+      }
+    }
+    if (mismatches.includes("A-human") || mismatches.includes("A-plant")) {
+      return "Check statement A again. It sounds plant-related, but the science idea in A is wrong.";
+    }
+    if (mismatches.includes("B-human") || mismatches.includes("B-plant") || mismatches.includes("D-human") || mismatches.includes("D-plant")) {
+      return "Remember: B and D work for both systems.";
+    }
+    if (mismatches.includes("C-human") || mismatches.includes("C-plant")) {
+      return "Look at the word testis again. That helps you place C.";
+    }
+    return "Check each statement one more time and compare both columns carefully.";
+  }
+
+  function checkBuild() {
+    state.buildChecked = true;
+    let success = true;
+    for (const statement of ["A", "B", "C", "D"]) {
+      for (const group of ["human", "plant"]) {
+        if (state.build[statement][group] !== correctBuild[statement][group]) {
+          success = false;
+        }
+      }
+    }
+    if (success) {
+      state.buildSuccess = true;
+      state.nextUnlocked.build = true;
+      setFeedback("build", "ok", "Good. Humans = B, C, D. Plants = B, D.");
+    } else {
+      state.buildSuccess = false;
+      setFeedback("build", "bad", clueForBuild());
+      addDemerit();
+    }
+    render();
+  }
+
+  const singleChoiceConfigs = {
+    task: {
+      key: "task",
+      instruction: "Tap what you need to do first.",
+      options: [
+        { id: "task_a", text: "Choose the one statement that is false.", correct: false },
+        { id: "task_b", text: "Work out which statements fit humans, plants, or both, then match the table.", correct: true },
+        { id: "task_c", text: "Count how many plant words you can find.", correct: false }
+      ],
+      correctFeedback: "Yes. First sort each statement. Then match the pattern to one answer row.",
+      wrongFeedback: "This question is about where each statement belongs, not just spotting one false sentence."
+    },
+    A: {
+      key: "A",
+      instruction: "Tap whether statement A is scientifically correct.",
+      options: [
+        { id: "A_yes", text: "Yes. Statement A is correct.", correct: false },
+        { id: "A_no", text: "No. Statement A is not correct.", correct: true }
+      ],
+      correctFeedback: "Yes. In plants, the ovule becomes the seed. The ovary becomes the fruit.",
+      wrongFeedback: "Look closely at what becomes the fruit after fertilisation."
+    },
+    B: {
+      key: "B",
+      instruction: "Tap where statement B fits.",
+      options: [
+        { id: "B_h", text: "Humans only", correct: false },
+        { id: "B_p", text: "Plants only", correct: false },
+        { id: "B_b", text: "Both humans and plants", correct: true }
+      ],
+      correctFeedback: "Yes. Both systems have an ovary linked to the female reproductive cells.",
+      wrongFeedback: "This screen is about where the female reproductive cells are found."
+    },
+    C: {
+      key: "C",
+      instruction: "Tap where statement C fits.",
+      options: [
+        { id: "C_h", text: "Humans only", correct: true },
+        { id: "C_p", text: "Plants only", correct: false },
+        { id: "C_b", text: "Both humans and plants", correct: false }
+      ],
+      correctFeedback: "Yes. Testis is part of the human male reproductive system.",
+      wrongFeedback: "Look again at the word testis."
+    },
+    D: {
+      key: "D",
+      instruction: "Tap where statement D fits.",
+      options: [
+        { id: "D_h", text: "Humans only", correct: false },
+        { id: "D_p", text: "Plants only", correct: false },
+        { id: "D_b", text: "Both humans and plants", correct: true }
+      ],
+      correctFeedback: "Yes. Fertilisation in both systems uses male and female reproductive cells.",
+      wrongFeedback: "Think about what fertilisation means in both systems."
+    },
+    transfer: {
+      key: "transfer",
+      instruction: "Tap the new statement that fits humans only.",
+      options: transferOptions,
+      correctFeedback: "Good. The testis clue makes this humans only.",
+      wrongFeedback: "Choose the statement that works only for humans, not for plants."
+    }
+  };
+
+  function screenIntro() {
+    state.nextUnlocked.intro = true;
+    setSpeech("Read the whole question. Then tap start. Donna made some statements about sexual reproduction in humans and plants. Which of the above statements are correct about each reproductive system?");
+    return `
+      <div class="work-area">
+        <div class="card">
+          <div class="instruction">Read the whole question. Then tap start.</div>
+          <div class="subtext">First understand what the question is asking. Do not jump to the answer rows yet.</div>
+          ${introQuestionHTML}
+        </div>
+        <div class="helper-row">
+          <button class="small-btn" id="introSourceBtn" type="button" aria-expanded="${state.sourceOpen ? "true" : "false"}">
+            ${state.sourceOpen ? "Hide" : "Show"} original screenshot
+          </button>
+        </div>
+        ${state.sourceOpen ? `
+          <div class="source-wrap visual-card fade-in">
+            <img src="${sourceImage}" alt="Original question screenshot">
+          </div>
+        ` : ""}
+        <div class="nav-row">
+          <div></div>
+          <button class="main-btn" id="startBtn" type="button">Start</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function taskVisual() {
+    return `
+      <div class="visual-card">
+        <div class="legend-pills">
+          <div class="legend-pill legend-human">Humans only</div>
+          <div class="legend-pill legend-plant">Plants only</div>
+          <div class="legend-pill legend-both">Both</div>
+        </div>
+        <div class="tiny-note">The job is to sort each statement first. Then match the final pattern.</div>
+      </div>
+    `;
+  }
+
+  function diagramA() {
+    return `
+      <div class="diagram-frame">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 220" width="100%" role="img" aria-label="Plant diagram showing ovule becomes seed and ovary becomes fruit">
+            <defs>
+              <linearGradient id="leafGrad" x1="0" x2="1">
+                <stop offset="0%" stop-color="#8ed3a9"/>
+                <stop offset="100%" stop-color="#4fa770"/>
+              </linearGradient>
+              <linearGradient id="fruitGrad" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffb36b"/>
+                <stop offset="100%" stop-color="#ff7b54"/>
+              </linearGradient>
+            </defs>
+            <rect x="20" y="22" rx="22" ry="22" width="160" height="70" fill="#edf9f0" stroke="#b9e2c8" />
+            <text x="100" y="52" font-size="24" text-anchor="middle" fill="#1f5f43" font-weight="800">Ovary</text>
+            <text x="100" y="79" font-size="18" text-anchor="middle" fill="#355f4a">becomes fruit</text>
+
+            <rect x="20" y="128" rx="22" ry="22" width="160" height="70" fill="#edf9f0" stroke="#b9e2c8" />
+            <text x="100" y="158" font-size="24" text-anchor="middle" fill="#1f5f43" font-weight="800">Ovule</text>
+            <text x="100" y="185" font-size="18" text-anchor="middle" fill="#355f4a">becomes seed</text>
+
+            <path class="flow-arrow" d="M185 58 H300" fill="none" stroke="#2c7be5" stroke-width="5" stroke-linecap="round"/>
+            <path class="flow-arrow" d="M185 164 H300" fill="none" stroke="#2c7be5" stroke-width="5" stroke-linecap="round"/>
+
+            <g class="gentle-float">
+              <circle cx="365" cy="57" r="32" fill="url(#fruitGrad)" />
+              <circle cx="395" cy="50" r="21" fill="#ff8d67" opacity="0.85" />
+              <rect x="376" y="18" width="8" height="24" rx="4" fill="#548f58" />
+              <text x="445" y="63" font-size="24" fill="#7a3e1d" font-weight="800">Fruit</text>
+            </g>
+
+            <g class="gentle-float delay">
+              <ellipse cx="372" cy="164" rx="36" ry="24" fill="#f2c26f" />
+              <ellipse cx="372" cy="164" rx="18" ry="11" fill="#e0a64a" />
+              <text x="444" y="170" font-size="24" fill="#7a5b22" font-weight="800">Seed</text>
+            </g>
+          </svg>
+        </div>
+        <div class="tiny-note">Look at the plant changes after fertilisation.</div>
+      </div>
+    `;
+  }
+
+  function diagramB() {
+    return `
+      <div class="diagram-frame">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 240" width="100%" role="img" aria-label="Two simple diagrams showing ovaries in humans and plants">
+            <rect x="22" y="18" width="230" height="200" rx="24" fill="#eef5ff" stroke="#c9dcf8"/>
+            <text x="137" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#1e4f87">Human</text>
+            <ellipse cx="96" cy="125" rx="28" ry="38" fill="#ffd5df" stroke="#e3a8b6"/>
+            <ellipse cx="178" cy="125" rx="28" ry="38" fill="#ffd5df" stroke="#e3a8b6"/>
+            <text x="96" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#7a3652">ovary</text>
+            <text x="178" y="130" text-anchor="middle" font-size="16" font-weight="800" fill="#7a3652">ovary</text>
+            <circle cx="96" cy="106" r="8" fill="#fff8c7"/>
+            <circle cx="178" cy="144" r="8" fill="#fff8c7"/>
+            <text x="137" y="188" text-anchor="middle" font-size="17" fill="#33546b">female reproductive</text>
+            <text x="137" y="208" text-anchor="middle" font-size="17" fill="#33546b">cells are in the ovary</text>
+
+            <rect x="308" y="18" width="230" height="200" rx="24" fill="#edf9f0" stroke="#c5e5d0"/>
+            <text x="423" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#1f6b46">Plant</text>
+            <g class="gentle-float">
+              <ellipse cx="423" cy="126" rx="50" ry="68" fill="url(#leafGrad)" />
+              <ellipse cx="423" cy="126" rx="28" ry="48" fill="#b7efc6"/>
+              <circle cx="423" cy="103" r="11" fill="#fff2b4" stroke="#d8c57a"/>
+              <circle cx="423" cy="127" r="11" fill="#fff2b4" stroke="#d8c57a"/>
+              <circle cx="423" cy="151" r="11" fill="#fff2b4" stroke="#d8c57a"/>
+              <text x="423" y="127" text-anchor="middle" font-size="18" font-weight="800" fill="#275c43">ovary</text>
+            </g>
+            <text x="423" y="188" text-anchor="middle" font-size="17" fill="#335f4a">ovules in the ovary</text>
+            <text x="423" y="208" text-anchor="middle" font-size="17" fill="#335f4a">contain female cells</text>
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  function diagramC() {
+    return `
+      <div class="diagram-frame">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 230" width="100%" role="img" aria-label="Human and plant comparison showing testis on human side only">
+            <rect x="24" y="20" width="246" height="186" rx="24" fill="#eef5ff" stroke="#c9dcf8"/>
+            <text x="147" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#1e4f87">Human male system</text>
+            <circle cx="113" cy="127" r="24" fill="#d4e7ff" stroke="#9cc2f2"/>
+            <circle cx="181" cy="127" r="24" fill="#d4e7ff" stroke="#9cc2f2"/>
+            <text x="113" y="133" text-anchor="middle" font-size="16" font-weight="800" fill="#1e4f87">testis</text>
+            <text x="181" y="133" text-anchor="middle" font-size="16" font-weight="800" fill="#1e4f87">testis</text>
+            <path d="M113 95 Q147 70 181 95" fill="none" stroke="#8bb5ef" stroke-width="6" stroke-linecap="round"/>
+            <text x="147" y="184" text-anchor="middle" font-size="18" fill="#35546b">male reproductive cells</text>
+            <text x="147" y="204" text-anchor="middle" font-size="18" fill="#35546b">are produced here</text>
+
+            <rect x="294" y="20" width="242" height="186" rx="24" fill="#f7fafc" stroke="#d9e3ea"/>
+            <text x="415" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#607183">Plant side</text>
+            <g opacity="0.45">
+              <ellipse cx="415" cy="126" rx="52" ry="68" fill="url(#leafGrad)" />
+              <text x="415" y="132" text-anchor="middle" font-size="18" font-weight="800" fill="#2a6c48">flower parts</text>
+            </g>
+            <text x="415" y="184" text-anchor="middle" font-size="18" fill="#607183">No testis in plant reproduction</text>
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  function diagramD() {
+    return `
+      <div class="diagram-frame">
+        <div class="svg-wrap">
+          <svg viewBox="0 0 560 230" width="100%" role="img" aria-label="Fertilisation in humans and plants">
+            <rect x="24" y="20" width="246" height="186" rx="24" fill="#eef5ff" stroke="#c9dcf8"/>
+            <text x="147" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#1e4f87">Humans</text>
+            <circle cx="110" cy="128" r="14" fill="#6ea8ff" class="fusion-dot-left"/>
+            <circle cx="184" cy="128" r="28" fill="#ffd79f" stroke="#efbf74" class="fusion-dot-right"/>
+            <text x="110" y="98" text-anchor="middle" font-size="18" fill="#1e4f87">male cell</text>
+            <text x="184" y="176" text-anchor="middle" font-size="18" fill="#8c6431">female cell</text>
+            <text x="147" y="205" text-anchor="middle" font-size="17" fill="#35546b">fuse during fertilisation</text>
+
+            <rect x="294" y="20" width="242" height="186" rx="24" fill="#edf9f0" stroke="#c5e5d0"/>
+            <text x="415" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#1f6b46">Plants</text>
+            <circle cx="378" cy="128" r="14" fill="#6ea8ff" class="fusion-dot-left"/>
+            <circle cx="452" cy="128" r="28" fill="#ffd79f" stroke="#efbf74" class="fusion-dot-right"/>
+            <text x="378" y="98" text-anchor="middle" font-size="18" fill="#1e4f87">male cell</text>
+            <text x="452" y="176" text-anchor="middle" font-size="18" fill="#8c6431">female cell</text>
+            <text x="415" y="205" text-anchor="middle" font-size="17" fill="#335f4a">fuse during fertilisation</text>
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderSingleChoiceScreen(config, visualHtml, popupHtml = "") {
+    setSpeech(config.instruction + " " + config.options.map(opt => opt.text).join(" "));
+    return `
+      <div class="work-area">
+        <div class="instruction">${escapeHtml(config.instruction)}</div>
+        <div class="screen-grid">
+          <div>
+            ${visualHtml}
+            ${popupHtml}
+          </div>
+          <div>
+            ${renderChoiceButtons(config)}
+            ${feedbackBox(config.key)}
+          </div>
+        </div>
+        ${questionPanel()}
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          ${nextButtonHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderBuildScreen() {
+    setSpeech("Put each correct statement into the right group. You can turn Human or Plant on for each statement. Then tap Check.");
+    const mismatchClass = (statement, group) => {
+      if (!state.buildChecked || state.buildSuccess) return "";
+      return state.build[statement][group] !== correctBuild[statement][group] ? " mismatch" : "";
+    };
+    return `
+      <div class="work-area">
+        <div class="instruction">Put each correct statement into the right group.</div>
+        <div class="subtext">Turn a group on if the statement belongs there. Leave it off if it does not belong there.</div>
+        <div class="card">
+          <div class="sort-table" role="table" aria-label="Build the groups">
+            <div class="legend-pills">
+              <div class="legend-pill legend-human">Humans</div>
+              <div class="legend-pill legend-plant">Plants</div>
+            </div>
+
+            ${["A","B","C","D"].map(statement => `
+              <div class="sort-row-card">
+                <div class="sort-statement"><strong>${statement}:</strong> ${statement === "A" ? "The ovule becomes the fruit after fertilisation." : statement === "B" ? "The female reproductive cell is found in the ovary." : statement === "C" ? "The male reproductive cells are produced in the testis." : "The male and female reproductive cells fuse during fertilisation."}</div>
+                <div class="toggle-cell">
+                  <button class="toggle-chip${state.build[statement].human ? " on" : ""}${mismatchClass(statement, "human")}" type="button" data-build="${statement}|human">Humans</button>
+                  <button class="toggle-chip${state.build[statement].plant ? " on" : ""}${mismatchClass(statement, "plant")}" type="button" data-build="${statement}|plant">Plants</button>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="helper-row" style="margin-top:14px;">
+            <button class="check-btn" id="checkBuildBtn" type="button">Check my groups</button>
+          </div>
+        </div>
+        ${feedbackBox("build")}
+        ${questionPanel()}
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          ${nextButtonHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderMatchScreen() {
+    setSpeech("Tap the answer card that matches your two groups.");
+    const cards = shuffledOnce("match", matchCards);
+    return `
+      <div class="work-area">
+        <div class="instruction">Tap the answer card that matches your two groups.</div>
+        <div class="subtext">Look at both columns together before you choose.</div>
+        <div class="answer-card-grid two">
+          ${cards.map((card, index) => {
+            const selected = state.answered.match === card.id;
+            const feedback = state.feedback.match;
+            let classes = "answer-card";
+            if (selected) classes += " selected";
+            if (feedback && selected) classes += card.id === "pattern_2" ? " correct" : " wrong";
+            const label = String.fromCharCode(65 + index);
+            return `
+              <button class="${classes}" type="button" data-match-id="${card.id}">
+                <div class="answer-card-head"><span class="option-label">${label}</span><span>Answer card</span></div>
+                <table class="mini-answer-table" aria-label="Answer card">
+                  <thead><tr><th>Humans</th><th>Plants</th></tr></thead>
+                  <tbody><tr><td>${card.humans}</td><td>${card.plants}</td></tr></tbody>
+                </table>
+              </button>
+            `;
+          }).join("")}
+        </div>
+        ${feedbackBox("match")}
+        ${questionPanel()}
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          ${nextButtonHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderRetryScreen() {
+    setSpeech("Now answer the original question.");
+    const selected = state.answered.retry;
+    return `
+      <div class="work-area">
+        <div class="instruction">Now answer the original question.</div>
+        <div class="subtext">This is the exact source order and the exact source labels.</div>
+        <div class="retry-table">
+          <table class="question-table" aria-label="Original answer table for retry">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Reproduction in Humans</th>
+                <th>Reproduction in Plants</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${[
+                {id:"r1", label:"(1)", humans:"B, D", plants:"A, C"},
+                {id:"r2", label:"(2)", humans:"B, C, D", plants:"B, D"},
+                {id:"r3", label:"(3)", humans:"A, B, C", plants:"A, B, D"},
+                {id:"r4", label:"(4)", humans:"A, B, C, D", plants:"A, C, D"}
+              ].map(row => {
+                let classes = "retry-row-btn";
+                if (selected === row.id) classes += " selected";
+                const info = state.feedback.retry;
+                if (info && selected === row.id) classes += row.id === "r2" ? " correct" : " wrong";
+                return `
+                  <tr>
+                    <td colspan="3" style="border:none; padding:8px 0;">
+                      <button class="${classes}" type="button" data-retry-id="${row.id}">
+                        <strong>${row.label}</strong> &nbsp; Humans: ${row.humans} &nbsp; | &nbsp; Plants: ${row.plants}
+                      </button>
+                    </td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+        ${feedbackBox("retry")}
+        ${questionPanel()}
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          ${nextButtonHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderTransferScreen() {
+    const config = singleChoiceConfigs.transfer;
+    setSpeech(config.instruction + " " + config.options.map(opt => opt.text).join(" "));
+    return `
+      <div class="work-area">
+        <div class="instruction">${escapeHtml(config.instruction)}</div>
+        <div class="subtext">This is a quick new check. Read carefully.</div>
+        ${renderChoiceButtons(config)}
+        ${feedbackBox("transfer")}
+        ${questionPanel()}
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          ${nextButtonHtml()}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDoneScreen() {
+    state.nextUnlocked.done = true;
+    setSpeech("Finished. Sort each statement carefully. Watch for both-systems ideas. Then match the pattern.");
+    return `
+      <div class="work-area">
+        <div class="instruction">Finished. Tap restart to try again.</div>
+        <div class="summary-card">
+          <div class="subtext" style="margin-bottom: 0;">Big idea:</div>
+          <div class="summary-list">
+            <div class="summary-item"><strong>1.</strong> Sort each statement before looking for the final answer row.</div>
+            <div class="summary-item"><strong>2.</strong> Watch for <em>both-systems</em> ideas like B and D.</div>
+            <div class="summary-item"><strong>3.</strong> Be careful with plant words. A sounds plant-related, but it is still wrong.</div>
+          </div>
+        </div>
+        <div class="nav-row">
+          <button class="small-btn" id="backBtn" type="button">Back</button>
+          <button class="main-btn" id="finishRestartBtn" type="button">Restart</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function render() {
+    updateTopStrip();
+    const screenKey = screens[state.screenIndex];
+    progressFill.style.width = ((state.screenIndex) / (screens.length - 1) * 100) + "%";
+    screenPill.textContent = "Screen " + (state.screenIndex + 1) + " of " + screens.length;
+
+    let html = "";
+    if (screenKey === "intro") {
+      html = screenIntro();
+    } else if (screenKey === "task") {
+      html = renderSingleChoiceScreen(singleChoiceConfigs.task, taskVisual());
+    } else if (screenKey === "A") {
+      html = renderSingleChoiceScreen(singleChoiceConfigs.A, diagramA(), `
+        <div class="mini-popup">
+          <button class="small-btn" id="togglePopupA" type="button" aria-expanded="${state.popupA ? "true" : "false"}">
+            ${state.popupA ? "Hide" : "Show"} quick reminder
+          </button>
+          ${state.popupA ? `<div class="fade-in" style="margin-top:12px;"><h3>After fertilisation in plants</h3><div>Ovule → seed<br>Ovary → fruit</div></div>` : ""}
+        </div>
+      `);
+    } else if (screenKey === "B") {
+      html = renderSingleChoiceScreen(singleChoiceConfigs.B, diagramB(), `
+        <div class="mini-popup">
+          <button class="small-btn" id="togglePopupB" type="button" aria-expanded="${state.popupB ? "true" : "false"}">
+            ${state.popupB ? "Hide" : "Show"} quick reminder
+          </button>
+          ${state.popupB ? `<div class="fade-in" style="margin-top:12px;"><h3>Shared word</h3><div>Plants and humans both have ovaries.</div></div>` : ""}
+        </div>
+      `);
+    } else if (screenKey === "C") {
+      html = renderSingleChoiceScreen(singleChoiceConfigs.C, diagramC());
+    } else if (screenKey === "D") {
+      html = renderSingleChoiceScreen(singleChoiceConfigs.D, diagramD());
+    } else if (screenKey === "build") {
+      html = renderBuildScreen();
+    } else if (screenKey === "match") {
+      html = renderMatchScreen();
+    } else if (screenKey === "retry") {
+      html = renderRetryScreen();
+    } else if (screenKey === "transfer") {
+      html = renderTransferScreen();
+    } else if (screenKey === "done") {
+      html = renderDoneScreen();
+    }
+
+    screenRoot.innerHTML = html;
+    attachEvents();
+  }
+
+  function attachEvents() {
+    document.querySelectorAll("[data-screen]").forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        const key = event.currentTarget.getAttribute("data-screen");
+        const optionId = event.currentTarget.getAttribute("data-option-id");
+        handleSingleChoice(key, optionId, !["transfer"].includes(key));
+      });
+    });
+
+    document.querySelectorAll("[data-build]").forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        const [statement, group] = event.currentTarget.getAttribute("data-build").split("|");
+        toggleBuild(statement, group);
+      });
+    });
+
+    const checkBuildBtn = document.getElementById("checkBuildBtn");
+    if (checkBuildBtn) {
+      checkBuildBtn.addEventListener("click", checkBuild);
+    }
+
+    document.querySelectorAll("[data-match-id]").forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        handleExactChoice("match", event.currentTarget.getAttribute("data-match-id"), "pattern_2",
+          "Yes. This pattern matches your two groups.",
+          "Compare both columns together. Humans should be B, C, D and plants should be B, D.",
+          true
+        );
+      });
+    });
+
+    document.querySelectorAll("[data-retry-id]").forEach(btn => {
+      btn.addEventListener("click", (event) => {
+        handleExactChoice("retry", event.currentTarget.getAttribute("data-retry-id"), "r2",
+          "Correct. Option 2 matches the original question.",
+          "Use the groups you built: Humans = B, C, D. Plants = B, D.",
+          false
+        );
+      });
+    });
+
+    const questionToggle = document.getElementById("questionToggle");
+    if (questionToggle) {
+      questionToggle.addEventListener("click", () => {
+        state.questionOpen = !state.questionOpen;
+        render();
+      });
+    }
+
+    const sourceToggle = document.getElementById("sourceToggle");
+    if (sourceToggle) {
+      sourceToggle.addEventListener("click", () => {
+        state.sourceOpen = !state.sourceOpen;
+        render();
+      });
+    }
+
+    const introSourceBtn = document.getElementById("introSourceBtn");
+    if (introSourceBtn) {
+      introSourceBtn.addEventListener("click", () => {
+        state.sourceOpen = !state.sourceOpen;
+        render();
+      });
+    }
+
+    const togglePopupA = document.getElementById("togglePopupA");
+    if (togglePopupA) {
+      togglePopupA.addEventListener("click", () => {
+        state.popupA = !state.popupA;
+        render();
+      });
+    }
+
+    const togglePopupB = document.getElementById("togglePopupB");
+    if (togglePopupB) {
+      togglePopupB.addEventListener("click", () => {
+        state.popupB = !state.popupB;
+        render();
+      });
+    }
+
+    const startBtn = document.getElementById("startBtn");
+    if (startBtn) {
+      startBtn.addEventListener("click", () => {
+        goNext();
+      });
+    }
+
+    const nextBtn = document.getElementById("nextBtn");
+    if (nextBtn) {
+      nextBtn.addEventListener("click", goNext);
+    }
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+      backBtn.addEventListener("click", goBack);
+    }
+
+    const finishRestartBtn = document.getElementById("finishRestartBtn");
+    if (finishRestartBtn) {
+      finishRestartBtn.addEventListener("click", resetApp);
+    }
+  }
+
+  function goNext() {
+    if (state.screenIndex < screens.length - 1) {
+      state.screenIndex += 1;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  function goBack() {
+    if (state.screenIndex > 0) {
+      state.screenIndex -= 1;
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  }
+
+  toggleAutoReadBtn.addEventListener("click", () => {
+    state.autoRead = !state.autoRead;
+    updateTopStrip();
+    if (state.autoRead) {
+      speakNow();
+    } else if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+    }
+  });
+
+  readNowBtn.addEventListener("click", speakNow);
+  restartBtn.addEventListener("click", resetApp);
+
+  window.addEventListener("beforeunload", () => {
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

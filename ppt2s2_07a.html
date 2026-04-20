@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_7a</title>
+<style>
+  :root{
+    --bg:#f7f8f2;
+    --panel:#ffffff;
+    --ink:#163021;
+    --muted:#5e6d63;
+    --line:#d8dfd7;
+    --green:#2d7a46;
+    --green-2:#e9f5ec;
+    --green-3:#cfe8d6;
+    --gold:#b88725;
+    --gold-2:#fff4d8;
+    --red:#b33a3a;
+    --red-2:#fdeaea;
+    --blue:#1d5f8f;
+    --blue-2:#eaf4fb;
+    --shadow:0 12px 32px rgba(20,48,33,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:
+      radial-gradient(circle at top left, #eef8ef 0, transparent 30%),
+      radial-gradient(circle at top right, #fff8e9 0, transparent 22%),
+      var(--bg);
+    color:var(--ink);
+  }
+  .app{
+    max-width:980px;
+    margin:0 auto;
+    padding:18px 16px 26px;
+  }
+  .topbar{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-bottom:14px;
+  }
+  .title-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  h1{
+    font-size:1.15rem;
+    margin:0;
+    letter-spacing:.02em;
+  }
+  .progress{
+    font-size:.95rem;
+    color:var(--muted);
+    font-weight:700;
+  }
+
+  .demerit-strip{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:10px 14px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px 14px;
+  }
+  .demerit-left{
+    display:flex;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .demerit-label{
+    font-weight:800;
+    color:var(--green);
+  }
+  .seed-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .seed-pill{
+    min-width:68px;
+    padding:6px 10px;
+    border-radius:999px;
+    border:2px solid var(--green-3);
+    background:var(--green-2);
+    font-weight:700;
+    text-align:center;
+    color:var(--green);
+  }
+  .seed-pill.lost{
+    border-color:#e7d8b2;
+    background:var(--gold-2);
+    color:#8a6720;
+  }
+  .demerit-note{
+    font-size:.92rem;
+    color:var(--muted);
+  }
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .control-btn,
+  .nav-btn,
+  .action-btn,
+  .option-btn,
+  .chip-btn,
+  .toggle-btn{
+    border:none;
+    border-radius:16px;
+    cursor:pointer;
+    font:inherit;
+    transition:transform .08s ease, box-shadow .12s ease, background .12s ease;
+  }
+  button:active{transform:translateY(1px)}
+  .control-btn, .toggle-btn{
+    padding:11px 14px;
+    background:var(--panel);
+    color:var(--ink);
+    border:2px solid var(--line);
+    box-shadow:var(--shadow);
+    font-weight:700;
+  }
+  .control-btn[aria-pressed="true"], .toggle-btn[aria-pressed="true"]{
+    background:var(--blue-2);
+    border-color:#b8d7ea;
+    color:var(--blue);
+  }
+  .control-btn[disabled]{
+    opacity:.5;
+    cursor:not-allowed;
+  }
+
+  .card{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+  .instruction{
+    font-size:1.55rem;
+    line-height:1.2;
+    font-weight:900;
+    margin:0 0 14px;
+    color:var(--ink);
+  }
+  .subtext{
+    font-size:1rem;
+    color:var(--muted);
+    margin:0 0 14px;
+  }
+  .question-image-wrap{
+    border:2px solid var(--line);
+    border-radius:18px;
+    background:#fdfdfd;
+    padding:10px;
+  }
+  .question-image-wrap img{
+    max-width:100%;
+    display:block;
+    margin:0 auto;
+    border-radius:12px;
+  }
+  .highlight-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:14px;
+  }
+  .highlight-chip{
+    background:var(--gold-2);
+    border:2px solid #efd78a;
+    color:#6e5214;
+    border-radius:999px;
+    padding:10px 14px;
+    font-weight:700;
+  }
+
+  .diagram-wrap{
+    background:#fbfcf7;
+    border:2px solid #dde6d9;
+    border-radius:22px;
+    padding:14px;
+    margin-bottom:12px;
+  }
+  .diagram-wrap svg{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+
+  .options-grid{
+    display:grid;
+    gap:12px;
+    grid-template-columns:repeat(2, minmax(0,1fr));
+    margin-top:14px;
+  }
+  .options-grid.one-col{
+    grid-template-columns:1fr;
+  }
+  .option-btn{
+    min-height:68px;
+    padding:14px 16px;
+    text-align:left;
+    background:#fff;
+    border:2px solid var(--line);
+    color:var(--ink);
+    font-weight:700;
+    font-size:1rem;
+    box-shadow:0 6px 16px rgba(20,48,33,.05);
+  }
+  .option-btn:hover{background:#fbfdfb}
+  .option-btn.selected{
+    background:var(--blue-2);
+    border-color:#8bc1e6;
+    color:var(--blue);
+  }
+  .option-btn.correct{
+    background:var(--green-2);
+    border-color:#93c8a3;
+    color:var(--green);
+  }
+  .option-btn.wrong{
+    background:var(--red-2);
+    border-color:#e1a5a5;
+    color:var(--red);
+  }
+  .option-note{
+    display:block;
+    font-weight:400;
+    color:var(--muted);
+    margin-top:4px;
+    font-size:.95rem;
+  }
+
+  .row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  .grow{flex:1 1 280px}
+  .sentence-box{
+    background:#f8fbf8;
+    border:2px dashed #b9cdbd;
+    border-radius:20px;
+    padding:16px;
+    font-size:1.15rem;
+    line-height:1.5;
+    font-weight:700;
+    margin-bottom:12px;
+  }
+  .blank{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:140px;
+    min-height:44px;
+    padding:8px 12px;
+    margin:4px 3px;
+    border-radius:14px;
+    border:2px dashed #9ab3a1;
+    background:#fff;
+    color:var(--muted);
+    vertical-align:middle;
+  }
+  .blank.filled{
+    border-style:solid;
+    background:var(--green-2);
+    color:var(--green);
+    border-color:#93c8a3;
+  }
+  .bank-label{
+    font-size:.96rem;
+    font-weight:800;
+    color:var(--muted);
+    margin-bottom:8px;
+  }
+  .chip-bank, .chosen-bank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .chip-btn{
+    padding:12px 14px;
+    background:#fff;
+    border:2px solid var(--line);
+    font-weight:700;
+    min-height:54px;
+  }
+  .chip-btn.selected{
+    background:var(--blue-2);
+    border-color:#8bc1e6;
+    color:var(--blue);
+  }
+  .chip-btn.used{
+    background:#edf2ed;
+    border-color:#d6ddd6;
+    color:#94a198;
+    cursor:not-allowed;
+  }
+  .chip-btn.correct{
+    background:var(--green-2);
+    border-color:#93c8a3;
+    color:var(--green);
+  }
+  .chip-btn.wrong{
+    background:var(--red-2);
+    border-color:#e1a5a5;
+    color:var(--red);
+  }
+
+  .feedback{
+    min-height:52px;
+    border-radius:16px;
+    padding:12px 14px;
+    margin-top:14px;
+    font-weight:700;
+    line-height:1.35;
+    display:flex;
+    align-items:center;
+  }
+  .feedback.neutral{
+    background:#f3f6f3;
+    border:2px solid #d8dfd7;
+    color:var(--muted);
+  }
+  .feedback.good{
+    background:var(--green-2);
+    border:2px solid #93c8a3;
+    color:var(--green);
+  }
+  .feedback.bad{
+    background:var(--red-2);
+    border:2px solid #e1a5a5;
+    color:var(--red);
+  }
+
+  .button-row{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:16px;
+  }
+  .nav-row{
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+    margin-top:18px;
+  }
+  .nav-left, .nav-right{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .nav-btn, .action-btn{
+    padding:13px 18px;
+    font-weight:800;
+    min-height:54px;
+  }
+  .nav-btn{
+    background:#eef3ef;
+    color:var(--ink);
+    border:2px solid #d1dbd2;
+  }
+  .nav-btn.primary, .action-btn.primary{
+    background:var(--green);
+    color:#fff;
+    border:2px solid var(--green);
+  }
+  .action-btn{
+    background:#f2f7f3;
+    color:var(--ink);
+    border:2px solid #d1dbd2;
+  }
+  .nav-btn[disabled], .action-btn[disabled]{
+    opacity:.42;
+    cursor:not-allowed;
+  }
+
+  .question-panel{
+    margin-top:14px;
+  }
+  .question-toggle{
+    width:100%;
+    text-align:left;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+  .question-panel-body{
+    margin-top:10px;
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+    box-shadow:var(--shadow);
+  }
+  .question-panel-body p{
+    margin:.25rem 0 .65rem;
+    line-height:1.5;
+  }
+
+  .guess-frame{
+    font-size:1.2rem;
+    font-weight:800;
+    line-height:1.55;
+    background:#fbfcf7;
+    border:2px solid #dde6d9;
+    border-radius:20px;
+    padding:16px;
+    margin-bottom:12px;
+  }
+  .guess-word{
+    color:var(--blue);
+    letter-spacing:.04em;
+  }
+  .guess-input-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .guess-input{
+    flex:1 1 240px;
+    min-height:54px;
+    border-radius:16px;
+    border:2px solid var(--line);
+    padding:12px 14px;
+    font:inherit;
+    font-weight:700;
+    font-size:1.05rem;
+  }
+  .guess-hint{
+    font-size:1rem;
+    color:var(--muted);
+    margin-top:8px;
+  }
+
+  .complete-box{
+    border-radius:22px;
+    background:linear-gradient(180deg, #f4fbf5 0%, #ffffff 100%);
+    border:2px solid #bdddbe;
+    padding:18px;
+  }
+  .complete-box h2{
+    margin:0 0 8px;
+    font-size:1.35rem;
+  }
+  .completion-message{
+    margin-top:14px;
+    padding:16px;
+    border-radius:18px;
+    border:2px solid #bdddbe;
+    background:#f4fbf5;
+    font-weight:700;
+    line-height:1.45;
+  }
+
+  .overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(22,48,33,.44);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:20;
+  }
+  .overlay-card{
+    max-width:460px;
+    width:100%;
+    background:#fff;
+    border-radius:24px;
+    padding:22px;
+    border:2px solid #ead9a8;
+    box-shadow:0 18px 50px rgba(0,0,0,.18);
+    text-align:center;
+  }
+  .overlay-card h2{
+    margin:0 0 10px;
+    color:#8a6720;
+  }
+  .overlay-card p{
+    margin:0;
+    line-height:1.5;
+    font-weight:700;
+  }
+
+  @media (max-width:760px){
+    .instruction{font-size:1.35rem}
+    .options-grid{grid-template-columns:1fr}
+    .button-row, .nav-row{flex-direction:column}
+    .nav-left, .nav-right{width:100%}
+    .nav-left .nav-btn, .nav-right .nav-btn, .nav-right .action-btn{width:100%}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+const QUESTION_IMAGE = "data:image/png;base64,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";
+const ORIGINAL_QUESTION_TEXT = "The diagram below shows a process in the reproduction of plants. State the name of this process and list the conditions needed for it to take place.";
+const TYPED_QUESTION_LINES = [
+  "The diagram below shows a process in the reproduction of plants.",
+  "State the name of this process and list the conditions needed for it to take place."
+];
+
+const SCREENS = [
+  { id:"entry", kind:"entry", title:"Question 7(a)", instruction:"Read the whole question. Then tap I have read it." },
+  { id:"taskDemand", kind:"multi", title:"Find the 2 jobs", instruction:"Tap the 2 things you must answer.", prompt:"Select 2 choices. Then tap Check.", choices:[
+      {id:"d_name", text:"name of this process", correct:true},
+      {id:"d_cond", text:"conditions needed", correct:true},
+      {id:"d_draw", text:"draw the next stage", correct:false},
+      {id:"d_where", text:"say where the seed came from", correct:false}
+    ]
+  },
+  { id:"processName", kind:"single", title:"Name the process", instruction:"Tap the name of the process.", prompt:"This clean diagram shows the same seed process.", choices:[
+      {id:"p_germination", text:"germination", correct:true},
+      {id:"p_pollination", text:"pollination", correct:false},
+      {id:"p_fertilisation", text:"fertilisation", correct:false},
+      {id:"p_dispersal", text:"seed dispersal", correct:false}
+    ]
+  },
+  { id:"conditions", kind:"multi", title:"Needed conditions", instruction:"Select all the things the seed needs for this process.", prompt:"Choose only the needed conditions. Then tap Check.", choices:[
+      {id:"c_water", text:"water", correct:true},
+      {id:"c_oxygen", text:"oxygen", correct:true},
+      {id:"c_temp", text:"suitable temperature", correct:true},
+      {id:"c_light", text:"light", correct:false},
+      {id:"c_soil", text:"soil", correct:false},
+      {id:"c_warmth", text:"warmth", correct:false}
+    ]
+  },
+  { id:"wording", kind:"single", title:"Use the accepted wording", instruction:"Tap the wording that can get the mark.", prompt:"One phrase sounds close, but only one is accepted here.", choices:[
+      {id:"w_temp", text:"suitable temperature", correct:true},
+      {id:"w_warmth", text:"warmth", correct:false}
+    ]
+  },
+  { id:"buildProcess", kind:"fillOne", title:"Build the first part", instruction:"Fill the process blank.", sentencePrefix:"The process is", sentenceSuffix:".", choices:[
+      {id:"b_germination", text:"germination", correct:true},
+      {id:"b_germinate", text:"germinate", correct:false},
+      {id:"b_growth", text:"growth", correct:false},
+      {id:"b_sprouting", text:"sprouting", correct:false}
+    ]
+  },
+  { id:"buildConditions", kind:"fillMany", title:"Build the conditions part", instruction:"Fill the 3 condition boxes.", prompt:"Tap 3 choices. Tap a filled box to remove it. Then tap Check.", choices:[
+      {id:"bc_water", text:"water", correct:true},
+      {id:"bc_oxygen", text:"oxygen", correct:true},
+      {id:"bc_temp", text:"a suitable temperature", correct:true},
+      {id:"bc_light", text:"light", correct:false},
+      {id:"bc_soil", text:"soil", correct:false},
+      {id:"bc_warmth", text:"warmth", correct:false}
+    ]
+  },
+  { id:"guessWords", kind:"guess", title:"Guess the science words", instruction:"Type each missing science word.", words:[
+      {id:"g1", word:"germination", lead:"The process is ", trail:".", hintLabel:"Process word"},
+      {id:"g2", word:"water", lead:"Seeds need ", trail:", oxygen and suitable temperature.", hintLabel:"First needed condition"},
+      {id:"g3", word:"oxygen", lead:"Seeds need water, ", trail:" and suitable temperature.", hintLabel:"Second needed condition"},
+      {id:"g4", word:"suitable", lead:"Seeds need water, oxygen and ", trail:" temperature.", hintLabel:"First temperature word"},
+      {id:"g5", word:"temperature", lead:"Seeds need water, oxygen and suitable ", trail:".", hintLabel:"Second temperature word"}
+    ]
+  },
+  { id:"transfer", kind:"singleFinal", title:"Quick transfer check", instruction:"Tap the best answer.", prompt:"A seed is kept in air at a suitable temperature, but no water is given. What should you say?", choices:[
+      {id:"t_water", text:"It will not germinate because water is missing.", correct:true},
+      {id:"t_light", text:"It will not germinate because light is missing.", correct:false},
+      {id:"t_enough", text:"It will germinate because air and temperature are enough.", correct:false},
+      {id:"t_soil", text:"It will germinate because soil is not needed.", correct:false}
+    ]
+  }
+];
+
+const state = {
+  currentScreen: 0,
+  maxDemerits: 5,
+  demeritsLeft: 5,
+  readAloudOn: false,
+  questionPanelOpen: true,
+  screens: {},
+  gameOver: false,
+  restarting: false
+};
+
+function resetAll(){
+  state.currentScreen = 0;
+  state.demeritsLeft = state.maxDemerits;
+  state.questionPanelOpen = true;
+  state.screens = {};
+  state.gameOver = false;
+  state.restarting = false;
+  window.speechSynthesis?.cancel();
+  render();
+}
+function currentScreenObj(){
+  return SCREENS[state.currentScreen];
+}
+function getScreenState(id){
+  if(!state.screens[id]){
+    state.screens[id] = {
+      solved:false,
+      feedback:"",
+      feedbackType:"neutral",
+      order:null,
+      selected:[],
+      selectedOne:null,
+      checked:false,
+      attemptCount:0,
+      wrongSet:new Set(),
+      fillOne:null,
+      fillMany:[],
+      currentGuessIndex:0,
+      revealCount:1,
+      guessInput:"",
+      completedWords:[]
+    };
+  }
+  return state.screens[id];
+}
+function shuffleArray(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function getOrderedChoices(screen){
+  const s = getScreenState(screen.id);
+  if(!s.order){
+    let ids = screen.choices.map(c => c.id);
+    ids = shuffleArray(ids);
+    s.order = ids;
+  }
+  return s.order.map(id => screen.choices.find(c => c.id === id));
+}
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
+}
+function seedStatusHtml(){
+  const used = state.maxDemerits - state.demeritsLeft;
+  let html = "";
+  for(let i=0;i<state.maxDemerits;i++){
+    const lost = i < used;
+    html += `<div class="seed-pill ${lost ? 'lost' : ''}">${lost ? '🌰 Lost' : '🌱 Safe'}</div>`;
+  }
+  return html;
+}
+function demeritApplies(screenId){
+  return ["taskDemand","processName","conditions","wording","buildProcess","buildConditions"].includes(screenId);
+}
+function conditionsScreenFeedback(selectedIds){
+  const picked = new Set(selectedIds || []);
+  const notes = [];
+  if(picked.has("c_light")){
+    notes.push("Light is not needed for germination because the young plant uses food stored in its seed leaves at first.");
+  }
+  if(picked.has("c_soil")){
+    notes.push("Soil is not needed for germination. A seed can still germinate on wet cotton wool if it has water, oxygen and a suitable temperature.");
+  }
+  if(picked.has("c_warmth")){
+    notes.push("“Warmth” is too vague here. Use the accepted wording “suitable temperature”.");
+  }
+  if(!picked.has("c_water")){
+    notes.push("Water is one needed condition, so add water.");
+  }
+  if(!picked.has("c_oxygen")){
+    notes.push("Oxygen is one needed condition, so add oxygen.");
+  }
+  if(!picked.has("c_temp")){
+    notes.push("The third needed condition is a suitable temperature.");
+  }
+  return notes.join(" ");
+}
+function spendDemerit(){
+  state.demeritsLeft -= 1;
+  if(state.demeritsLeft <= 0){
+    state.demeritsLeft = 0;
+    triggerRestart();
+  }
+}
+function triggerRestart(){
+  state.gameOver = true;
+  render();
+  if(state.restarting) return;
+  state.restarting = true;
+  setTimeout(() => {
+    resetAll();
+  }, 1700);
+}
+function toggleQuestionPanel(force){
+  if(typeof force === "boolean"){
+    state.questionPanelOpen = force;
+  }else{
+    state.questionPanelOpen = !state.questionPanelOpen;
+  }
+  render();
+}
+function speakCurrent(){
+  if(!state.readAloudOn || !("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const screen = currentScreenObj();
+  const s = getScreenState(screen.id);
+  const parts = [];
+  parts.push(screen.title);
+  parts.push(screen.instruction);
+  if(screen.prompt) parts.push(screen.prompt);
+  if(screen.kind === "entry"){
+    parts.push(TYPED_QUESTION_LINES.join(" "));
+  }
+  if(["single","singleFinal","multi","fillOne","fillMany"].includes(screen.kind)){
+    if(screen.choices) parts.push(screen.choices.map(c => c.text).join(". "));
+  }
+  if(screen.kind === "guess"){
+    const gw = screen.words[s.currentGuessIndex];
+    if(gw){
+      parts.push(gw.hintLabel);
+      parts.push(formatGuessFrame(screen, s));
+    }
+  }
+  if(s.feedback) parts.push(s.feedback);
+  const utter = new SpeechSynthesisUtterance(parts.join(". "));
+  utter.rate = .95;
+  utter.pitch = 1;
+  window.speechSynthesis.speak(utter);
+}
+function highlightText(){
+  return `
+    <div class="highlight-row">
+      <div class="highlight-chip">name of this process</div>
+      <div class="highlight-chip">conditions needed</div>
+    </div>
+  `;
+}
+function cleanDiagramSvg(){
+  return `
+  <svg viewBox="0 0 860 280" role="img" aria-label="A clean seed germination sequence">
+    <defs>
+      <linearGradient id="seedFill" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#3d2a20"></stop>
+        <stop offset="100%" stop-color="#6a4933"></stop>
+      </linearGradient>
+      <linearGradient id="rootFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff"></stop>
+        <stop offset="100%" stop-color="#f0f5ef"></stop>
+      </linearGradient>
+      <linearGradient id="shootFill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#5aa15d"></stop>
+        <stop offset="100%" stop-color="#3f7d44"></stop>
+      </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(20,48,33,.18)"/>
+      </filter>
+    </defs>
+    <rect x="0" y="0" width="860" height="280" rx="24" fill="#fbfcf7"/>
+    <path d="M180 136 C198 114, 247 102, 259 136 C271 170, 228 194, 193 179 C171 170, 167 150, 180 136 Z" fill="url(#seedFill)" filter="url(#shadow)"></path>
+    <path d="M205 110 C220 130, 224 150, 219 176" stroke="#120d0b" stroke-width="4" stroke-linecap="round" fill="none" opacity=".5"></path>
+
+    <g transform="translate(285,0)">
+      <path d="M180 136 C198 114, 247 102, 259 136 C271 170, 228 194, 193 179 C171 170, 167 150, 180 136 Z" fill="url(#seedFill)" filter="url(#shadow)"></path>
+      <path d="M205 110 C220 130, 224 150, 219 176" stroke="#120d0b" stroke-width="4" stroke-linecap="round" fill="none" opacity=".5"></path>
+      <path d="M222 178 C220 198, 210 211, 212 228 C214 242, 220 248, 218 258" stroke="url(#rootFill)" stroke-width="9" stroke-linecap="round" fill="none"></path>
+      <path d="M218 232 C229 238, 235 244, 238 253" stroke="url(#rootFill)" stroke-width="7" stroke-linecap="round" fill="none"></path>
+    </g>
+
+    <g transform="translate(570,0)">
+      <path d="M180 136 C198 114, 247 102, 259 136 C271 170, 228 194, 193 179 C171 170, 167 150, 180 136 Z" fill="url(#seedFill)" filter="url(#shadow)"></path>
+      <path d="M205 110 C220 130, 224 150, 219 176" stroke="#120d0b" stroke-width="4" stroke-linecap="round" fill="none" opacity=".5"></path>
+      <path d="M222 178 C221 205, 211 216, 213 231 C214 244, 220 248, 217 258" stroke="url(#rootFill)" stroke-width="9" stroke-linecap="round" fill="none"></path>
+      <path d="M218 234 C232 242, 239 248, 242 259" stroke="url(#rootFill)" stroke-width="7" stroke-linecap="round" fill="none"></path>
+      <path d="M230 130 C243 118, 252 106, 254 92 C255 78, 246 66, 249 57" stroke="url(#shootFill)" stroke-width="8" stroke-linecap="round" fill="none"></path>
+      <path d="M249 58 C262 60, 270 55, 279 46" stroke="url(#shootFill)" stroke-width="7" stroke-linecap="round" fill="none"></path>
+      <path d="M248 57 C242 46, 237 41, 228 36" stroke="url(#shootFill)" stroke-width="7" stroke-linecap="round" fill="none"></path>
+    </g>
+
+    <path d="M290 140 L350 140" stroke="#6f7d73" stroke-width="8" stroke-linecap="round"></path>
+    <path d="M346 124 L372 140 L346 156" fill="none" stroke="#6f7d73" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+
+    <path d="M575 140 L635 140" stroke="#6f7d73" stroke-width="8" stroke-linecap="round"></path>
+    <path d="M631 124 L657 140 L631 156" fill="none" stroke="#6f7d73" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+  </svg>`;
+}
+function feedbackClass(type){
+  return type === "good" ? "good" : type === "bad" ? "bad" : "neutral";
+}
+function renderFeedback(screenState){
+  const text = screenState.feedback || " ";
+  return `<div class="feedback ${feedbackClass(screenState.feedbackType)}">${escapeHtml(text)}</div>`;
+}
+function renderQuestionPanel(){
+  const label = state.questionPanelOpen ? "Hide full question" : "Show full question";
+  return `
+    <div class="question-panel">
+      <button class="toggle-btn question-toggle" id="question-toggle" aria-pressed="${state.questionPanelOpen ? 'true':'false'}">
+        <span>${label}</span>
+        <span>${state.questionPanelOpen ? "▲" : "▼"}</span>
+      </button>
+      ${state.questionPanelOpen ? `
+        <div class="question-panel-body">
+          <p><strong>Original question</strong></p>
+          <p>${escapeHtml(TYPED_QUESTION_LINES[0])}</p>
+          <p>${escapeHtml(TYPED_QUESTION_LINES[1])}</p>
+          <div class="question-image-wrap" style="margin-top:8px;">
+            <img src="${QUESTION_IMAGE}" alt="Original worksheet question about seed germination">
+          </div>
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+function canGoNext(){
+  const screen = currentScreenObj();
+  const s = getScreenState(screen.id);
+  if(screen.kind === "singleFinal") return false;
+  return !!s.solved;
+}
+function formatGuessFrame(screen, s){
+  const currentWordData = screen.words[s.currentGuessIndex];
+  if(!currentWordData) return "";
+  const word = currentWordData.word;
+  const reveal = Math.min(Math.max(1, s.revealCount), word.length);
+  const partial = word.slice(0, reveal) + "_".repeat(Math.max(0, word.length - reveal));
+  return `${currentWordData.lead}${partial}${currentWordData.trail}`;
+}
+function renderEntry(screen, s){
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      <p class="subtext">Start by reading the original question carefully.</p>
+      <div class="question-image-wrap">
+        <img src="${QUESTION_IMAGE}" alt="Original worksheet question about a seed process">
+      </div>
+      ${highlightText()}
+      <div class="button-row">
+        <button class="action-btn primary" id="entry-read">I have read it</button>
+      </div>
+      ${renderFeedback(s)}
+    </div>
+  `;
+}
+function renderMulti(screen, s){
+  const ordered = getOrderedChoices(screen);
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      <p class="subtext">${escapeHtml(screen.prompt)}</p>
+      <div class="options-grid">
+        ${ordered.map(choice => {
+          const selected = s.selected.includes(choice.id);
+          let cls = "option-btn";
+          if(selected) cls += " selected";
+          if(s.checked && selected && choice.correct) cls += " correct";
+          if(s.checked && selected && !choice.correct) cls += " wrong";
+          if(s.checked && !selected && choice.correct && s.solved) cls += " correct";
+          return `<button class="${cls}" data-role="multi-choice" data-id="${choice.id}">${escapeHtml(choice.text)}</button>`;
+        }).join("")}
+      </div>
+      <div class="button-row">
+        <button class="action-btn" id="check-multi">Check</button>
+      </div>
+      ${renderFeedback(s)}
+    </div>
+  `;
+}
+function renderSingle(screen, s, isFinal=false){
+  const ordered = getOrderedChoices(screen);
+  const extra = screen.id === "processName"
+    ? `<div class="diagram-wrap">${cleanDiagramSvg()}</div>`
+    : "";
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      ${screen.prompt ? `<p class="subtext">${escapeHtml(screen.prompt)}</p>` : ""}
+      ${extra}
+      <div class="options-grid ${screen.choices.length <= 3 ? 'one-col' : ''}">
+        ${ordered.map(choice => {
+          const selected = s.selectedOne === choice.id;
+          let cls = "option-btn";
+          if(selected) cls += " selected";
+          if(selected && s.checked && choice.correct) cls += " correct";
+          if(selected && s.checked && !choice.correct) cls += " wrong";
+          if(s.solved && choice.correct) cls += " correct";
+          return `<button class="${cls}" data-role="single-choice" data-id="${choice.id}">${escapeHtml(choice.text)}</button>`;
+        }).join("")}
+      </div>
+      ${renderFeedback(s)}
+      ${isFinal && s.solved ? `<div class="completion-message">Well done. Missing one needed condition stops germination. You identified the process, used the accepted wording, and checked the needed conditions.</div>` : ""}
+    </div>
+  `;
+}
+function renderFillOne(screen, s){
+  const ordered = getOrderedChoices(screen);
+  const selectedChoice = screen.choices.find(c => c.id === s.fillOne);
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      <div class="sentence-box">
+        ${escapeHtml(screen.sentencePrefix)} <span class="blank ${selectedChoice ? 'filled' : ''}" id="fillone-blank">${selectedChoice ? escapeHtml(selectedChoice.text) : "tap a word"}</span>${escapeHtml(screen.sentenceSuffix)}
+      </div>
+      <div class="bank-label">Word bank</div>
+      <div class="chip-bank">
+        ${ordered.map(choice => {
+          const selected = s.fillOne === choice.id;
+          let cls = "chip-btn";
+          if(selected) cls += " selected";
+          if(selected && s.checked && choice.correct) cls += " correct";
+          if(selected && s.checked && !choice.correct) cls += " wrong";
+          if(s.solved && choice.correct) cls += " correct";
+          return `<button class="${cls}" data-role="fillone-choice" data-id="${choice.id}">${escapeHtml(choice.text)}</button>`;
+        }).join("")}
+      </div>
+      <div class="button-row">
+        <button class="action-btn" id="check-fillone">Check</button>
+        <button class="action-btn" id="clear-fillone">Clear</button>
+      </div>
+      ${renderFeedback(s)}
+    </div>
+  `;
+}
+function renderFillMany(screen, s){
+  const ordered = getOrderedChoices(screen);
+  const chosen = s.fillMany.map(id => screen.choices.find(c => c.id === id)).filter(Boolean);
+  const boxes = [0,1,2].map(i => {
+    const choice = chosen[i];
+    return `<button class="blank ${choice ? 'filled' : ''}" data-role="remove-fillmany" data-index="${i}">${choice ? escapeHtml(choice.text) : "tap a choice"}</button>`;
+  }).join("");
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      <p class="subtext">${escapeHtml(screen.prompt)}</p>
+      <div class="sentence-box">
+        Needed conditions:<br>${boxes}
+      </div>
+      <div class="bank-label">Condition bank</div>
+      <div class="chip-bank">
+        ${ordered.map(choice => {
+          const used = s.fillMany.includes(choice.id);
+          let cls = "chip-btn";
+          if(used) cls += " used";
+          if(used && s.checked && choice.correct) cls += " correct";
+          if(used && s.checked && !choice.correct) cls += " wrong";
+          if(s.solved && choice.correct && s.fillMany.includes(choice.id)) cls += " correct";
+          return `<button class="${cls}" data-role="fillmany-choice" data-id="${choice.id}" ${used ? 'disabled' : ''}>${escapeHtml(choice.text)}</button>`;
+        }).join("")}
+      </div>
+      <div class="button-row">
+        <button class="action-btn" id="check-fillmany">Check</button>
+        <button class="action-btn" id="clear-fillmany">Clear all</button>
+      </div>
+      ${renderFeedback(s)}
+    </div>
+  `;
+}
+function renderGuess(screen, s){
+  const allDone = s.currentGuessIndex >= screen.words.length;
+  if(allDone){
+    return `
+      <div class="card">
+        <p class="instruction">${escapeHtml(screen.instruction)}</p>
+        <div class="complete-box">
+          <h2>You rebuilt the full answer.</h2>
+          <p><strong>The process is germination.</strong></p>
+          <p><strong>Seeds need water, oxygen and a suitable temperature.</strong></p>
+        </div>
+        <div class="feedback good" style="margin-top:14px;">Good. Now use the idea once more in a new question.</div>
+      </div>
+    `;
+  }
+  const wordData = screen.words[s.currentGuessIndex];
+  const word = wordData.word;
+  const reveal = Math.min(Math.max(1, s.revealCount), word.length);
+  const shown = word.slice(0, reveal) + "_".repeat(Math.max(0, word.length - reveal));
+  return `
+    <div class="card">
+      <p class="instruction">${escapeHtml(screen.instruction)}</p>
+      <div class="guess-frame">
+        ${escapeHtml(wordData.lead)}<span class="guess-word">${escapeHtml(shown)}</span>${escapeHtml(wordData.trail)}
+      </div>
+      <p class="subtext">${escapeHtml(wordData.hintLabel)}</p>
+      <div class="guess-input-row">
+        <input class="guess-input" id="guess-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" value="${escapeHtml(s.guessInput)}" placeholder="Type the whole word">
+        <button class="action-btn primary" id="submit-guess">Check word</button>
+      </div>
+      <div class="guess-hint">Wrong tries here do not use any demerits. One more letter will appear each time.</div>
+      ${renderFeedback(s)}
+    </div>
+  `;
+}
+function renderMainCard(){
+  const screen = currentScreenObj();
+  const s = getScreenState(screen.id);
+  if(screen.kind === "entry") return renderEntry(screen, s);
+  if(screen.kind === "multi") return renderMulti(screen, s);
+  if(screen.kind === "single") return renderSingle(screen, s, false);
+  if(screen.kind === "fillOne") return renderFillOne(screen, s);
+  if(screen.kind === "fillMany") return renderFillMany(screen, s);
+  if(screen.kind === "guess") return renderGuess(screen, s);
+  if(screen.kind === "singleFinal") return renderSingle(screen, s, true);
+  return "";
+}
+function renderNav(){
+  const isFirst = state.currentScreen === 0;
+  const isLast = state.currentScreen === SCREENS.length - 1;
+  const nextDisabled = !canGoNext();
+  return `
+    <div class="nav-row">
+      <div class="nav-left">
+        <button class="nav-btn" id="back-btn" ${isFirst ? "disabled" : ""}>Back</button>
+      </div>
+      <div class="nav-right">
+        ${!isLast ? `<button class="nav-btn primary" id="next-btn" ${nextDisabled ? "disabled" : ""}>Next</button>` : `<button class="nav-btn" id="restart-btn">Start again</button>`}
+      </div>
+    </div>
+  `;
+}
+function render(){
+  const root = document.getElementById("app");
+  const screen = currentScreenObj();
+  const s = getScreenState(screen.id);
+  if(screen.id !== "entry" && !state.screens["entry"]?.solved && state.currentScreen > 0){
+    state.questionPanelOpen = false;
+  }
+  if(state.currentScreen > 0 && state.questionPanelOpen === true && !state.screens["questionOpenedByUser"]){
+    // leave as current user choice once toggled; auto-collapse after entry
+    state.questionPanelOpen = false;
+  }
+  root.innerHTML = `
+    <div class="topbar">
+      <div class="title-row">
+        <h1>ppt2s2_7a · Germination interactive</h1>
+        <div class="progress">Screen ${state.currentScreen + 1} of ${SCREENS.length}</div>
+      </div>
+
+      <div class="demerit-strip">
+        <div class="demerit-left">
+          <div class="demerit-label">Seed tray chances</div>
+          <div class="seed-row">${seedStatusHtml()}</div>
+        </div>
+        <div class="demerit-note">You have 5 chances. Wrong checked attempts in the teaching screens use 1 chance. Guess-the-word and the final transfer check do not.</div>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn" id="toggle-read" aria-pressed="${state.readAloudOn ? 'true' : 'false'}">
+          ${state.readAloudOn ? '🔊 Read-aloud is ON' : '🔈 Read-aloud is OFF'}
+        </button>
+        <button class="control-btn" id="speak-btn" ${state.readAloudOn ? '' : 'disabled'}>Read this screen</button>
+      </div>
+    </div>
+
+    ${renderMainCard()}
+    ${screen.id !== "entry" ? renderQuestionPanel() : ""}
+    ${renderNav()}
+    ${state.gameOver ? `
+      <div class="overlay">
+        <div class="overlay-card">
+          <h2>Seed tray empty</h2>
+          <p>All chances were used up. The whole interactive is restarting now so you can try again carefully.</p>
+        </div>
+      </div>
+    ` : ""}
+  `;
+  bindEvents();
+}
+function markQuestionUserToggled(){
+  state.screens["questionOpenedByUser"] = {solved:true};
+}
+function bindEvents(){
+  const screen = currentScreenObj();
+  const s = getScreenState(screen.id);
+
+  document.getElementById("toggle-read")?.addEventListener("click", () => {
+    state.readAloudOn = !state.readAloudOn;
+    if(!state.readAloudOn) window.speechSynthesis?.cancel();
+    render();
+  });
+  document.getElementById("speak-btn")?.addEventListener("click", speakCurrent);
+
+  document.getElementById("question-toggle")?.addEventListener("click", () => {
+    markQuestionUserToggled();
+    toggleQuestionPanel();
+  });
+
+  document.getElementById("back-btn")?.addEventListener("click", () => {
+    if(state.currentScreen > 0){
+      state.currentScreen -= 1;
+      render();
+    }
+  });
+  document.getElementById("next-btn")?.addEventListener("click", () => {
+    if(canGoNext() && state.currentScreen < SCREENS.length - 1){
+      state.currentScreen += 1;
+      render();
+    }
+  });
+  document.getElementById("restart-btn")?.addEventListener("click", resetAll);
+
+  if(screen.kind === "entry"){
+    document.getElementById("entry-read")?.addEventListener("click", () => {
+      s.solved = true;
+      s.feedback = "Good. Now find what the question wants.";
+      s.feedbackType = "good";
+      render();
+    });
+  }
+
+  document.querySelectorAll('[data-role="multi-choice"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(s.solved) return;
+      const id = btn.dataset.id;
+      if(s.selected.includes(id)){
+        s.selected = s.selected.filter(x => x !== id);
+      }else{
+        s.selected = [...s.selected, id];
+      }
+      s.checked = false;
+      s.feedback = "";
+      s.feedbackType = "neutral";
+      render();
+    });
+  });
+  document.getElementById("check-multi")?.addEventListener("click", () => {
+    const correctIds = screen.choices.filter(c => c.correct).map(c => c.id).sort();
+    const picked = [...s.selected].sort();
+    s.checked = true;
+    s.attemptCount += 1;
+    const correct = picked.length === correctIds.length && picked.every((id, i) => id === correctIds[i]);
+    if(correct){
+      s.solved = true;
+      if(screen.id === "taskDemand"){
+        s.feedback = "Yes. You need the process name and the needed conditions.";
+      }else{
+        s.feedback = "Yes. The seed needs water, oxygen and a suitable temperature.";
+      }
+      s.feedbackType = "good";
+    }else{
+      if(demeritApplies(screen.id)) spendDemerit();
+      if(screen.id === "taskDemand"){
+        s.feedback = "This question has 2 jobs. Look again at the words in the question.";
+      }else{
+        s.feedback = conditionsScreenFeedback(s.selected);
+      }
+      s.feedbackType = "bad";
+    }
+    render();
+  });
+
+  document.querySelectorAll('[data-role="single-choice"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(s.solved) return;
+      const choice = screen.choices.find(c => c.id === btn.dataset.id);
+      s.selectedOne = choice.id;
+      s.checked = true;
+      if(choice.correct){
+        s.solved = true;
+        s.feedbackType = "good";
+        if(screen.id === "processName"){
+          s.feedback = "Yes. A seed starting to grow is germination.";
+        }else if(screen.id === "wording"){
+          s.feedback = "Yes. Use suitable temperature.";
+        }else{
+          s.feedback = "Yes. Missing one needed condition stops germination.";
+        }
+      }else{
+        s.attemptCount += 1;
+        if(demeritApplies(screen.id)) spendDemerit();
+        s.feedbackType = "bad";
+        if(screen.id === "processName"){
+          s.feedback = "These flower processes happen earlier. This diagram shows a seed starting to grow.";
+        }else if(screen.id === "wording"){
+          s.feedback = "Warmth sounds close, but the accepted science wording here is suitable temperature.";
+        }else{
+          s.feedback = "Check which needed condition is missing.";
+        }
+      }
+      render();
+    });
+  });
+
+  document.querySelectorAll('[data-role="fillone-choice"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(s.solved) return;
+      s.fillOne = btn.dataset.id;
+      s.checked = false;
+      s.feedback = "";
+      s.feedbackType = "neutral";
+      render();
+    });
+  });
+  document.getElementById("clear-fillone")?.addEventListener("click", () => {
+    if(s.solved) return;
+    s.fillOne = null;
+    s.checked = false;
+    s.feedback = "";
+    s.feedbackType = "neutral";
+    render();
+  });
+  document.getElementById("check-fillone")?.addEventListener("click", () => {
+    s.checked = true;
+    s.attemptCount += 1;
+    const choice = screen.choices.find(c => c.id === s.fillOne);
+    if(choice && choice.correct){
+      s.solved = true;
+      s.feedback = "Yes. That is the process name.";
+      s.feedbackType = "good";
+    }else{
+      spendDemerit();
+      s.feedback = "Use the exact name of the process.";
+      s.feedbackType = "bad";
+    }
+    render();
+  });
+
+  document.querySelectorAll('[data-role="fillmany-choice"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(s.solved) return;
+      if(s.fillMany.length >= 3) return;
+      const id = btn.dataset.id;
+      if(!s.fillMany.includes(id)){
+        s.fillMany = [...s.fillMany, id];
+      }
+      s.checked = false;
+      s.feedback = "";
+      s.feedbackType = "neutral";
+      render();
+    });
+  });
+  document.querySelectorAll('[data-role="remove-fillmany"]').forEach(btn => {
+    btn.addEventListener("click", () => {
+      if(s.solved) return;
+      const index = Number(btn.dataset.index);
+      if(Number.isInteger(index) && s.fillMany[index]){
+        s.fillMany.splice(index, 1);
+      }
+      s.checked = false;
+      s.feedback = "";
+      s.feedbackType = "neutral";
+      render();
+    });
+  });
+  document.getElementById("clear-fillmany")?.addEventListener("click", () => {
+    if(s.solved) return;
+    s.fillMany = [];
+    s.checked = false;
+    s.feedback = "";
+    s.feedbackType = "neutral";
+    render();
+  });
+  document.getElementById("check-fillmany")?.addEventListener("click", () => {
+    s.checked = true;
+    s.attemptCount += 1;
+    const correctSet = screen.choices.filter(c => c.correct).map(c => c.id).sort();
+    const selectedSet = [...s.fillMany].sort();
+    const correct = selectedSet.length === correctSet.length && selectedSet.every((id, i) => id === correctSet[i]);
+    if(correct){
+      s.solved = true;
+      s.feedback = "Good. Those are the 3 needed conditions.";
+      s.feedbackType = "good";
+    }else{
+      spendDemerit();
+      s.feedback = s.attemptCount >= 2
+        ? "The correct set is water, oxygen and a suitable temperature."
+        : "You need all 3 needed conditions only.";
+      s.feedbackType = "bad";
+    }
+    render();
+  });
+
+  document.getElementById("guess-input")?.addEventListener("input", (e) => {
+    s.guessInput = e.target.value;
+  });
+  document.getElementById("guess-input")?.addEventListener("keydown", (e) => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      document.getElementById("submit-guess")?.click();
+    }
+  });
+  document.getElementById("submit-guess")?.addEventListener("click", () => {
+    const wordData = screen.words[s.currentGuessIndex];
+    if(!wordData) return;
+    const cleaned = (s.guessInput || "").trim().toLowerCase();
+    if(cleaned === wordData.word.toLowerCase()){
+      s.completedWords.push(wordData.word);
+      s.guessInput = "";
+      s.feedback = "Good. That word is correct.";
+      s.feedbackType = "good";
+      s.currentGuessIndex += 1;
+      s.revealCount = 1;
+      if(s.currentGuessIndex >= screen.words.length){
+        s.solved = true;
+        s.feedback = "Good. Now use the idea once more in a new question.";
+        s.feedbackType = "good";
+      }
+    }else{
+      s.feedback = "Try again. One more letter is showing now.";
+      s.feedbackType = "bad";
+      s.revealCount = Math.min(wordData.word.length, s.revealCount + 1);
+    }
+    render();
+    document.getElementById("guess-input")?.focus();
+  });
+}
+render();
+</script>
+</body>
+</html>

@@ -1,0 +1,1771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_08</title>
+<style>
+  :root{
+    --bg:#f4fbff;
+    --panel:#ffffff;
+    --ink:#13324b;
+    --muted:#5d7285;
+    --accent:#1f78b4;
+    --accent-2:#0f5f8f;
+    --soft:#dff3ff;
+    --soft-2:#eef8ff;
+    --line:#c7e0ef;
+    --good:#1f8f63;
+    --good-bg:#e7fff5;
+    --bad:#b33b3b;
+    --bad-bg:#fff0f0;
+    --warn:#9a6a11;
+    --warn-bg:#fff7df;
+    --peg:#8b5a2b;
+    --towel:#8fd3ff;
+    --towel-dark:#5fb5ec;
+    --shadow:0 12px 28px rgba(23,61,92,.10);
+    --radius:22px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    background:
+      radial-gradient(circle at top left, #ffffff 0, #f8fdff 28%, #eef8ff 60%, #eaf7ff 100%);
+    color:var(--ink);
+  }
+
+  .app{
+    max-width:980px;
+    margin:0 auto;
+    padding:16px 14px 30px;
+  }
+
+  .top-strip{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:12px 14px;
+    display:grid;
+    gap:10px;
+    margin-bottom:14px;
+  }
+
+  .top-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  .brand{
+    font-weight:900;
+    font-size:1.1rem;
+    color:var(--accent-2);
+  }
+
+  .small-note{
+    color:var(--muted);
+    font-size:.95rem;
+  }
+
+  .controls{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+
+  .toggle, .mini-btn{
+    border:none;
+    border-radius:14px;
+    padding:12px 16px;
+    font-weight:800;
+    font-size:1rem;
+    cursor:pointer;
+    min-height:48px;
+  }
+
+  .toggle{
+    background:var(--soft);
+    color:var(--accent-2);
+  }
+
+  .toggle.on{
+    background:var(--accent);
+    color:white;
+  }
+
+  .mini-btn{
+    background:#eff7fc;
+    color:var(--ink);
+    border:2px solid var(--line);
+  }
+
+  .demerit-row{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  .demerit-label{
+    font-weight:900;
+    color:var(--peg);
+    font-size:1rem;
+  }
+
+  .peg-track{
+    flex:1 1 260px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+
+  .peg{
+    width:32px;
+    height:18px;
+    border-radius:8px;
+    background:linear-gradient(180deg,#b57d47,#8b5a2b);
+    border:2px solid #6e431d;
+    position:relative;
+  }
+
+  .peg::after{
+    content:"";
+    position:absolute;
+    right:5px;
+    top:4px;
+    width:8px;
+    height:6px;
+    border-radius:3px;
+    background:#e7c190;
+    opacity:.75;
+  }
+
+  .peg.lost{
+    opacity:.22;
+    filter:grayscale(100%);
+  }
+
+  .screen{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    padding:18px 18px 16px;
+  }
+
+  .screen-header{
+    display:flex;
+    gap:10px;
+    justify-content:space-between;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .progress{
+    font-weight:900;
+    color:var(--accent-2);
+    background:var(--soft-2);
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:8px 12px;
+    min-height:44px;
+    display:flex;
+    align-items:center;
+  }
+
+  .title{
+    font-size:1.28rem;
+    margin:0;
+    color:var(--accent-2);
+  }
+
+  .instruction{
+    margin:14px 0 8px;
+    font-size:1.45rem;
+    line-height:1.25;
+    font-weight:900;
+    color:#0d4467;
+  }
+
+  .subtext{
+    margin:0 0 14px;
+    color:var(--muted);
+    font-size:1rem;
+    line-height:1.45;
+  }
+
+  .card{
+    background:#f8fcff;
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:14px;
+  }
+
+  .question-card{
+    display:grid;
+    gap:14px;
+  }
+
+  .question-text{
+    font-size:1.06rem;
+    line-height:1.58;
+  }
+
+  .highlight{
+    background:#fff1a8;
+    padding:1px 4px;
+    border-radius:6px;
+    font-weight:800;
+  }
+
+  .diagram-wrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+  }
+
+  .option-grid{
+    display:grid;
+    gap:12px;
+    margin-top:10px;
+  }
+
+  .option-card, .big-action, .chip, .slot, .hotspot-btn, .word-btn{
+    min-height:60px;
+    border-radius:18px;
+    border:2px solid var(--line);
+    background:white;
+    cursor:pointer;
+    font-size:1.04rem;
+    line-height:1.35;
+    color:var(--ink);
+    padding:14px 16px;
+    font-weight:800;
+    text-align:left;
+    transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+  }
+
+  .option-card:hover, .big-action:hover, .chip:hover, .slot:hover, .hotspot-btn:hover, .word-btn:hover, .mini-btn:hover, .toggle:hover, .next-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 8px 18px rgba(18,69,102,.10);
+  }
+
+  .option-card.selected, .chip.selected, .slot.filled, .word-btn.selected{
+    border-color:var(--accent);
+    background:var(--soft);
+  }
+
+  .option-card.correct, .hotspot-correct, .chip.correct, .slot.correct{
+    border-color:var(--good);
+    background:var(--good-bg);
+  }
+
+  .option-card.incorrect, .chip.incorrect, .slot.incorrect{
+    border-color:var(--bad);
+    background:var(--bad-bg);
+  }
+
+  .action-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:14px;
+    align-items:center;
+  }
+
+  .check-btn, .next-btn{
+    min-height:54px;
+    border:none;
+    border-radius:16px;
+    padding:14px 18px;
+    font-weight:900;
+    font-size:1rem;
+    cursor:pointer;
+  }
+
+  .check-btn{
+    background:var(--accent);
+    color:#fff;
+  }
+
+  .next-btn{
+    background:#ddeef8;
+    color:#7e9ab0;
+  }
+
+  .next-btn.ready{
+    background:var(--good);
+    color:white;
+  }
+
+  .feedback{
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:18px;
+    border:2px solid transparent;
+    font-weight:800;
+    line-height:1.45;
+    display:none;
+  }
+
+  .feedback.show{display:block}
+  .feedback.good{
+    background:var(--good-bg);
+    border-color:#bde9d8;
+    color:#156647;
+  }
+  .feedback.bad{
+    background:var(--bad-bg);
+    border-color:#f1cdcd;
+    color:#8a2828;
+  }
+  .feedback.info{
+    background:var(--warn-bg);
+    border-color:#f0ddb0;
+    color:#855b0c;
+  }
+
+  .question-panel{
+    margin-top:18px;
+    border-top:2px dashed var(--line);
+    padding-top:14px;
+  }
+
+  .panel-toggle{
+    width:100%;
+    border:none;
+    background:transparent;
+    color:var(--accent-2);
+    font-weight:900;
+    font-size:1rem;
+    text-align:left;
+    padding:8px 0;
+    cursor:pointer;
+  }
+
+  .panel-body{
+    display:none;
+    margin-top:8px;
+  }
+  .panel-body.open{display:block}
+
+  .mini-question{
+    background:#f8fcff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:12px;
+  }
+
+  .two-col{
+    display:grid;
+    gap:14px;
+    align-items:start;
+  }
+
+  .diagram-card{
+    background:#fbfeff;
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:12px;
+  }
+
+  .chain-wrap, .fill-wrap{
+    display:grid;
+    gap:14px;
+  }
+
+  .bank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+  .chip{
+    text-align:center;
+    min-height:54px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .slot-row{
+    display:grid;
+    gap:10px;
+  }
+
+  .slot{
+    background:#f7fbfe;
+    text-align:center;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:64px;
+  }
+
+  .slot.empty{
+    color:#7f99ab;
+    font-weight:800;
+    border-style:dashed;
+  }
+
+  .sentence-frame{
+    background:#fbfeff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    font-size:1.08rem;
+    line-height:1.7;
+  }
+
+  .blank{
+    display:inline-flex;
+    min-width:160px;
+    min-height:42px;
+    align-items:center;
+    justify-content:center;
+    padding:6px 10px;
+    margin:3px 4px;
+    border-radius:12px;
+    border:2px dashed var(--line);
+    background:#fff;
+    vertical-align:middle;
+    font-weight:900;
+    color:#7e9ab0;
+  }
+
+  .blank.filled{
+    border-style:solid;
+    color:var(--ink);
+    background:var(--soft);
+  }
+
+  .guess-wrap{
+    display:grid;
+    gap:14px;
+  }
+
+  .guess-sentence{
+    background:#fbfeff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+    font-size:1.1rem;
+    line-height:1.8;
+  }
+
+  .guess-word{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:120px;
+    min-height:42px;
+    padding:6px 10px;
+    margin:0 4px;
+    border-bottom:3px solid var(--accent);
+    font-weight:900;
+    color:var(--accent-2);
+  }
+
+  .guess-input{
+    width:100%;
+    max-width:320px;
+    min-height:54px;
+    border-radius:16px;
+    border:2px solid var(--line);
+    padding:12px 14px;
+    font-size:1.05rem;
+    font-weight:800;
+    color:var(--ink);
+  }
+
+  .helper{
+    color:var(--muted);
+    font-size:.98rem;
+    line-height:1.45;
+  }
+
+  .hotspot-note{
+    color:var(--muted);
+    font-size:1rem;
+    margin:0;
+  }
+
+  .footer-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:18px;
+  }
+
+  .speech-btn{
+    min-height:52px;
+    border-radius:16px;
+    border:2px solid var(--line);
+    background:white;
+    padding:12px 16px;
+    font-weight:900;
+    cursor:pointer;
+    color:var(--accent-2);
+  }
+
+  .done-box{
+    text-align:center;
+    padding:10px 0 6px;
+  }
+
+  .takeaway{
+    font-size:1.18rem;
+    font-weight:900;
+    line-height:1.5;
+    color:#0d4467;
+  }
+
+  .pill{
+    display:inline-block;
+    background:var(--soft);
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:8px 12px;
+    font-weight:900;
+    color:var(--accent-2);
+    margin-bottom:12px;
+  }
+
+  .game-over{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(17,38,54,.48);
+    padding:18px;
+    z-index:20;
+  }
+
+  .game-over.show{display:flex}
+
+  .game-over-card{
+    max-width:460px;
+    width:100%;
+    background:white;
+    border-radius:24px;
+    border:2px solid var(--line);
+    padding:22px;
+    text-align:center;
+    box-shadow:var(--shadow);
+  }
+
+  .game-over-title{
+    font-size:1.5rem;
+    font-weight:900;
+    color:var(--bad);
+    margin:0 0 10px;
+  }
+
+  .tiny{
+    font-size:.92rem;
+    color:var(--muted);
+  }
+
+  .air{
+    stroke:#74c7ff;
+    stroke-width:3;
+    stroke-dasharray:6 6;
+    fill:none;
+    animation:floatline 2.2s linear infinite;
+  }
+  .vapour{
+    opacity:.75;
+    animation:floatup 2.4s ease-in-out infinite;
+  }
+  .svg-hotspot{
+    cursor:pointer;
+  }
+  @keyframes floatup{
+    0%{transform:translateY(8px); opacity:.2}
+    50%{opacity:.85}
+    100%{transform:translateY(-10px); opacity:.15}
+  }
+  @keyframes floatline{
+    from{stroke-dashoffset:0}
+    to{stroke-dashoffset:-24}
+  }
+
+  @media (min-width: 760px){
+    .two-col{grid-template-columns:1fr 1fr}
+    .option-grid.cols-2{grid-template-columns:1fr 1fr}
+    .slot-row.cols-3{grid-template-columns:repeat(3,1fr)}
+    .slot-row.cols-2{grid-template-columns:repeat(2,1fr)}
+  }
+
+  @media (max-width: 759px){
+    .screen{padding:16px 14px}
+    .instruction{font-size:1.28rem}
+    .title{font-size:1.18rem}
+    .brand{font-size:1rem}
+    .option-card, .big-action, .chip, .slot, .check-btn, .speech-btn, .next-btn, .toggle, .mini-btn{
+      width:100%;
+    }
+    .controls{width:100%}
+    .controls > *{flex:1 1 180px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-strip">
+    <div class="top-row">
+      <div>
+        <div class="brand">Evaporation Helper</div>
+        <div class="small-note">Question 8 · cotton towels and chopsticks</div>
+      </div>
+      <div class="controls">
+        <button id="toggleSpeech" class="toggle" aria-pressed="false">Read-aloud: Off</button>
+        <button id="restartBtn" class="mini-btn">Start again</button>
+      </div>
+    </div>
+    <div class="top-row">
+      <div class="progress" id="progressTop">Screen 1 of 14</div>
+      <div class="demerit-row" aria-live="polite">
+        <div class="demerit-label" id="demeritLabel">Drying pegs left: 5</div>
+        <div class="peg-track" id="pegTrack"></div>
+      </div>
+    </div>
+  </div>
+
+  <main class="screen" id="screen" aria-live="polite"></main>
+</div>
+
+<div class="game-over" id="gameOver">
+  <div class="game-over-card">
+    <p class="game-over-title">All the pegs are gone.</p>
+    <p class="subtext">Let’s start the whole interactive again and read more carefully this time.</p>
+    <p class="tiny">Restarting now…</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const totalScreens = 14;
+  const questionPlain = [
+    "8. Siti used 6 identical square cotton towels to carry out an experiment. She wet all of them with the same amount of water and stacked 3 of them in each of the set-ups X and Y as shown below.",
+    "For set-up Y, she placed chopsticks across the towels. The two set-ups are left on the table for two hours.",
+    "The wet towels in set-up Y have less water in two hours. How do the chopsticks help the towels lose water? Explain your answer clearly. [2]"
+  ];
+
+  const teachingScreensWithDemerits = 10;
+  const defaultDemerits = Math.max(1, Math.ceil(teachingScreensWithDemerits / 2));
+
+  const state = {
+    screenIndex: 0,
+    nextReady: false,
+    readAloudOn: false,
+    questionPanelOpen: false,
+    feedback: null,
+    demeritsMax: defaultDemerits,
+    demeritsLeft: defaultDemerits,
+    currentScreenState: {},
+    screenStore: {},
+    gameOverLock: false
+  };
+
+  const el = {
+    screen: document.getElementById('screen'),
+    toggleSpeech: document.getElementById('toggleSpeech'),
+    restartBtn: document.getElementById('restartBtn'),
+    progressTop: document.getElementById('progressTop'),
+    demeritLabel: document.getElementById('demeritLabel'),
+    pegTrack: document.getElementById('pegTrack'),
+    gameOver: document.getElementById('gameOver')
+  };
+
+  const screenSpeakText = {
+    0: "Read the full question. Notice the words chopsticks, less water, and how do the chopsticks help. Then tap I have read it.",
+    1: "What changed? Choose the changed condition.",
+    2: "What result must you explain? Choose the result sentence.",
+    3: "Which evaporation factor matters here? Choose the factor that changed.",
+    4: "Tap all the spaces between the towels in set-up Y. Then tap check.",
+    5: "What do the spaces do? Choose the best science idea.",
+    6: "Choose the precise science wording.",
+    7: "Build the cause chain. Tap the cards to place them in order. Then tap check.",
+    8: "Fix the science wording. Choose the sentence that says what evaporates.",
+    9: "Build the comparison sentence. Fill both blanks, then tap check.",
+    10: "Build the explanation sentence. Fill both blanks, then tap check.",
+    11: "Guess the hidden science words one at a time. Wrong tries are penalty-free here.",
+    12: "Transfer check. Choose which new set-up dries faster and why.",
+    13: "Well done. Read the final takeaway and tap Done."
+  };
+
+  function shuffleItems(items, avoidSolved=false, correctOrderIds=[]){
+    const copy = items.map(item => ({...item}));
+    if(copy.length < 2) return copy;
+    let tries = 0;
+    do{
+      for(let i = copy.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      tries += 1;
+      if(!avoidSolved) break;
+      if(tries > 40) break;
+    } while(copy.map(x => x.id).join('|') === correctOrderIds.join('|'));
+    return copy;
+  }
+
+  function escapeHtml(text){
+    return text.replace(/[&<>"']/g, function(m){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]);
+    });
+  }
+
+  function highlightQuestionText(){
+    return `
+      <div class="question-text">
+        <p>8. Siti used 6 identical square cotton towels to carry out an experiment. She wet all of them with the same amount of water and stacked 3 of them in each of the set-ups X and Y as shown below.</p>
+        <p>For set-up Y, she placed <span class="highlight">chopsticks</span> across the towels. The two set-ups are left on the table for two hours.</p>
+        <p>The wet towels in set-up Y have <span class="highlight">less water</span> in two hours. <span class="highlight">How do the chopsticks help</span> the towels lose water? Explain your answer clearly. [2]</p>
+      </div>`;
+  }
+
+  function plainQuestionText(){
+    return `
+      <div class="question-text">
+        <p>${escapeHtml(questionPlain[0])}</p>
+        <p>${escapeHtml(questionPlain[1])}</p>
+        <p>${escapeHtml(questionPlain[2])}</p>
+      </div>`;
+  }
+
+  function renderFullDiagram(){
+    return `
+      <svg viewBox="0 0 760 280" width="100%" role="img" aria-label="Cross-sections of set-up X and set-up Y">
+        <defs>
+          <linearGradient id="towelFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#bfe7ff"/>
+            <stop offset="100%" stop-color="#7dccff"/>
+          </linearGradient>
+          <linearGradient id="stickFill" x1="0" x2="1">
+            <stop offset="0%" stop-color="#c08950"/>
+            <stop offset="100%" stop-color="#8b5a2b"/>
+          </linearGradient>
+        </defs>
+
+        <text x="122" y="44" text-anchor="middle" font-size="24" font-weight="800" fill="#0f5f8f">Set-up X</text>
+        <text x="122" y="244" text-anchor="middle" font-size="20" font-weight="700" fill="#5d7285">Cross-section</text>
+
+        <rect x="40" y="120" rx="10" ry="10" width="164" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="40" y="108" rx="10" ry="10" width="164" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="40" y="96" rx="10" ry="10" width="164" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+
+        <text x="565" y="44" text-anchor="middle" font-size="24" font-weight="800" fill="#0f5f8f">Set-up Y</text>
+        <text x="565" y="244" text-anchor="middle" font-size="20" font-weight="700" fill="#5d7285">Cross-section</text>
+
+        <rect x="452" y="84" rx="10" ry="10" width="196" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="430" y="104" rx="8" ry="8" width="220" height="8" fill="url(#stickFill)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="452" y="126" rx="10" ry="10" width="196" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="430" y="146" rx="8" ry="8" width="220" height="8" fill="url(#stickFill)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="452" y="168" rx="10" ry="10" width="196" height="16" fill="url(#towelFill)" stroke="#3d9bd8" stroke-width="2"/>
+
+        <circle cx="480" cy="112" r="7" fill="#ffffff" stroke="#83cfff" stroke-width="2"/>
+        <circle cx="548" cy="112" r="7" fill="#ffffff" stroke="#83cfff" stroke-width="2"/>
+        <circle cx="612" cy="112" r="7" fill="#ffffff" stroke="#83cfff" stroke-width="2"/>
+        <circle cx="512" cy="154" r="7" fill="#ffffff" stroke="#83cfff" stroke-width="2"/>
+        <circle cx="586" cy="154" r="7" fill="#ffffff" stroke="#83cfff" stroke-width="2"/>
+
+        <text x="682" y="103" font-size="17" font-weight="800" fill="#8b5a2b">chopsticks</text>
+        <text x="682" y="137" font-size="17" font-weight="800" fill="#3d9bd8">wet cotton</text>
+        <text x="682" y="159" font-size="17" font-weight="800" fill="#3d9bd8">towels</text>
+
+        <line x1="654" y1="100" x2="645" y2="106" stroke="#8b5a2b" stroke-width="3"/>
+        <line x1="654" y1="100" x2="646" y2="149" stroke="#8b5a2b" stroke-width="3"/>
+        <line x1="654" y1="134" x2="648" y2="90" stroke="#3d9bd8" stroke-width="3"/>
+        <line x1="654" y1="154" x2="648" y2="176" stroke="#3d9bd8" stroke-width="3"/>
+      </svg>
+    `;
+  }
+
+  function renderYDiagramInteractive(selected=[]){
+    return `
+      <svg viewBox="0 0 520 270" width="100%" role="img" aria-label="Set-up Y with spaces between towels">
+        <defs>
+          <linearGradient id="towelFill2" x1="0" x2="1">
+            <stop offset="0%" stop-color="#bfe7ff"/>
+            <stop offset="100%" stop-color="#7dccff"/>
+          </linearGradient>
+          <linearGradient id="stickFill2" x1="0" x2="1">
+            <stop offset="0%" stop-color="#c08950"/>
+            <stop offset="100%" stop-color="#8b5a2b"/>
+          </linearGradient>
+        </defs>
+
+        <text x="260" y="32" text-anchor="middle" font-size="24" font-weight="800" fill="#0f5f8f">Set-up Y</text>
+
+        <rect x="160" y="58" rx="10" ry="10" width="210" height="18" fill="url(#towelFill2)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="136" y="86" rx="8" ry="8" width="246" height="10" fill="url(#stickFill2)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="160" y="114" rx="10" ry="10" width="210" height="18" fill="url(#towelFill2)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="136" y="142" rx="8" ry="8" width="246" height="10" fill="url(#stickFill2)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="160" y="170" rx="10" ry="10" width="210" height="18" fill="url(#towelFill2)" stroke="#3d9bd8" stroke-width="2"/>
+
+        <rect class="svg-hotspot" data-hotspot="gap1" x="176" y="78" width="176" height="26" rx="12"
+              fill="rgba(116,199,255,0.18)"
+              stroke="${selected.includes('gap1') ? '#1f8f63' : '#75b8dd'}"
+              stroke-width="3" stroke-dasharray="7 5"/>
+        <rect class="svg-hotspot" data-hotspot="gap2" x="176" y="134" width="176" height="26" rx="12"
+              fill="rgba(116,199,255,0.18)"
+              stroke="${selected.includes('gap2') ? '#1f8f63' : '#75b8dd'}"
+              stroke-width="3" stroke-dasharray="7 5"/>
+
+        <text x="260" y="95" text-anchor="middle" font-size="18" font-weight="800" fill="#0d4467">space</text>
+        <text x="260" y="151" text-anchor="middle" font-size="18" font-weight="800" fill="#0d4467">space</text>
+
+        <path d="M90 92 C112 92, 122 86, 142 86" class="air"/>
+        <path d="M90 148 C112 148, 122 142, 142 142" class="air"/>
+        <path d="M380 86 C404 86, 418 92, 438 92" class="air"/>
+        <path d="M380 142 C404 142, 418 148, 438 148" class="air"/>
+
+        <text x="260" y="234" text-anchor="middle" font-size="18" font-weight="700" fill="#5d7285">Tap the two blue spaces in the diagram</text>
+      </svg>
+    `;
+  }
+
+  function renderAirExposureDiagram(){
+    return `
+      <svg viewBox="0 0 520 250" width="100%" role="img" aria-label="Spaces expose more of the towel to air">
+        <defs>
+          <linearGradient id="towelFill3" x1="0" x2="1">
+            <stop offset="0%" stop-color="#bfe7ff"/>
+            <stop offset="100%" stop-color="#7dccff"/>
+          </linearGradient>
+          <linearGradient id="stickFill3" x1="0" x2="1">
+            <stop offset="0%" stop-color="#c08950"/>
+            <stop offset="100%" stop-color="#8b5a2b"/>
+          </linearGradient>
+        </defs>
+        <text x="260" y="28" text-anchor="middle" font-size="23" font-weight="800" fill="#0f5f8f">More towel surface is open to air</text>
+
+        <rect x="160" y="56" rx="10" ry="10" width="210" height="18" fill="url(#towelFill3)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="136" y="84" rx="8" ry="8" width="246" height="10" fill="url(#stickFill3)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="160" y="112" rx="10" ry="10" width="210" height="18" fill="url(#towelFill3)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="136" y="140" rx="8" ry="8" width="246" height="10" fill="url(#stickFill3)" stroke="#6e431d" stroke-width="2"/>
+        <rect x="160" y="168" rx="10" ry="10" width="210" height="18" fill="url(#towelFill3)" stroke="#3d9bd8" stroke-width="2"/>
+
+        <path d="M78 91 C112 91, 122 86, 142 86" class="air"/>
+        <path d="M78 147 C112 147, 122 142, 142 142" class="air"/>
+        <path d="M376 86 C400 86, 414 91, 444 91" class="air"/>
+        <path d="M376 142 C400 142, 414 147, 444 147" class="air"/>
+        <path d="M260 26 C260 44, 260 60, 260 74" class="air"/>
+
+        <text x="64" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#1f78b4">air</text>
+        <text x="456" y="90" text-anchor="middle" font-size="16" font-weight="700" fill="#1f78b4">air</text>
+        <text x="64" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#1f78b4">air</text>
+        <text x="456" y="146" text-anchor="middle" font-size="16" font-weight="700" fill="#1f78b4">air</text>
+      </svg>
+    `;
+  }
+
+  function renderEvaporationHint(){
+    return `
+      <svg viewBox="0 0 520 220" width="100%" role="img" aria-label="Water in the towels evaporates faster">
+        <defs>
+          <linearGradient id="towelFill4" x1="0" x2="1">
+            <stop offset="0%" stop-color="#bfe7ff"/>
+            <stop offset="100%" stop-color="#7dccff"/>
+          </linearGradient>
+        </defs>
+        <rect x="110" y="122" rx="12" ry="12" width="300" height="22" fill="url(#towelFill4)" stroke="#3d9bd8" stroke-width="2"/>
+        <circle class="vapour" cx="155" cy="102" r="7" fill="#6dc6ff"/>
+        <circle class="vapour" cx="210" cy="90" r="6" fill="#6dc6ff" style="animation-delay:.3s"/>
+        <circle class="vapour" cx="260" cy="78" r="7" fill="#6dc6ff" style="animation-delay:.6s"/>
+        <circle class="vapour" cx="315" cy="92" r="6" fill="#6dc6ff" style="animation-delay:.9s"/>
+        <circle class="vapour" cx="365" cy="82" r="7" fill="#6dc6ff" style="animation-delay:1.2s"/>
+        <path d="M156 116 C156 102, 154 96, 154 86" class="air"/>
+        <path d="M210 106 C210 92, 208 86, 208 74" class="air"/>
+        <path d="M262 98 C262 84, 260 76, 260 64" class="air"/>
+        <path d="M314 108 C314 94, 312 88, 312 76" class="air"/>
+        <path d="M366 100 C366 86, 364 80, 364 68" class="air"/>
+        <text x="260" y="38" text-anchor="middle" font-size="22" font-weight="800" fill="#0f5f8f">Water in the towels evaporates</text>
+        <text x="260" y="60" text-anchor="middle" font-size="18" font-weight="700" fill="#5d7285">The towels do not evaporate.</text>
+      </svg>
+    `;
+  }
+
+
+  function renderTransferDiagram(){
+    return `
+      <svg viewBox="0 0 640 280" width="100%" role="img" aria-label="Two new ways to dry wet cloths">
+        <defs>
+          <linearGradient id="clothFillT" x1="0" x2="1">
+            <stop offset="0%" stop-color="#bfe7ff"/>
+            <stop offset="100%" stop-color="#7dccff"/>
+          </linearGradient>
+          <linearGradient id="trayFillT" x1="0" x2="1">
+            <stop offset="0%" stop-color="#d8e6ef"/>
+            <stop offset="100%" stop-color="#b7cfdf"/>
+          </linearGradient>
+        </defs>
+
+        <text x="160" y="34" text-anchor="middle" font-size="22" font-weight="800" fill="#0f5f8f">Cloths pressed together</text>
+        <rect x="58" y="178" width="204" height="22" rx="11" fill="url(#trayFillT)" stroke="#86a8bb" stroke-width="2"/>
+        <rect x="84" y="126" width="150" height="28" rx="12" fill="url(#clothFillT)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="84" y="152" width="150" height="28" rx="12" fill="url(#clothFillT)" stroke="#3d9bd8" stroke-width="2"/>
+        <text x="160" y="232" text-anchor="middle" font-size="17" font-weight="700" fill="#5d7285">Less cloth is exposed to air</text>
+
+        <text x="480" y="34" text-anchor="middle" font-size="22" font-weight="800" fill="#0f5f8f">Cloths hanging separately</text>
+        <line x1="388" y1="68" x2="572" y2="68" stroke="#8b5a2b" stroke-width="8" stroke-linecap="round"/>
+        <rect x="422" y="80" width="18" height="16" rx="4" fill="#8b5a2b"/>
+        <rect x="520" y="80" width="18" height="16" rx="4" fill="#8b5a2b"/>
+        <rect x="404" y="96" width="56" height="108" rx="12" fill="url(#clothFillT)" stroke="#3d9bd8" stroke-width="2"/>
+        <rect x="502" y="96" width="56" height="108" rx="12" fill="url(#clothFillT)" stroke="#3d9bd8" stroke-width="2"/>
+        <path d="M372 120 C392 120, 398 120, 404 120" class="air"/>
+        <path d="M372 176 C392 176, 398 176, 404 176" class="air"/>
+        <path d="M460 120 C480 120, 486 120, 502 120" class="air"/>
+        <path d="M460 176 C480 176, 486 176, 502 176" class="air"/>
+        <path d="M558 120 C578 120, 586 120, 602 120" class="air"/>
+        <path d="M558 176 C578 176, 586 176, 602 176" class="air"/>
+        <text x="480" y="232" text-anchor="middle" font-size="17" font-weight="700" fill="#5d7285">More cloth is exposed to air</text>
+      </svg>
+    `;
+  }
+
+  function updateTopStrip(){
+    el.progressTop.textContent = `Screen ${state.screenIndex + 1} of ${totalScreens}`;
+    el.demeritLabel.textContent = `Drying pegs left: ${state.demeritsLeft}`;
+    el.pegTrack.innerHTML = Array.from({length: state.demeritsMax}, (_, i) => {
+      const live = i < state.demeritsLeft;
+      return `<div class="peg ${live ? '' : 'lost'}" aria-hidden="true"></div>`;
+    }).join('');
+    el.toggleSpeech.classList.toggle('on', state.readAloudOn);
+    el.toggleSpeech.setAttribute('aria-pressed', state.readAloudOn ? 'true' : 'false');
+    el.toggleSpeech.textContent = `Read-aloud: ${state.readAloudOn ? 'On' : 'Off'}`;
+  }
+
+  function speakNow(extra=''){
+    if(!('speechSynthesis' in window)) return;
+    const pieces = [
+      `Screen ${state.screenIndex + 1}.`,
+      screenSpeakText[state.screenIndex] || '',
+      extra || ''
+    ].filter(Boolean);
+    const text = pieces.join(' ');
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.92;
+    utter.pitch = 1.02;
+    utter.lang = 'en-SG';
+    window.speechSynthesis.speak(utter);
+  }
+
+  function maybeAutoSpeak(extra=''){
+    if(state.readAloudOn) speakNow(extra);
+  }
+
+  function loadScreenState(){
+    if(!state.screenStore[state.screenIndex]){
+      state.screenStore[state.screenIndex] = {};
+    }
+    state.currentScreenState = state.screenStore[state.screenIndex];
+  }
+
+  function goToScreen(newIndex){
+    state.screenIndex = newIndex;
+    state.nextReady = false;
+    state.feedback = null;
+    loadScreenState();
+    renderScreen();
+  }
+
+  function restartWholeActivity(){
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    state.screenIndex = 0;
+    state.nextReady = false;
+    state.feedback = null;
+    state.questionPanelOpen = false;
+    state.demeritsLeft = state.demeritsMax;
+    state.currentScreenState = {};
+    state.screenStore = {};
+    state.gameOverLock = false;
+    el.gameOver.classList.remove('show');
+    loadScreenState();
+    renderScreen();
+  }
+
+  function loseDemerit(){
+    if(state.gameOverLock) return;
+    state.demeritsLeft -= 1;
+    if(state.demeritsLeft < 0) state.demeritsLeft = 0;
+    updateTopStrip();
+    if(state.demeritsLeft === 0){
+      state.gameOverLock = true;
+      el.gameOver.classList.add('show');
+      setTimeout(() => restartWholeActivity(), 1400);
+    }
+  }
+
+  function setFeedback(kind, text){
+    state.feedback = {kind, text};
+    renderFeedback();
+    maybeAutoSpeak(text);
+  }
+
+  function renderFeedback(){
+    const box = document.getElementById('feedback');
+    if(!box) return;
+    if(!state.feedback){
+      box.className = 'feedback';
+      box.innerHTML = '';
+      return;
+    }
+    box.className = `feedback show ${state.feedback.kind}`;
+    box.textContent = state.feedback.text;
+  }
+
+  function renderQuestionPanel(showOnThisScreen){
+    if(!showOnThisScreen || state.screenIndex === 0){
+      return '';
+    }
+    return `
+      <section class="question-panel">
+        <button class="panel-toggle" id="panelToggle">${state.questionPanelOpen ? 'Hide the full question ▲' : 'Show the full question ▼'}</button>
+        <div class="panel-body ${state.questionPanelOpen ? 'open' : ''}" id="panelBody">
+          <div class="mini-question">
+            ${plainQuestionText()}
+            <div class="diagram-wrap">${renderFullDiagram()}</div>
+          </div>
+        </div>
+      </section>
+    `;
+  }
+
+  function renderFooter(showQuestionPanel=true, doneLabel='Next'){
+    return `
+      <div id="feedback" class="feedback"></div>
+      <div class="footer-row">
+        <button class="speech-btn" id="speechBtn">🔊 Read this screen</button>
+        <button class="next-btn ${state.nextReady ? 'ready' : ''}" id="nextBtn" ${state.nextReady ? '' : 'disabled'}>${doneLabel}</button>
+      </div>
+      ${renderQuestionPanel(showQuestionPanel)}
+    `;
+  }
+
+  function bindCommonButtons(){
+    const speechBtn = document.getElementById('speechBtn');
+    if(speechBtn){
+      speechBtn.addEventListener('click', () => speakNow(state.feedback ? state.feedback.text : ''));
+    }
+    const nextBtn = document.getElementById('nextBtn');
+    if(nextBtn){
+      nextBtn.addEventListener('click', () => {
+        if(!state.nextReady) return;
+        if(state.screenIndex < totalScreens - 1){
+          goToScreen(state.screenIndex + 1);
+        }
+      });
+    }
+    const panelToggle = document.getElementById('panelToggle');
+    if(panelToggle){
+      panelToggle.addEventListener('click', () => {
+        state.questionPanelOpen = !state.questionPanelOpen;
+        renderScreen();
+      });
+    }
+  }
+
+  function renderIntro(){
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">Read the question first</h1>
+          <div class="instruction">Read the full question. Then tap “I have read it.”</div>
+          <p class="subtext">Notice only the real words from the question. Do not guess the answer yet.</p>
+        </div>
+        <div class="progress">Screen 1 of 14</div>
+      </div>
+
+      <div class="question-card card">
+        ${highlightQuestionText()}
+        <div class="diagram-wrap">${renderFullDiagram()}</div>
+      </div>
+
+      <div class="action-row">
+        <button class="big-action" id="startReadBtn" style="max-width:320px;">I have read it</button>
+      </div>
+
+      ${renderFooter(false)}
+    `;
+    document.getElementById('startReadBtn').addEventListener('click', () => {
+      state.nextReady = true;
+      setFeedback('good', 'Good. Now find what changed.');
+      const nextBtn = document.getElementById('nextBtn');
+      nextBtn.disabled = false;
+      nextBtn.classList.add('ready');
+    });
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderSingleChoice(screenDef){
+    if(!state.currentScreenState.options){
+      state.currentScreenState.options = shuffleItems(screenDef.options);
+    }
+    const options = state.currentScreenState.options;
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">${screenDef.title}</h1>
+          <div class="instruction">${screenDef.instruction}</div>
+          ${screenDef.subtext ? `<p class="subtext">${screenDef.subtext}</p>` : ''}
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      <div class="${screenDef.showDiagram ? 'two-col' : ''}">
+        ${screenDef.showDiagram ? `<div class="diagram-card">${screenDef.diagramHtml}</div>` : ''}
+        <div class="option-grid ${screenDef.cols2 ? 'cols-2' : ''}" id="optionGrid">
+          ${options.map(option => `
+            <button class="option-card" data-id="${option.id}">
+              ${option.text}
+            </button>
+          `).join('')}
+        </div>
+      </div>
+
+      ${renderFooter(true)}
+    `;
+
+    document.querySelectorAll('.option-card').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const chosenId = btn.getAttribute('data-id');
+        const chosen = options.find(o => o.id === chosenId);
+        document.querySelectorAll('.option-card').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        if(chosen.correct){
+          btn.classList.add('correct');
+          state.nextReady = true;
+          setFeedback('good', screenDef.correctFeedback);
+          const nextBtn = document.getElementById('nextBtn');
+          nextBtn.disabled = false;
+          nextBtn.classList.add('ready');
+        }else{
+          btn.classList.add('incorrect');
+          if(screenDef.demerit !== false) loseDemerit();
+          setFeedback('bad', screenDef.wrongFeedback);
+        }
+      });
+    });
+
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderHotspots(){
+    if(!state.currentScreenState.selected){
+      state.currentScreenState.selected = [];
+    }
+
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">Tap the new spaces in set-up Y</h1>
+          <div class="instruction">Tap the two spaces in the diagram.</div>
+          <p class="subtext">These spaces are the clue you need for the explanation.</p>
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      <div class="diagram-card">
+        <div class="diagram-wrap">${renderYDiagramInteractive(state.currentScreenState.selected)}</div>
+      </div>
+
+      ${renderFooter(true)}
+    `;
+
+    document.querySelectorAll('[data-hotspot]').forEach(node => {
+      node.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const id = node.getAttribute('data-hotspot');
+        const list = state.currentScreenState.selected;
+        if(list.includes(id)) return;
+        list.push(id);
+
+        if(list.length === 1){
+          state.feedback = {kind:'info', text:'Good. Now tap the other space.'};
+          renderScreen();
+          return;
+        }
+
+        if(list.includes('gap1') && list.includes('gap2')){
+          state.nextReady = true;
+          state.feedback = {kind:'good', text:'Yes. The chopsticks create spaces.'};
+          renderScreen();
+        }
+      });
+    });
+
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderOrderBuild(){
+    const correctOrder = [
+      {id:'spaces', text:'chopsticks create spaces'},
+      {id:'surface', text:'more exposed surface area to air'},
+      {id:'evaporates', text:'water evaporates faster'}
+    ];
+
+    if(!state.currentScreenState.bank){
+      state.currentScreenState.bank = shuffleItems(correctOrder, true, correctOrder.map(x => x.id));
+      state.currentScreenState.slots = [null, null, null];
+      state.currentScreenState.attempts = 0;
+    }
+
+    const bank = state.currentScreenState.bank;
+    const slots = state.currentScreenState.slots;
+
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">Build the cause chain</h1>
+          <div class="instruction">Tap the cards to place them in order. Then tap Check.</div>
+          <p class="subtext">Start with what the chopsticks do first.</p>
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      <div class="two-col">
+        <div class="diagram-card">
+          <div class="diagram-wrap">${renderAirExposureDiagram()}</div>
+        </div>
+        <div class="chain-wrap">
+          <div class="slot-row cols-3" id="slotRow">
+            ${slots.map((slot, i) => `
+              <button class="slot ${slot ? 'filled' : 'empty'}" data-slot="${i}">
+                ${slot ? slot.text : `Step ${i+1}`}
+              </button>
+            `).join('')}
+          </div>
+          <div class="bank" id="chainBank">
+            ${bank.map(item => `
+              <button class="chip" data-id="${item.id}">${item.text}</button>
+            `).join('')}
+          </div>
+          <div class="action-row">
+            <button class="check-btn" id="checkChain">Check</button>
+          </div>
+        </div>
+      </div>
+
+      ${renderFooter(true)}
+    `;
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const id = btn.getAttribute('data-id');
+        const item = state.currentScreenState.bank.find(x => x.id === id);
+        const emptyIndex = state.currentScreenState.slots.findIndex(x => x === null);
+        if(emptyIndex === -1 || !item) return;
+        state.currentScreenState.slots[emptyIndex] = item;
+        state.currentScreenState.bank = state.currentScreenState.bank.filter(x => x.id !== id);
+        renderScreen();
+      });
+    });
+
+    document.querySelectorAll('.slot').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const idx = Number(btn.getAttribute('data-slot'));
+        const item = state.currentScreenState.slots[idx];
+        if(!item) return;
+        state.currentScreenState.bank.push(item);
+        state.currentScreenState.slots[idx] = null;
+        renderScreen();
+      });
+    });
+
+    document.getElementById('checkChain').addEventListener('click', () => {
+      if(state.nextReady) return;
+      state.currentScreenState.attempts += 1;
+      const built = state.currentScreenState.slots.map(x => x ? x.id : null);
+      const correct = correctOrder.map(x => x.id);
+      if(built.every((id, index) => id === correct[index])){
+        state.nextReady = true;
+        setFeedback('good', 'Yes. That is the science chain.');
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.disabled = false;
+        nextBtn.classList.add('ready');
+      }else{
+        loseDemerit();
+        if(state.currentScreenState.attempts === 1){
+          setFeedback('info', 'Start with what the chopsticks do first.');
+        }else{
+          setFeedback('bad', 'Check the middle link. It must connect the spaces to faster evaporation.');
+        }
+      }
+    });
+
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderFillScreen(config){
+    if(!state.currentScreenState.bank){
+      state.currentScreenState.bank = shuffleItems(config.options, true, config.correctIds);
+      state.currentScreenState.blanks = config.blanks.map(() => null);
+      state.currentScreenState.attempts = 0;
+    }
+    const bank = state.currentScreenState.bank;
+    const blanks = state.currentScreenState.blanks;
+
+    function sentenceHtml(){
+      return config.sentenceParts.map((part, index) => {
+        if(index < config.blanks.length){
+          const filled = blanks[index];
+          return `${part}<button class="blank ${filled ? 'filled' : ''}" data-blank="${index}">${filled ? filled.text : config.blankLabels[index]}</button>`;
+        }
+        return part;
+      }).join('');
+    }
+
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">${config.title}</h1>
+          <div class="instruction">${config.instruction}</div>
+          ${config.subtext ? `<p class="subtext">${config.subtext}</p>` : ''}
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      ${config.diagramHtml ? `<div class="diagram-card">${config.diagramHtml}</div>` : ''}
+
+      <div class="fill-wrap">
+        <div class="sentence-frame">${sentenceHtml()}</div>
+        <div class="bank">
+          ${bank.map(item => `<button class="chip" data-id="${item.id}">${item.text}</button>`).join('')}
+        </div>
+        <div class="action-row">
+          <button class="check-btn" id="checkFill">Check</button>
+        </div>
+      </div>
+
+      ${renderFooter(true)}
+    `;
+
+    document.querySelectorAll('.chip').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const id = btn.getAttribute('data-id');
+        const item = state.currentScreenState.bank.find(x => x.id === id);
+        const emptyIndex = state.currentScreenState.blanks.findIndex(x => x === null);
+        if(emptyIndex === -1 || !item) return;
+        state.currentScreenState.blanks[emptyIndex] = item;
+        state.currentScreenState.bank = state.currentScreenState.bank.filter(x => x.id !== id);
+        renderScreen();
+      });
+    });
+
+    document.querySelectorAll('.blank').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if(state.nextReady) return;
+        const idx = Number(btn.getAttribute('data-blank'));
+        const item = state.currentScreenState.blanks[idx];
+        if(!item) return;
+        state.currentScreenState.bank.push(item);
+        state.currentScreenState.blanks[idx] = null;
+        renderScreen();
+      });
+    });
+
+    document.getElementById('checkFill').addEventListener('click', () => {
+      if(state.nextReady) return;
+      state.currentScreenState.attempts += 1;
+      const built = state.currentScreenState.blanks.map(x => x ? x.id : null);
+      const okay = built.every((id, i) => id === config.correctIds[i]);
+      if(okay){
+        state.nextReady = true;
+        setFeedback('good', config.correctFeedback);
+        const nextBtn = document.getElementById('nextBtn');
+        nextBtn.disabled = false;
+        nextBtn.classList.add('ready');
+      }else{
+        loseDemerit();
+        setFeedback(state.currentScreenState.attempts === 1 ? 'info' : 'bad', state.currentScreenState.attempts === 1 ? config.firstWrong : config.laterWrong);
+      }
+    });
+
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderGuessWord(){
+    if(!state.currentScreenState.words){
+      state.currentScreenState.words = [
+        {word:'spaces', revealed:1, done:false},
+        {word:'exposed', revealed:1, done:false},
+        {word:'evaporation', revealed:1, done:false}
+      ];
+      state.currentScreenState.index = 0;
+      state.currentScreenState.fullShown = false;
+    }
+    const words = state.currentScreenState.words;
+    const activeIndex = state.currentScreenState.index;
+    const active = words[activeIndex];
+
+    function displayWord(wordObj, index){
+      if(wordObj.done) return wordObj.word;
+      if(index === activeIndex){
+        return wordObj.word.slice(0, wordObj.revealed).toUpperCase() + ' _'.repeat(Math.max(0, wordObj.word.length - wordObj.revealed));
+      }
+      return '• • • •';
+    }
+
+    const allDone = words.every(w => w.done);
+    const helper = allDone
+      ? 'Great. You rebuilt the key science words.'
+      : `Type the whole word. First clue: ${active.word[0].toUpperCase()}`;
+
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">Guess the word</h1>
+          <div class="instruction">Type the missing science word. Wrong tries are penalty-free here.</div>
+          <p class="subtext">One word at a time. More letters will appear if you need help.</p>
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      <div class="guess-wrap">
+        <div class="guess-sentence">
+          The chopsticks create <span class="guess-word">${displayWord(words[0],0)}</span> between the towels.
+          This increases the <span class="guess-word">${displayWord(words[1],1)}</span> surface area and increases the rate of <span class="guess-word">${displayWord(words[2],2)}</span>.
+        </div>
+
+        <div class="card">
+          <div class="helper">${helper}</div>
+          ${allDone ? `
+            <div class="action-row" style="margin-top:12px;">
+              <button class="big-action" id="showFullSentenceBtn" style="max-width:360px;">Show the full sentence once</button>
+            </div>
+            ${state.currentScreenState.fullShown ? `
+              <div class="feedback show good" style="display:block;margin-top:14px;">
+                The chopsticks create spaces between the towels. This increases the exposed surface area and increases the rate of evaporation.
+              </div>
+            ` : ``}
+          ` : `
+            <div class="action-row" style="margin-top:12px;">
+              <input id="guessInput" class="guess-input" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Type the word here" />
+              <button class="check-btn" id="checkGuess">Check word</button>
+            </div>
+          `}
+        </div>
+      </div>
+
+      ${renderFooter(true)}
+    `;
+
+    if(!allDone){
+      const input = document.getElementById('guessInput');
+      input.focus();
+      const submit = () => {
+        const value = input.value.trim().toLowerCase();
+        if(!value) return;
+        if(value === active.word){
+          active.done = true;
+          state.currentScreenState.index += 1;
+          if(state.currentScreenState.index >= words.length){
+            state.nextReady = true;
+            setFeedback('good', 'Well done. You rebuilt the key science words.');
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.disabled = false;
+            nextBtn.classList.add('ready');
+          }else{
+            setFeedback('good', 'Good. Now guess the next word.');
+          }
+          renderScreen();
+        }else{
+          active.revealed = Math.min(active.word.length, active.revealed + 1);
+          setFeedback('info', 'Try again. One more letter has appeared.');
+          renderScreen();
+        }
+      };
+      document.getElementById('checkGuess').addEventListener('click', submit);
+      input.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter') submit();
+      });
+    }else{
+      const btn = document.getElementById('showFullSentenceBtn');
+      if(btn){
+        btn.addEventListener('click', () => {
+          state.currentScreenState.fullShown = true;
+          setFeedback('good', 'You can now use these words in the answer.');
+          renderScreen();
+        });
+      }
+    }
+
+    bindCommonButtons();
+    renderFeedback();
+    maybeAutoSpeak();
+  }
+
+  function renderComplete(){
+    state.nextReady = true;
+    el.screen.innerHTML = `
+      <div class="screen-header">
+        <div>
+          <h1 class="title">You finished</h1>
+          <div class="instruction">Tap Done.</div>
+          <p class="subtext">You followed the full idea from chopsticks to faster evaporation.</p>
+        </div>
+        <div class="progress">Screen ${state.screenIndex + 1} of ${totalScreens}</div>
+      </div>
+
+      <div class="done-box">
+        <div class="pill">Main idea</div>
+        <div class="takeaway">Spaces between wet materials can expose more surface to air, so water evaporates faster.</div>
+      </div>
+
+      ${renderFooter(false, 'Done')}
+    `;
+    bindCommonButtons();
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.addEventListener('click', () => restartWholeActivity());
+    renderFeedback();
+    maybeAutoSpeak('Spaces between wet materials can expose more surface to air, so water evaporates faster.');
+  }
+
+  function renderScreen(){
+    loadScreenState();
+    updateTopStrip();
+    const screenNum = state.screenIndex;
+
+    if(screenNum === 0){
+      renderIntro();
+      return;
+    }
+
+    if(screenNum === 1){
+      renderSingleChoice({
+        title:'What changed?',
+        instruction:'Choose the changed condition.',
+        subtext:'Look for the difference the question actually shows.',
+        options:[
+          {id:'changed', text:'The towels in Y have chopsticks between them.', correct:true},
+          {id:'hotter', text:'The towels in Y were hotter.', correct:false},
+          {id:'wind', text:'The towels in Y had more wind blowing on them.', correct:false},
+          {id:'morewater', text:'The towels in Y had more water at the start.', correct:false}
+        ],
+        correctFeedback:'Yes. The chopsticks are the changed condition.',
+        wrongFeedback:'Look for the difference the question actually shows.'
+      });
+      return;
+    }
+
+    if(screenNum === 2){
+      renderSingleChoice({
+        title:'What result must you explain?',
+        instruction:'Choose the result sentence.',
+        options:[
+          {id:'result', text:'Set-up Y had less water after two hours.', correct:true},
+          {id:'towels', text:'Set-up X had more towels.', correct:false},
+          {id:'material', text:'Set-up Y had a stronger material.', correct:false},
+          {id:'sticks', text:'Set-up X had chopsticks.', correct:false}
+        ],
+        correctFeedback:'Yes. This is the result you must explain.',
+        wrongFeedback:'Find the sentence that tells you what happened after two hours.'
+      });
+      return;
+    }
+
+    if(screenNum === 3){
+      renderSingleChoice({
+        title:'Which evaporation factor matters here?',
+        instruction:'Choose the factor that changed.',
+        subtext:'No extra heat or wind is shown in the question.',
+        options:[
+          {id:'surface', text:'Exposed surface area', correct:true},
+          {id:'temp', text:'Temperature', correct:false},
+          {id:'wind', text:'Wind', correct:false}
+        ],
+        correctFeedback:'Yes. The question does not show a change in heat or wind.',
+        wrongFeedback:'Check what stayed the same. No extra heat or wind is shown.'
+      });
+      return;
+    }
+
+    if(screenNum === 4){
+      renderHotspots();
+      return;
+    }
+
+    if(screenNum === 5){
+      renderSingleChoice({
+        title:'What do the spaces do?',
+        instruction:'Choose the best science idea.',
+        showDiagram:true,
+        diagramHtml: renderAirExposureDiagram(),
+        options:[
+          {id:'airtouch', text:'They expose more of the towel to air.', correct:true},
+          {id:'heavier', text:'They make the towel heavier.', correct:false},
+          {id:'soak', text:'They soak up the water.', correct:false},
+          {id:'cool', text:'They cool the towel directly.', correct:false}
+        ],
+        correctFeedback:'Yes. More of the towel surface is open to air.',
+        wrongFeedback:'Think about what air can now touch.'
+      });
+      return;
+    }
+
+    if(screenNum === 6){
+      renderSingleChoice({
+        title:'Choose the precise science wording',
+        instruction:'Tap the better wording.',
+        options:[
+          {id:'exposed', text:'more exposed surface area', correct:true},
+          {id:'surface', text:'more surface area', correct:false},
+          {id:'bigger', text:'bigger towels', correct:false},
+          {id:'thicker', text:'thicker towels', correct:false}
+        ],
+        correctFeedback:'Yes. The important idea is the part exposed to air.',
+        wrongFeedback:'This question is about the surface touching the air.'
+      });
+      return;
+    }
+
+    if(screenNum === 7){
+      renderOrderBuild();
+      return;
+    }
+
+    if(screenNum === 8){
+      renderSingleChoice({
+        title:'Fix the science wording',
+        instruction:'Choose the sentence that says what evaporates.',
+        showDiagram:true,
+        diagramHtml: renderEvaporationHint(),
+        options:[
+          {id:'water', text:'More water in the towels evaporates.', correct:true},
+          {id:'towels', text:'The towels evaporate.', correct:false},
+          {id:'sticks', text:'The chopsticks evaporate the water.', correct:false},
+          {id:'cloth', text:'The towel cloth disappears.', correct:false}
+        ],
+        correctFeedback:'Yes. Water evaporates, not the towels.',
+        wrongFeedback:'Ask yourself: what changes into water vapour?'
+      });
+      return;
+    }
+
+    if(screenNum === 9){
+      renderFillScreen({
+        title:'Build the comparison sentence',
+        instruction:'Fill both blanks. Then tap Check.',
+        subtext:'One blank compares Y with X. One blank explains what the chopsticks do.',
+        sentenceParts:[
+          'Set-up Y has ',
+          ' than set-up X because the chopsticks ',
+          '.'
+        ],
+        blanks:[0,1],
+        blankLabels:['Blank 1', 'Blank 2'],
+        options:[
+          {id:'surfaceMore', text:'more exposed surface area to air'},
+          {id:'lessSurface', text:'less exposed surface area to air'},
+          {id:'spaces', text:'create spaces between the towels'},
+          {id:'drycloth', text:'make the cloth disappear'}
+        ],
+        correctIds:['surfaceMore','spaces'],
+        correctFeedback:'Good. Now add what that causes.',
+        firstWrong:'One blank compares Y with X. One blank explains what the chopsticks do.',
+        laterWrong:'Check both ideas again: compare Y with X, then explain the chopsticks.'
+      });
+      return;
+    }
+
+    if(screenNum === 10){
+      renderFillScreen({
+        title:'Build the explanation sentence',
+        instruction:'Fill both blanks. Then tap Check.',
+        subtext:'Think about rate first, then result.',
+        sentenceParts:[
+          'This makes the water in the towels ',
+          ', so set-up Y loses ',
+          '.'
+        ],
+        blanks:[0,1],
+        blankLabels:['Blank 1', 'Blank 2'],
+        options:[
+          {id:'faster', text:'evaporate faster'},
+          {id:'moreWater', text:'more water'},
+          {id:'slower', text:'evaporate more slowly'},
+          {id:'lessCloth', text:'less cloth'}
+        ],
+        correctIds:['faster','moreWater'],
+        correctFeedback:'Yes. You now have the full explanation.',
+        firstWrong:'Think about rate first, then result.',
+        laterWrong:'The first blank is about evaporation rate. The second is about the result after two hours.'
+      });
+      return;
+    }
+
+    if(screenNum === 11){
+      renderGuessWord();
+      return;
+    }
+
+    if(screenNum === 12){
+      renderSingleChoice({
+        title:'Transfer check',
+        instruction:'Look at the two new drying methods. Choose which one dries faster and why.',
+        subtext:'This is a new situation. Use the same science idea.',
+        showDiagram:true,
+        diagramHtml:renderTransferDiagram(),
+        options:[
+          {id:'line', text:'The cloths hanging separately dry faster because more of each cloth is exposed to air.', correct:true},
+          {id:'trayThick', text:'The cloths pressed together dry faster because they are thicker.', correct:false},
+          {id:'trayLess', text:'The cloths pressed together dry faster because there is less cloth.', correct:false},
+          {id:'clips', text:'The cloths hanging separately dry faster because the clips absorb the water.', correct:false}
+        ],
+        correctFeedback:'Yes. The same idea works in a new situation.',
+        wrongFeedback:'Use the same chain: more exposed surface area to air leads to faster evaporation.',
+        demerit:false
+      });
+      return;
+    }
+
+    if(screenNum === 13){
+      renderComplete();
+      return;
+    }
+  }
+
+  el.toggleSpeech.addEventListener('click', () => {
+    state.readAloudOn = !state.readAloudOn;
+    updateTopStrip();
+    if(state.readAloudOn) speakNow(state.feedback ? state.feedback.text : '');
+    else if(window.speechSynthesis) window.speechSynthesis.cancel();
+  });
+
+  el.restartBtn.addEventListener('click', restartWholeActivity);
+
+  loadScreenState();
+  renderScreen();
+})();
+</script>
+</body>
+</html>

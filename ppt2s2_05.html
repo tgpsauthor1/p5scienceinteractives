@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_05</title>
+<style>
+  :root {
+    --bg: #eef6ff;
+    --panel: #ffffff;
+    --ink: #15324b;
+    --muted: #5c7286;
+    --blue: #2f78d4;
+    --blue-dark: #1d5fb7;
+    --ice: #dff3ff;
+    --ice-2: #eefaff;
+    --good: #1f8f5f;
+    --good-soft: #e7f8ef;
+    --bad: #b43b3b;
+    --bad-soft: #fff0f0;
+    --warn: #ffb84d;
+    --shadow: 0 12px 30px rgba(21, 50, 75, 0.12);
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at top left, #f7fcff 0%, #eef6ff 45%, #e6f0fb 100%);
+    min-height: 100vh;
+  }
+
+  .app {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  .topbar {
+    background: linear-gradient(135deg, #d8ecff, #f3fbff);
+    border: 3px solid #b3d8ff;
+    border-radius: 22px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+  }
+
+  .topbar-grid {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .demerit-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    align-items: center;
+  }
+
+  .demerit-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .snowflakes {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .flake {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 1.35rem;
+    background: #ffffff;
+    border: 2px solid #9dc8f6;
+    box-shadow: inset 0 0 0 3px #f5fbff;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .flake.lost {
+    opacity: 0.35;
+    transform: scale(0.9);
+    filter: grayscale(0.1);
+  }
+
+  .small-note {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .toggle-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.8);
+    border: 2px solid #cae5ff;
+    border-radius: 16px;
+    padding: 8px 12px;
+  }
+
+  .switch {
+    position: relative;
+    width: 58px;
+    height: 32px;
+    display: inline-block;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+    background: #b5cae2;
+    border-radius: 999px;
+    transition: 0.25s;
+  }
+
+  .slider::before {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    left: 4px;
+    top: 4px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.16);
+    transition: 0.25s;
+  }
+
+  .switch input:checked + .slider {
+    background: var(--blue);
+  }
+
+  .switch input:checked + .slider::before {
+    transform: translateX(26px);
+  }
+
+  button {
+    font: inherit;
+  }
+
+  .speak-btn, .restart-btn, .next-btn, .primary-btn, .secondary-btn, .check-btn {
+    border: none;
+    border-radius: 16px;
+    padding: 14px 18px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+  }
+
+  .speak-btn, .secondary-btn {
+    background: #ffffff;
+    color: var(--ink);
+    border: 2px solid #c6def6;
+  }
+
+  .restart-btn {
+    background: #fff5e6;
+    color: #805100;
+    border: 2px solid #ffd38b;
+  }
+
+  .primary-btn, .next-btn, .check-btn {
+    background: var(--blue);
+    color: white;
+    box-shadow: 0 8px 16px rgba(47, 120, 212, 0.22);
+  }
+
+  .primary-btn:hover, .next-btn:hover, .check-btn:hover,
+  .secondary-btn:hover, .restart-btn:hover, .speak-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .speak-btn:disabled, .next-btn:disabled, .check-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .screen-card {
+    background: var(--panel);
+    border-radius: 28px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    border: 3px solid #d9ebff;
+  }
+
+  .screen-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .screen-tag {
+    background: #edf6ff;
+    border: 2px solid #cfe6ff;
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 700;
+    color: var(--blue-dark);
+  }
+
+  .screen-title {
+    font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+    font-weight: 900;
+    margin: 0;
+  }
+
+  .instruction {
+    font-size: clamp(1.65rem, 3.25vw, 2.25rem);
+    line-height: 1.18;
+    font-weight: 900;
+    margin: 12px 0 20px;
+    color: #12385e;
+  }
+
+  .subtitle {
+    font-size: 1.06rem;
+    color: var(--muted);
+    margin: -8px 0 16px;
+  }
+
+  .question-box {
+    background: linear-gradient(135deg, #f5fbff, #ffffff);
+    border: 3px solid #cfe6ff;
+    border-radius: 24px;
+    padding: 18px;
+  }
+
+  .question-text {
+    font-size: 1.12rem;
+    line-height: 1.55;
+  }
+
+  mark {
+    background: #fff1a8;
+    color: inherit;
+    padding: 0.05em 0.2em;
+    border-radius: 6px;
+  }
+
+  .intro-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .screenshot {
+    width: 100%;
+    border-radius: 18px;
+    border: 3px solid #d2e6fb;
+    box-shadow: 0 8px 20px rgba(21, 50, 75, 0.08);
+    background: white;
+  }
+
+  .action-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .option-grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  .option-grid.two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .option-card {
+    border: 3px solid #cfe2f6;
+    background: linear-gradient(180deg, #ffffff, #f8fbff);
+    border-radius: 20px;
+    padding: 18px 18px;
+    min-height: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 1.12rem;
+    font-weight: 700;
+    line-height: 1.35;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .option-card.selected,
+  .state-box.selected,
+  .process-pill.selected {
+    border-color: var(--blue);
+    background: #e9f3ff;
+    box-shadow: inset 0 0 0 2px rgba(47, 120, 212, 0.1);
+  }
+
+  .option-card.correct,
+  .state-box.correct,
+  .process-pill.correct {
+    border-color: var(--good);
+    background: var(--good-soft);
+  }
+
+  .option-card.wrong,
+  .state-box.wrong,
+  .process-pill.wrong {
+    border-color: var(--bad);
+    background: var(--bad-soft);
+  }
+
+  .diagram-panel {
+    background: linear-gradient(180deg, #f7fcff, #ffffff);
+    border: 3px solid #cfe6ff;
+    border-radius: 24px;
+    padding: 16px;
+  }
+
+  .diagram-wrap {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    aspect-ratio: 7 / 3.7;
+  }
+
+  .diagram-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .state-box {
+    position: absolute;
+    border: 3px solid #b7d8f8;
+    border-radius: 16px;
+    background: white;
+    color: var(--ink);
+    font-weight: 800;
+    line-height: 1.2;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .state-box.clickable {
+    cursor: pointer;
+  }
+
+  .state-box.steam {
+    left: 2%;
+    top: 29%;
+    width: 18%;
+    height: 22%;
+  }
+
+  .state-box.ice {
+    left: 37%;
+    top: 2%;
+    width: 18%;
+    height: 22%;
+  }
+
+  .state-box.water {
+    left: 37%;
+    top: 53%;
+    width: 18%;
+    height: 22%;
+  }
+
+  .state-box.vapour {
+    right: 2%;
+    top: 29%;
+    width: 22%;
+    height: 22%;
+  }
+
+  .process-pill {
+    position: absolute;
+    min-width: 56px;
+    min-height: 46px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 3px solid #b7d8f8;
+    background: white;
+    color: var(--ink);
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(21, 50, 75, 0.08);
+  }
+
+  .process-pill[data-process="M"] { left: 21%; top: 55%; }
+  .process-pill[data-process="N"] { left: 43.4%; top: 28%; }
+  .process-pill[data-process="O"] { left: 53.5%; top: 28%; }
+  .process-pill[data-process="P"] { left: 74%; top: 55%; }
+
+  .hint-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+
+  .help-box {
+    margin-top: 12px;
+    background: #f8fcff;
+    border: 2px dashed #b7d8f8;
+    border-radius: 16px;
+    padding: 12px 14px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .feedback {
+    margin-top: 18px;
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 1.02rem;
+    line-height: 1.45;
+    font-weight: 700;
+    border: 2px solid #d1e5fb;
+    background: #f8fbff;
+    min-height: 64px;
+  }
+
+  .feedback.good {
+    background: var(--good-soft);
+    border-color: #b7e7ca;
+    color: #17553b;
+  }
+
+  .feedback.bad {
+    background: var(--bad-soft);
+    border-color: #f2c2c2;
+    color: #8e2f2f;
+  }
+
+  .question-panel {
+    margin-top: 24px;
+    background: #fcfeff;
+    border: 3px solid #d9ebff;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  .question-toggle {
+    width: 100%;
+    background: #f2f9ff;
+    border: none;
+    border-bottom: 2px solid #d9ebff;
+    padding: 16px 18px;
+    font-weight: 800;
+    color: var(--ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .question-panel-body {
+    padding: 18px;
+    display: none;
+  }
+
+  .question-panel.open .question-panel-body {
+    display: block;
+  }
+
+  .question-panel.open .question-toggle {
+    background: #eaf5ff;
+  }
+
+  .question-mini-text {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+
+  .footer-note {
+    margin-top: 18px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 31, 49, 0.7);
+    display: none;
+    place-items: center;
+    padding: 16px;
+    z-index: 50;
+  }
+
+  .overlay.show {
+    display: grid;
+  }
+
+  .overlay-card {
+    max-width: 520px;
+    width: 100%;
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.22);
+    border: 4px solid #d7ebff;
+  }
+
+  .overlay-card h2 {
+    margin-top: 0;
+    font-size: 2rem;
+  }
+
+  .overlay-card p {
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+
+  .transfer-diagram {
+    background: linear-gradient(180deg, #f7fcff, #ffffff);
+    border: 3px solid #cfe6ff;
+    border-radius: 24px;
+    padding: 16px;
+  }
+
+  .transfer-wrap {
+    position: relative;
+    max-width: 720px;
+    margin: 0 auto;
+    aspect-ratio: 8 / 3.5;
+  }
+
+  .transfer-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .transfer-state {
+    position: absolute;
+    width: 22%;
+    height: 28%;
+    border: 3px solid #b7d8f8;
+    border-radius: 16px;
+    background: white;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+  }
+
+  .transfer-state.solid { left: 4%; top: 30%; }
+  .transfer-state.liquid { left: 38%; top: 6%; }
+  .transfer-state.gas { right: 4%; top: 30%; }
+
+  .transfer-pill {
+    position: absolute;
+    min-width: 58px;
+    min-height: 46px;
+    border-radius: 999px;
+    border: 3px solid #b7d8f8;
+    background: white;
+    font-weight: 900;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(21, 50, 75, 0.08);
+  }
+
+  .transfer-pill.selected { border-color: var(--blue); background: #e9f3ff; }
+  .transfer-pill.correct { border-color: var(--good); background: var(--good-soft); }
+  .transfer-pill.wrong { border-color: var(--bad); background: var(--bad-soft); }
+
+  .transfer-pill[data-process="Q"] { left: 23%; top: 12%; }
+  .transfer-pill[data-process="R"] { left: 57%; top: 12%; }
+  .transfer-pill[data-process="S"] { left: 49%; top: 49%; }
+
+  .done-wrap {
+    text-align: center;
+    padding: 16px 8px 4px;
+  }
+
+  .done-icon {
+    font-size: 4rem;
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 860px) {
+    .topbar-grid {
+      grid-template-columns: 1fr;
+    }
+    .intro-grid {
+      grid-template-columns: 1fr;
+    }
+    .option-grid.two-col {
+      grid-template-columns: 1fr;
+    }
+    .screen-card {
+      padding: 18px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .app {
+      padding: 14px 12px 28px;
+    }
+    .instruction {
+      font-size: 1.6rem;
+    }
+    .process-pill, .transfer-pill {
+      min-width: 52px;
+      min-height: 42px;
+      font-size: 0.95rem;
+    }
+    .state-box, .transfer-state {
+      font-size: 0.95rem;
+    }
+    .speak-btn, .restart-btn, .next-btn, .primary-btn, .secondary-btn, .check-btn {
+      width: 100%;
+    }
+    .action-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-grid">
+      <div class="demerit-wrap">
+        <div>
+          <div class="demerit-title">Keep your snowflakes from melting.</div>
+          <div class="small-note" id="demeritNote"></div>
+        </div>
+        <div class="snowflakes" id="snowflakes" aria-live="polite"></div>
+      </div>
+
+      <div class="toggle-group">
+        <span><strong>Read-aloud</strong></span>
+        <label class="switch" aria-label="Toggle read-aloud">
+          <input type="checkbox" id="speechToggle" />
+          <span class="slider"></span>
+        </label>
+        <span id="speechLabel">Off</span>
+      </div>
+
+      <div class="hint-row">
+        <button class="speak-btn" id="speakBtn" disabled>🔊 Read this screen</button>
+        <button class="restart-btn" id="restartBtn">↺ Restart</button>
+      </div>
+    </div>
+  </div>
+
+  <main id="appMain" aria-live="polite"></main>
+</div>
+
+<div class="overlay" id="gameOverOverlay" aria-hidden="true">
+  <div class="overlay-card">
+    <h2>All the snowflakes melted!</h2>
+    <p>Take a fresh breath. The whole interactive will restart in a moment so you can try again carefully.</p>
+    <p><strong>Restarting…</strong></p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const QUESTION_IMAGE = "data:image/png;base64,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";
+
+  const screens = [
+    {
+      id: "screen1",
+      type: "intro",
+      title: "Question 5",
+      instruction: "Read the question, then tap when you are ready.",
+      speech: [
+        "Question 5.",
+        "Study the diagram carefully. M, N, O and P represent processes which lead to changes in the state of water.",
+        "Which two processes involve heat loss?",
+        "Tap when you are ready."
+      ]
+    },
+    {
+      id: "screen2",
+      type: "single",
+      title: "Find the task",
+      instruction: "Tap what you must find.",
+      subtitle: "This screen is about the question demand, not the science answer yet.",
+      demerit: true,
+      options: [
+        { id: "task-heat-loss", text: "Processes that involve heat loss", correct: true },
+        { id: "task-state-names", text: "Names of the states", correct: false },
+        { id: "task-up-arrows", text: "Arrows pointing up", correct: false },
+        { id: "task-hottest", text: "The hottest box", correct: false }
+      ],
+      correctFeedback: "Yes. You are finding the processes that involve heat loss.",
+      wrongFeedback: "Look at the question words, not the picture style."
+    },
+    {
+      id: "screen3",
+      type: "diagram-state-multi",
+      title: "Check the states",
+      instruction: "Tap all the boxes that show gas.",
+      subtitle: "Use the cleaner diagram to sort the states first.",
+      demerit: true,
+      correctIds: ["steam", "vapour"],
+      correctFeedback: "Yes. Steam and water vapour are gas here.",
+      wrongFeedback1: "Think about which states are gases, not which words look similar.",
+      wrongFeedback2: "Check the green boxes. Both gas states should be selected.",
+      helpText: "Need help? In this question, steam and water vapour both count as gas."
+    },
+    {
+      id: "screen4",
+      type: "multi",
+      title: "Recall the rule",
+      instruction: "Tap both changes that involve heat loss.",
+      subtitle: "Think about water cooling down.",
+      demerit: true,
+      options: [
+        { id: "solid-liquid", text: "solid → liquid", correct: false },
+        { id: "liquid-gas", text: "liquid → gas", correct: false },
+        { id: "gas-liquid", text: "gas → liquid", correct: true },
+        { id: "liquid-solid", text: "liquid → solid", correct: true }
+      ],
+      correctFeedback: "Yes. Heat loss changes gas to liquid and liquid to solid.",
+      wrongFeedback1: "Think about changes that happen when water cools down.",
+      wrongFeedback2: "The green cards show the two heat-loss changes."
+    },
+    {
+      id: "screen5",
+      type: "diagram-process-single",
+      title: "Use one clear clue",
+      instruction: "Tap the process that is water changing to steam.",
+      subtitle: "This gives you one process that is definitely not heat loss.",
+      demerit: true,
+      correctProcess: "M",
+      correctFeedback: "Yes. Water to steam is liquid to gas, so it is not heat loss.",
+      wrongFeedback: "Find the arrow that starts at water and ends at steam."
+    },
+    {
+      id: "screen6",
+      type: "diagram-process-multi",
+      title: "Map the rule to the diagram",
+      instruction: "Tap the two processes that involve heat loss.",
+      subtitle: "Follow the arrow direction each time.",
+      demerit: true,
+      correctIds: ["N", "P"],
+      correctFeedback: "Yes. Water to ice is liquid to solid, and water vapour to water is gas to liquid.",
+      wrongFeedback1: "Ask this for each arrow: does the change end in a lower-energy state?",
+      wrongFeedback2: "The green labels are the two heat-loss processes."
+    },
+    {
+      id: "screen7",
+      type: "single",
+      title: "Choose the best answer",
+      instruction: "Now choose the best answer.",
+      subtitle: "Pick the option that contains the two heat-loss processes.",
+      demerit: true,
+      options: [
+        { id: "ans-mn", text: "M and N", correct: false },
+        { id: "ans-mo", text: "M and O", correct: false },
+        { id: "ans-op", text: "O and P", correct: false },
+        { id: "ans-np", text: "N and P", correct: true }
+      ],
+      correctFeedback: "Correct. The two heat-loss processes are N and P.",
+      wrongFeedback: "Check which two letters were heat loss on the diagram."
+    },
+    {
+      id: "screen8",
+      type: "transfer-process-single",
+      title: "Quick transfer",
+      instruction: "One process below involves heat loss. Tap it.",
+      subtitle: "Try a new mini-diagram with less support.",
+      demerit: false,
+      correctProcess: "S",
+      correctFeedback: "Yes. Gas to liquid involves heat loss.",
+      wrongFeedback: "Heat loss moves to liquid or solid."
+    },
+    {
+      id: "screen9",
+      type: "complete",
+      title: "Finished",
+      instruction: "You solved the question by using arrow direction and heat-loss rules.",
+      speech: [
+        "Finished.",
+        "You solved the question by using arrow direction and heat-loss rules."
+      ]
+    }
+  ];
+
+  const teachingCheckableCount = screens.filter(s => s.demerit).length;
+  const defaultDemerits = Math.max(1, Math.floor(teachingCheckableCount / 2));
+
+  const state = {
+    screenIndex: 0,
+    readAloud: false,
+    questionOpen: false,
+    helpOpen: false,
+    demeritsMax: defaultDemerits,
+    demeritsLeft: defaultDemerits,
+    screenState: {},
+    restartTimer: null
+  };
+
+  function getQuestionTextHtml() {
+    return `
+      <div class="question-text">
+        <strong>5.</strong> Study the diagram carefully. M, N, O and P represent processes which lead to changes in the state of water.<br><br>
+        <mark>Which two processes</mark> involve <mark>heat loss</mark>?<br><br>
+        (1) M and N<br>
+        (2) M and O<br>
+        (3) O and P<br>
+        (4) N and P
+      </div>
+    `;
+  }
+
+  function getQuestionPanelHtml() {
+    return `
+      <section class="question-panel ${state.questionOpen ? 'open' : ''}" id="questionPanel">
+        <button class="question-toggle" id="questionToggle" aria-expanded="${state.questionOpen ? 'true' : 'false'}">
+          <span>Show the full question</span>
+          <span>${state.questionOpen ? '▲' : '▼'}</span>
+        </button>
+        <div class="question-panel-body">
+          <div class="question-mini-text">
+            Study the diagram carefully. M, N, O and P represent processes which lead to changes in the state of water.
+            <strong>Which two processes involve heat loss?</strong>
+          </div>
+          <img class="screenshot" src="${QUESTION_IMAGE}" alt="Original science question screenshot" />
+        </div>
+      </section>
+    `;
+  }
+
+  function getDiagramHtml(config = {}) {
+    const stateBoxButton = !!config.boxButtons;
+    const processButtons = !!config.processButtons;
+    const st = state.screenState[screens[state.screenIndex].id] || {};
+
+    const boxClass = (id, base) => {
+      const selected = st.selected && st.selected.includes(id) ? 'selected' : '';
+      const exact = st.showExact && st.checked ? (config.correctStateIds || []).includes(id) ? 'correct' : (st.selected || []).includes(id) ? 'wrong' : '' : '';
+      return `state-box ${base} ${stateBoxButton ? 'clickable' : ''} ${selected} ${exact}`;
+    };
+
+    const processClass = (id) => {
+      const selected = st.selected && st.selected.includes(id) ? 'selected' : '';
+      const exact = st.showExact && st.checked ? (config.correctProcessIds || []).includes(id) ? 'correct' : (st.selected || []).includes(id) ? 'wrong' : '' : '';
+      return `process-pill ${selected} ${exact}`;
+    };
+
+    return `
+      <div class="diagram-panel">
+        <div class="diagram-wrap">
+          <svg class="diagram-svg" viewBox="0 0 700 370" aria-hidden="true">
+            <defs>
+              <marker id="arrowEnd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4c83c2"></path>
+              </marker>
+            </defs>
+            <line x1="300" y1="225" x2="145" y2="160" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd)"></line>
+            <line x1="350" y1="205" x2="350" y2="78" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd)"></line>
+            <line x1="392" y1="80" x2="392" y2="205" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd)"></line>
+            <line x1="555" y1="160" x2="400" y2="225" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd)"></line>
+          </svg>
+
+          <div class="${boxClass('steam','steam')}" ${stateBoxButton ? 'data-state-id="steam"' : ''} role="${stateBoxButton ? 'button' : 'presentation'}" tabindex="${stateBoxButton ? '0' : '-1'}">Steam</div>
+          <div class="${boxClass('ice','ice')}" ${stateBoxButton ? 'data-state-id="ice"' : ''} role="${stateBoxButton ? 'button' : 'presentation'}" tabindex="${stateBoxButton ? '0' : '-1'}">Ice</div>
+          <div class="${boxClass('water','water')}" ${stateBoxButton ? 'data-state-id="water"' : ''} role="${stateBoxButton ? 'button' : 'presentation'}" tabindex="${stateBoxButton ? '0' : '-1'}">Water</div>
+          <div class="${boxClass('vapour','vapour')}" ${stateBoxButton ? 'data-state-id="vapour"' : ''} role="${stateBoxButton ? 'button' : 'presentation'}" tabindex="${stateBoxButton ? '0' : '-1'}">Water<br>vapour</div>
+
+          ${processButtons ? `<button class="${processClass('M')}" data-process="M" aria-label="Process M">M</button>` : ''}
+          ${processButtons ? `<button class="${processClass('N')}" data-process="N" aria-label="Process N">N</button>` : ''}
+          ${processButtons ? `<button class="${processClass('O')}" data-process="O" aria-label="Process O">O</button>` : ''}
+          ${processButtons ? `<button class="${processClass('P')}" data-process="P" aria-label="Process P">P</button>` : ''}
+        </div>
+      </div>
+    `;
+  }
+
+  function getTransferDiagramHtml() {
+    const st = state.screenState[screens[state.screenIndex].id] || {};
+    const processClass = (id) => {
+      const selected = st.selected === id ? 'selected' : '';
+      const exact = st.checked ? (id === screens[state.screenIndex].correctProcess ? 'correct' : (st.selected === id ? 'wrong' : '')) : '';
+      return `transfer-pill ${selected} ${exact}`;
+    };
+
+    return `
+      <div class="transfer-diagram">
+        <div class="transfer-wrap">
+          <svg class="transfer-svg" viewBox="0 0 720 320" aria-hidden="true">
+            <defs>
+              <marker id="arrowEnd2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#4c83c2"></path>
+              </marker>
+            </defs>
+            <line x1="184" y1="165" x2="315" y2="92" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd2)"></line>
+            <line x1="404" y1="92" x2="535" y2="165" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd2)"></line>
+            <line x1="534" y1="182" x2="425" y2="112" stroke="#6b8fb8" stroke-width="7" stroke-linecap="round" marker-end="url(#arrowEnd2)"></line>
+          </svg>
+          <div class="transfer-state solid">Solid</div>
+          <div class="transfer-state liquid">Liquid</div>
+          <div class="transfer-state gas">Gas</div>
+          <button class="${processClass('Q')}" data-process="Q" aria-label="Process Q">Q</button>
+          <button class="${processClass('R')}" data-process="R" aria-label="Process R">R</button>
+          <button class="${processClass('S')}" data-process="S" aria-label="Process S">S</button>
+        </div>
+      </div>
+    `;
+  }
+
+  function shuffleArray(items) {
+    const arr = items.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function ensureScreenState(screen) {
+    if (!state.screenState[screen.id]) {
+      const entry = {
+        answered: false,
+        feedbackType: "",
+        feedbackText: "",
+        selected: screen.type.includes('multi') ? [] : null,
+        attempts: 0,
+        checked: false,
+        showExact: false,
+        order: screen.options ? getShuffledOrder(screen) : null
+      };
+      state.screenState[screen.id] = entry;
+    }
+  }
+
+  function getShuffledOrder(screen) {
+    const items = screen.options.slice();
+    let arr = shuffleArray(items);
+    let safety = 0;
+    const originalOrder = items.map(x => x.id).join('|');
+    while (safety < 20) {
+      const correctIndex = arr.findIndex(x => x.correct);
+      const sameOrder = arr.map(x => x.id).join('|') === originalOrder;
+      if (correctIndex !== 0 && !sameOrder) break;
+      arr = shuffleArray(items);
+      safety++;
+    }
+    return arr.map(x => x.id);
+  }
+
+  function getOrderedOptions(screen) {
+    ensureScreenState(screen);
+    const order = state.screenState[screen.id].order || screen.options.map(x => x.id);
+    return order.map(id => screen.options.find(opt => opt.id === id));
+  }
+
+  function updateTopbar() {
+    const note = document.getElementById('demeritNote');
+    note.textContent = `Global chances: ${state.demeritsLeft} of ${state.demeritsMax} left. Wrong checks count only on the teaching screens.`;
+
+    const snowflakes = document.getElementById('snowflakes');
+    snowflakes.innerHTML = "";
+    for (let i = 0; i < state.demeritsMax; i++) {
+      const span = document.createElement('span');
+      span.className = 'flake' + (i < state.demeritsLeft ? '' : ' lost');
+      span.textContent = '❄️';
+      span.setAttribute('aria-hidden', 'true');
+      snowflakes.appendChild(span);
+    }
+
+    const toggle = document.getElementById('speechToggle');
+    const label = document.getElementById('speechLabel');
+    toggle.checked = state.readAloud;
+    label.textContent = state.readAloud ? 'On' : 'Off';
+    const speakBtn = document.getElementById('speakBtn');
+    speakBtn.disabled = !state.readAloud;
+  }
+
+  function render() {
+    updateTopbar();
+    const screen = screens[state.screenIndex];
+    ensureScreenState(screen);
+    const st = state.screenState[screen.id];
+    const main = document.getElementById('appMain');
+
+    let html = `<section class="screen-card">
+      <div class="screen-meta">
+        <div class="screen-tag">Screen ${state.screenIndex + 1} of ${screens.length}</div>
+        <h1 class="screen-title">${screen.title}</h1>
+      </div>
+      <div class="instruction">${screen.instruction}</div>
+      ${screen.subtitle ? `<div class="subtitle">${screen.subtitle}</div>` : ''}
+    `;
+
+    if (screen.type === 'intro') {
+      html += `
+        <div class="intro-grid">
+          <div class="question-box">
+            ${getQuestionTextHtml()}
+          </div>
+          <div>
+            <img class="screenshot" src="${QUESTION_IMAGE}" alt="Original science question screenshot" />
+          </div>
+        </div>
+        <div class="action-row">
+          <div class="small-note">Screen 1 is a calm start. Later screens will ask you to tap, choose, or check something each time.</div>
+          <button class="primary-btn" id="readyBtn">I'm ready</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'single') {
+      const options = getOrderedOptions(screen);
+      html += `<div class="option-grid two-col">`;
+      options.forEach(opt => {
+        const selected = st.selected === opt.id ? 'selected' : '';
+        const checkedClass = st.checked ? (opt.correct ? ' correct' : (st.selected === opt.id ? ' wrong' : '')) : '';
+        html += `<button class="option-card ${selected}${checkedClass}" data-option-id="${opt.id}">${opt.text}</button>`;
+      });
+      html += `</div>`;
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">Tap one answer. The next button unlocks only after the correct choice.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'diagram-state-multi') {
+      html += getDiagramHtml({ boxButtons: true, correctStateIds: screen.correctIds });
+      html += `
+        <div class="hint-row">
+          <button class="secondary-btn" id="helpBtn">${state.helpOpen ? 'Hide help' : 'Need help?'}</button>
+          <button class="check-btn" id="checkBtn" ${st.selected.length ? '' : 'disabled'}>Check</button>
+        </div>
+        ${state.helpOpen ? `<div class="help-box">${screen.helpText}</div>` : ''}
+      `;
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">Tap the boxes first, then check your set.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'multi') {
+      const options = getOrderedOptions(screen);
+      html += `<div class="option-grid two-col">`;
+      options.forEach(opt => {
+        const selected = st.selected.includes(opt.id) ? 'selected' : '';
+        let exact = '';
+        if (st.showExact && st.checked) {
+          exact = opt.correct ? ' correct' : (st.selected.includes(opt.id) ? ' wrong' : '');
+        }
+        html += `<button class="option-card ${selected}${exact}" data-option-id="${opt.id}">${opt.text}</button>`;
+      });
+      html += `</div>`;
+      html += `
+        <div class="hint-row">
+          <button class="check-btn" id="checkBtn" ${st.selected.length ? '' : 'disabled'}>Check</button>
+        </div>
+      `;
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">Choose the full set first. Then check it.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'diagram-process-single') {
+      html += getDiagramHtml({ processButtons: true, correctProcessIds: [screen.correctProcess] });
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">Tap one process label.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'diagram-process-multi') {
+      html += getDiagramHtml({ processButtons: true, correctProcessIds: screen.correctIds });
+      html += `
+        <div class="hint-row">
+          <button class="check-btn" id="checkBtn" ${st.selected.length ? '' : 'disabled'}>Check</button>
+        </div>
+      `;
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">Choose the two labels first. Then check them.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'transfer-process-single') {
+      html += getTransferDiagramHtml();
+      html += getFeedbackHtml(st);
+      html += `
+        <div class="action-row">
+          <div class="small-note">This transfer check does not use demerits.</div>
+          <button class="next-btn" id="nextBtn" ${st.answered ? '' : 'disabled'}>Next</button>
+        </div>
+      `;
+    }
+
+    if (screen.type === 'complete') {
+      html += `
+        <div class="done-wrap">
+          <div class="done-icon">💧❄️</div>
+          <p class="question-text">You noticed what the question asked, tracked the arrow direction, and matched each change to heat loss or heat gain.</p>
+          <div class="action-row" style="justify-content:center;">
+            <button class="primary-btn" id="restartBtnEnd">Try again from the start</button>
+          </div>
+        </div>
+      `;
+    }
+
+    if (screen.type !== 'intro') {
+      html += getQuestionPanelHtml();
+    }
+
+    html += `<div class="footer-note">Interactive file: <strong>ppt2s2_05.html</strong></div>`;
+    html += `</section>`;
+
+    main.innerHTML = html;
+    bindScreenEvents(screen);
+  }
+
+  function getFeedbackHtml(st) {
+    const cls = st.feedbackType ? `feedback ${st.feedbackType}` : 'feedback';
+    const text = st.feedbackText || ' ';
+    return `<div class="${cls}" id="feedbackBox">${text}</div>`;
+  }
+
+  function bindScreenEvents(screen) {
+    const speakBtn = document.getElementById('speakBtn');
+    speakBtn.onclick = () => speakCurrentScreen();
+
+    const restartBtn = document.getElementById('restartBtn');
+    restartBtn.onclick = () => resetInteractive();
+
+    const readyBtn = document.getElementById('readyBtn');
+    if (readyBtn) {
+      readyBtn.addEventListener('click', () => {
+        state.screenIndex++;
+        render();
+      });
+    }
+
+    const restartBtnEnd = document.getElementById('restartBtnEnd');
+    if (restartBtnEnd) {
+      restartBtnEnd.addEventListener('click', () => resetInteractive());
+    }
+
+    const nextBtn = document.getElementById('nextBtn');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (state.screenState[screen.id].answered && state.screenIndex < screens.length - 1) {
+          state.screenIndex++;
+          render();
+        }
+      });
+    }
+
+    const questionToggle = document.getElementById('questionToggle');
+    if (questionToggle) {
+      questionToggle.addEventListener('click', () => {
+        state.questionOpen = !state.questionOpen;
+        render();
+      });
+    }
+
+    const helpBtn = document.getElementById('helpBtn');
+    if (helpBtn) {
+      helpBtn.addEventListener('click', () => {
+        state.helpOpen = !state.helpOpen;
+        render();
+      });
+    }
+
+    if (screen.type === 'single') bindSingleScreen(screen);
+    if (screen.type === 'multi') bindMultiScreen(screen);
+    if (screen.type === 'diagram-state-multi') bindStateMulti(screen);
+    if (screen.type === 'diagram-process-single') bindProcessSingle(screen);
+    if (screen.type === 'diagram-process-multi') bindProcessMulti(screen);
+    if (screen.type === 'transfer-process-single') bindTransferSingle(screen);
+  }
+
+  function bindSingleScreen(screen) {
+    document.querySelectorAll('[data-option-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.selected = btn.dataset.optionId;
+        st.checked = true;
+        const chosen = screen.options.find(o => o.id === st.selected);
+        if (chosen.correct) {
+          st.answered = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          applyDemeritIfNeeded(screen);
+          st.feedbackType = 'bad';
+          st.feedbackText = screen.wrongFeedback;
+        }
+        render();
+      });
+    });
+  }
+
+  function bindMultiScreen(screen) {
+    document.querySelectorAll('[data-option-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        const id = btn.dataset.optionId;
+        if (st.selected.includes(id)) {
+          st.selected = st.selected.filter(x => x !== id);
+        } else {
+          st.selected = [...st.selected, id];
+        }
+        st.checked = false;
+        render();
+      });
+    });
+
+    const checkBtn = document.getElementById('checkBtn');
+    if (checkBtn) {
+      checkBtn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.checked = true;
+        const correctIds = screen.options.filter(o => o.correct).map(o => o.id).sort().join('|');
+        const selectedIds = st.selected.slice().sort().join('|');
+        if (correctIds === selectedIds) {
+          st.answered = true;
+          st.showExact = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          st.attempts += 1;
+          applyDemeritIfNeeded(screen);
+          st.feedbackType = 'bad';
+          st.feedbackText = st.attempts >= 2 ? screen.wrongFeedback2 : screen.wrongFeedback1;
+          st.showExact = st.attempts >= 2;
+        }
+        render();
+      });
+    }
+  }
+
+  function bindStateMulti(screen) {
+    document.querySelectorAll('[data-state-id]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        const id = btn.dataset.stateId;
+        if (st.selected.includes(id)) {
+          st.selected = st.selected.filter(x => x !== id);
+        } else {
+          st.selected = [...st.selected, id];
+        }
+        st.checked = false;
+        render();
+      });
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
+        }
+      });
+    });
+
+    const checkBtn = document.getElementById('checkBtn');
+    if (checkBtn) {
+      checkBtn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.checked = true;
+        const selectedIds = st.selected.slice().sort().join('|');
+        const correctIds = screen.correctIds.slice().sort().join('|');
+        if (selectedIds === correctIds) {
+          st.answered = true;
+          st.showExact = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          st.attempts += 1;
+          applyDemeritIfNeeded(screen);
+          st.feedbackType = 'bad';
+          st.feedbackText = st.attempts >= 2 ? screen.wrongFeedback2 : screen.wrongFeedback1;
+          st.showExact = st.attempts >= 2;
+        }
+        render();
+      });
+    }
+  }
+
+  function bindProcessSingle(screen) {
+    document.querySelectorAll('[data-process]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.selected = [btn.dataset.process];
+        st.checked = true;
+        if (btn.dataset.process === screen.correctProcess) {
+          st.answered = true;
+          st.showExact = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          applyDemeritIfNeeded(screen);
+          st.feedbackType = 'bad';
+          st.feedbackText = screen.wrongFeedback;
+        }
+        render();
+      });
+    });
+  }
+
+  function bindProcessMulti(screen) {
+    document.querySelectorAll('[data-process]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        const id = btn.dataset.process;
+        if (st.selected.includes(id)) {
+          st.selected = st.selected.filter(x => x !== id);
+        } else {
+          st.selected = [...st.selected, id];
+        }
+        st.checked = false;
+        render();
+      });
+    });
+
+    const checkBtn = document.getElementById('checkBtn');
+    if (checkBtn) {
+      checkBtn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.checked = true;
+        const selectedIds = st.selected.slice().sort().join('|');
+        const correctIds = screen.correctIds.slice().sort().join('|');
+        if (selectedIds === correctIds) {
+          st.answered = true;
+          st.showExact = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          st.attempts += 1;
+          applyDemeritIfNeeded(screen);
+          st.feedbackType = 'bad';
+          st.feedbackText = st.attempts >= 2 ? screen.wrongFeedback2 : screen.wrongFeedback1;
+          st.showExact = st.attempts >= 2;
+        }
+        render();
+      });
+    }
+  }
+
+  function bindTransferSingle(screen) {
+    document.querySelectorAll('[data-process]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const st = state.screenState[screen.id];
+        st.selected = btn.dataset.process;
+        st.checked = true;
+        if (btn.dataset.process === screen.correctProcess) {
+          st.answered = true;
+          st.feedbackType = 'good';
+          st.feedbackText = screen.correctFeedback;
+        } else {
+          st.feedbackType = 'bad';
+          st.feedbackText = screen.wrongFeedback;
+        }
+        render();
+      });
+    });
+  }
+
+  function applyDemeritIfNeeded(screen) {
+    if (!screen.demerit) return;
+    state.demeritsLeft = Math.max(0, state.demeritsLeft - 1);
+    if (state.demeritsLeft === 0) {
+      showGameOver();
+    }
+  }
+
+  function showGameOver() {
+    window.speechSynthesis.cancel();
+    const overlay = document.getElementById('gameOverOverlay');
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    if (state.restartTimer) clearTimeout(state.restartTimer);
+    state.restartTimer = setTimeout(() => {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      resetInteractive();
+    }, 1800);
+  }
+
+  function resetInteractive() {
+    window.speechSynthesis.cancel();
+    if (state.restartTimer) clearTimeout(state.restartTimer);
+    state.screenIndex = 0;
+    state.questionOpen = false;
+    state.helpOpen = false;
+    state.demeritsLeft = state.demeritsMax;
+    state.screenState = {};
+    document.getElementById('gameOverOverlay').classList.remove('show');
+    document.getElementById('gameOverOverlay').setAttribute('aria-hidden', 'true');
+    render();
+  }
+
+  function currentSpeechText() {
+    const screen = screens[state.screenIndex];
+    const st = state.screenState[screen.id] || {};
+    if (screen.speech) return screen.speech.join(' ');
+
+    if (screen.type === 'single') {
+      const options = getOrderedOptions(screen).map(o => o.text).join('. ');
+      return `${screen.title}. ${screen.instruction}. ${screen.subtitle || ''}. Options: ${options}. ${st.feedbackText || ''}`;
+    }
+
+    if (screen.type === 'multi') {
+      const options = getOrderedOptions(screen).map(o => o.text).join('. ');
+      return `${screen.title}. ${screen.instruction}. ${screen.subtitle || ''}. Options: ${options}. ${st.feedbackText || ''}`;
+    }
+
+    if (screen.type === 'diagram-state-multi') {
+      return `${screen.title}. ${screen.instruction}. Boxes shown are Steam, Ice, Water, and Water vapour. ${st.feedbackText || ''}`;
+    }
+
+    if (screen.type === 'diagram-process-single' || screen.type === 'diagram-process-multi') {
+      return `${screen.title}. ${screen.instruction}. The diagram shows Steam, Ice, Water, and Water vapour, with process labels M, N, O, and P. ${st.feedbackText || ''}`;
+    }
+
+    if (screen.type === 'transfer-process-single') {
+      return `${screen.title}. ${screen.instruction}. The mini-diagram shows Solid, Liquid, and Gas, with process labels Q, R, and S. ${st.feedbackText || ''}`;
+    }
+
+    return `${screen.title}. ${screen.instruction}.`;
+  }
+
+  function speakCurrentScreen() {
+    if (!state.readAloud || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(currentSpeechText());
+    utter.rate = 0.95;
+    utter.pitch = 1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  document.getElementById('speechToggle').addEventListener('change', (e) => {
+    state.readAloud = e.target.checked;
+    if (!state.readAloud) {
+      window.speechSynthesis.cancel();
+    }
+    updateTopbar();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

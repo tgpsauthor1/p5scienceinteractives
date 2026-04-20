@@ -1,0 +1,972 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_02</title>
+<style>
+  :root{
+    --bg1:#f7fbff;
+    --bg2:#eef7f1;
+    --ink:#17324d;
+    --muted:#5f748a;
+    --brand:#2f7d67;
+    --brand2:#f3a93b;
+    --card:#ffffff;
+    --line:#d6e3ef;
+    --good:#1c8f56;
+    --goodBg:#e8f7ef;
+    --bad:#b54b3d;
+    --badBg:#fff1ef;
+    --warn:#856404;
+    --warnBg:#fff8db;
+    --shadow:0 12px 30px rgba(28,57,91,.12);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    color:var(--ink);
+    background:linear-gradient(180deg,var(--bg1),var(--bg2));
+  }
+  .app{max-width:1024px;margin:0 auto;padding:18px 16px 32px;}
+  .topbar{
+    display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;
+    background:rgba(255,255,255,.9);border:1px solid var(--line);border-radius:18px;
+    padding:12px 14px;box-shadow:var(--shadow);margin-bottom:16px;
+  }
+  .top-left,.top-right{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;}
+  .badge{
+    background:#eef6ff;border:1px solid #cfe0f4;border-radius:999px;padding:8px 12px;
+    font-weight:800;font-size:15px;
+  }
+  .tracker{
+    display:flex;align-items:center;gap:8px;background:#f7fff8;border:1px solid #d6eddc;
+    border-radius:999px;padding:8px 12px;font-weight:800;font-size:15px;
+  }
+  .leaf{font-size:20px;display:inline-block;transform:translateY(1px);}
+  .leaf.lost{opacity:.22;filter:grayscale(1);}
+  .toggle-wrap{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);font-weight:800;}
+  .switch{
+    width:56px;height:32px;border-radius:999px;background:#dbe4ec;border:none;position:relative;cursor:pointer;
+  }
+  .switch span{
+    position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;
+    box-shadow:0 2px 8px rgba(0,0,0,.16);transition:transform .18s ease;
+  }
+  .switch.on{background:var(--brand)}
+  .switch.on span{transform:translateX(24px)}
+  .ghost-btn,.primary-btn,.check-btn{
+    border:none;border-radius:16px;cursor:pointer;font-weight:900;font-size:18px;
+    padding:14px 18px;min-height:52px;
+  }
+  .ghost-btn{background:#edf6ff;color:#184e8c;border:1px solid #cfe0f4;}
+  .primary-btn{background:linear-gradient(180deg,#2f7d67,#236a57);color:#fff;box-shadow:0 8px 20px rgba(35,106,87,.22);}
+  .check-btn{background:linear-gradient(180deg,#f3a93b,#e5961f);color:#fff;box-shadow:0 8px 20px rgba(243,169,59,.25);}
+  .ghost-btn:disabled,.primary-btn:disabled,.check-btn:disabled{cursor:not-allowed;opacity:.45;box-shadow:none;}
+  .screen-card{
+    background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);
+    padding:20px;position:relative;overflow:hidden;
+  }
+  .title-row{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:800;color:#48627a;
+    background:#f3f8fc;border:1px solid #dce8f2;border-radius:999px;padding:8px 12px;
+  }
+  .instruction{font-size:34px;line-height:1.18;margin:6px 0 8px;font-weight:900;letter-spacing:-.4px;}
+  .subtext{color:var(--muted);font-size:17px;line-height:1.45;margin:0;}
+  .feedback{
+    margin-top:14px;border-radius:18px;padding:14px 16px;font-size:18px;font-weight:700;line-height:1.35;
+    border:1px solid transparent;
+  }
+  .feedback.good{background:var(--goodBg);color:var(--good);border-color:#bfe7cf;}
+  .feedback.bad{background:var(--badBg);color:var(--bad);border-color:#f0c7c1;}
+  .feedback.warn{background:var(--warnBg);color:var(--warn);border-color:#f0e3a4;}
+  .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px;}
+  .option-grid{display:grid;gap:14px;margin-top:18px;}
+  .option-grid.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+  .option-grid.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .option-card{
+    border:2px solid #d9e5ef;background:#fbfdff;border-radius:22px;padding:18px;min-height:86px;
+    display:flex;align-items:center;justify-content:center;text-align:center;font-size:24px;line-height:1.25;
+    font-weight:800;cursor:pointer;transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+  }
+  .option-card:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.08);}
+  .option-card.selected{border-color:#5478ff;background:#eef1ff;box-shadow:0 8px 18px rgba(84,120,255,.14);}
+  .option-card.correct{border-color:#2b9a62;background:#edf9f1;}
+  .option-card.wrong{border-color:#cf6558;background:#fff4f2;}
+  .question-box{background:#f9fbfd;border:1px solid #dce8f2;border-radius:24px;padding:18px;}
+  .question-title{margin:0 0 10px;font-size:22px;font-weight:900;}
+  .question-stem{font-size:19px;line-height:1.45;margin:0 0 16px;}
+  .hl{background:#fff3bf;border-radius:8px;padding:1px 4px;}
+  .question-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start;}
+  .flow-wrap{background:#fff;border:1px solid #dce8f2;border-radius:22px;padding:14px;}
+  .fruit-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:14px;}
+  .fruit-card{border:1px solid #dce8f2;background:#fff;border-radius:22px;padding:14px;}
+  .fruit-card h4{margin:0 0 10px;font-size:22px;}
+  .fruit-label{text-align:center;margin-top:8px;font-size:20px;font-weight:900;}
+  .source-choices{
+    width:100%;border-collapse:collapse;margin-top:14px;font-size:18px;overflow:hidden;border-radius:18px;
+  }
+  .source-choices th,.source-choices td{border:1px solid #cfe0f4;padding:10px;text-align:center;}
+  .source-choices th{background:#eff6ff;font-size:17px;}
+  .source-choices td:first-child,.source-choices th:first-child{width:64px;font-weight:900;}
+  .mini-layout{display:grid;grid-template-columns:280px 1fr;gap:18px;align-items:start;margin-top:18px;}
+  .mini-card{border:1px solid #dce8f2;background:#fbfdff;border-radius:24px;padding:16px;}
+  .mini-card h3{margin:0 0 10px;font-size:26px;}
+  .path-builder{display:grid;gap:14px;margin-top:18px;}
+  .path-row{
+    display:grid;grid-template-columns:1.35fr 1fr;gap:12px;align-items:center;padding:14px;
+    border:1px solid #dce8f2;border-radius:22px;background:#fbfdff;
+  }
+  .path-row .question{font-size:21px;line-height:1.3;font-weight:800;}
+  .choice-pills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .pill{
+    border:2px solid #d8e4ef;background:#fff;border-radius:16px;min-height:54px;font-size:20px;font-weight:900;cursor:pointer;
+  }
+  .pill.selected{border-color:#5478ff;background:#eef1ff;}
+  .row-state{margin-top:8px;font-size:16px;font-weight:800;}
+  .row-state.good{color:var(--good)} .row-state.bad{color:var(--bad)}
+  .question-toggle{margin-top:18px;background:#f7fbff;border:1px solid #dce8f2;border-radius:22px;overflow:hidden;}
+  .question-toggle summary{list-style:none;cursor:pointer;padding:14px 16px;font-size:18px;font-weight:900;background:#f1f7fc;}
+  .question-toggle summary::-webkit-details-marker{display:none;}
+  .question-toggle .inside{padding:14px;}
+  .set-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:18px;}
+  .set-card{
+    border:2px solid #d8e4ef;border-radius:24px;padding:18px;background:#fbfdff;cursor:pointer;
+    min-height:122px;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start;
+  }
+  .set-card.selected{border-color:#5478ff;background:#eef1ff;}
+  .set-card.correct{border-color:#2b9a62;background:#edf9f1;}
+  .set-card.wrong{border-color:#cf6558;background:#fff4f2;}
+  .set-line{font-size:26px;font-weight:900;line-height:1.25;}
+  .progress-dots{display:flex;gap:8px;align-items:center;}
+  .dot{width:12px;height:12px;border-radius:999px;background:#d7e2ec;}
+  .dot.done{background:#6cbf8b;} .dot.now{background:#f3a93b;transform:scale(1.15);}
+  .helper-strip{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px;}
+  .helper-badge{
+    padding:8px 12px;border-radius:999px;font-size:15px;font-weight:800;background:#eef6ff;color:#315e8a;border:1px solid #d6e3ef;
+  }
+  .completion{margin-top:18px;border:1px solid #bee7d0;background:#edf9f1;border-radius:22px;padding:18px;}
+  .completion h3{margin:0 0 8px;font-size:28px;}
+  .completion p{margin:0;font-size:19px;line-height:1.4;}
+  .gameover{position:absolute;inset:0;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;}
+  .gameover-box{max-width:520px;background:#fff9e8;border:2px solid #f4d88e;border-radius:28px;padding:24px;box-shadow:0 12px 30px rgba(28,57,91,.12);}
+  .gameover-box h2{margin:0 0 10px;font-size:36px;}
+  .gameover-box p{margin:0;font-size:20px;line-height:1.4;}
+  svg{max-width:100%;height:auto;display:block;}
+  .endpoint-token{animation:floaty 1.5s ease-in-out infinite;}
+  @keyframes floaty{0%,100%{transform:translateY(0px);}50%{transform:translateY(-4px);}}
+  @keyframes dash{from{stroke-dashoffset:0;}to{stroke-dashoffset:-26;}}
+  .trail-line{stroke:#90a4b5;stroke-width:4;fill:none;}
+  .trail-line.hl{stroke:#2b9a62;stroke-width:6;stroke-dasharray:10 8;animation:dash 1.2s linear infinite;}
+  .choice-note{font-size:18px;font-weight:800;color:#48627a;margin-top:6px;}
+  @media (max-width: 900px){
+    .question-layout,.mini-layout{grid-template-columns:1fr;}
+    .option-grid.three,.option-grid.two,.set-grid{grid-template-columns:1fr;}
+    .path-row{grid-template-columns:1fr;}
+    .instruction{font-size:29px;}
+  }
+  @media (max-width: 560px){
+    .app{padding:12px 10px 24px;}
+    .screen-card{padding:14px;}
+    .instruction{font-size:26px;}
+    .option-card,.set-line{font-size:22px;}
+    .path-row .question{font-size:19px;}
+    .fruit-row{grid-template-columns:1fr;}
+    .topbar{padding:10px;}
+    .ghost-btn,.primary-btn,.check-btn{width:100%;}
+    .actions{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app" aria-live="polite"></div>
+
+<script>
+(function(){
+  const TOTAL_SCREENS = 8;
+  const TOTAL_DEMERITS = 3;
+  const sourceSets = [
+    {id:'set1', p:'X', q:'W'},
+    {id:'set2', p:'Y', q:'Z'},
+    {id:'set3', p:'Z', q:'W'},
+    {id:'set4', p:'Z', q:'X'}
+  ];
+  const screenNames = ['Start','Solve first','Fruit P clue','Fruit P path','Fruit Q clue','Fruit Q path','Match set','Transfer'];
+  const app = document.getElementById('app');
+
+  let state = freshState(false);
+
+  function freshState(preserveRead){
+    return {
+      screen:0,
+      demerits:TOTAL_DEMERITS,
+      readAloud:!!preserveRead,
+      lastAutoReadScreen:null,
+      questionOpen:false,
+      gameOver:false,
+      single:{
+        solveFirst:{selected:null, solved:false, feedback:null, feedbackType:null},
+        pClue:{selected:null, solved:false, feedback:null, feedbackType:null},
+        qClue:{selected:null, solved:false, feedback:null, feedbackType:null},
+        finalSet:{selected:null, solved:false, feedback:null, feedbackType:null},
+        transfer:{selected:null, solved:false, feedback:null, feedbackType:null}
+      },
+      path:{
+        p:{selected:[null,null,null], attempts:0, solved:false, feedback:null, feedbackType:null},
+        q:{selected:[null,null], attempts:0, solved:false, feedback:null, feedbackType:null}
+      },
+      orders:buildOrders(),
+      restartTimer:null
+    };
+  }
+
+  function buildOrders(){
+    return {
+      solveFirst: shuffleChoices([
+        {id:'number', text:'the printed option number'},
+        {id:'boxes', text:'where Fruit P and Fruit Q go in the chart'},
+        {id:'branches', text:'how many branches the chart has'}
+      ], 'boxes'),
+      pClue: shuffleChoices([
+        {id:'hooks', text:'stiff hooks'},
+        {id:'husk', text:'fibrous husk'},
+        {id:'wing', text:'wing-like structure'}
+      ], 'wing'),
+      qClue: shuffleChoices([
+        {id:'hooks', text:'stiff hooks'},
+        {id:'husk', text:'fibrous husk'},
+        {id:'wing', text:'wing-like structure'}
+      ], 'hooks'),
+      finalSet: shuffleChoices(sourceSets.map(x=>({...x})), 'set3', true),
+      transfer: shuffleChoices([
+        {id:'W', text:'W'},
+        {id:'X', text:'X'},
+        {id:'Y', text:'Y'},
+        {id:'Z', text:'Z'}
+      ], 'Y')
+    };
+  }
+
+  function shuffleChoices(items, correctId, avoidOriginal){
+    const original = items.map(x => x.id).join('|');
+    let copy = [];
+    let tries = 0;
+    do{
+      copy = [...items];
+      for(let i = copy.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      tries += 1;
+      if(tries > 50) break;
+    } while (
+      (copy[0] && copy[0].id === correctId) ||
+      (avoidOriginal && copy.map(x => x.id).join('|') === original)
+    );
+    return copy;
+  }
+
+  function render(){
+    app.innerHTML = `
+      <div class="topbar">
+        <div class="top-left">
+          <div class="badge">Fruit Trail Adventure</div>
+          <div class="progress-dots" aria-label="Progress">
+            ${screenNames.map((_, i) => `<span class="dot ${i < state.screen ? 'done' : ''} ${i === state.screen ? 'now' : ''}"></span>`).join('')}
+          </div>
+          <div class="badge">Screen ${state.screen + 1} / ${TOTAL_SCREENS}</div>
+        </div>
+        <div class="top-right">
+          <div class="tracker" aria-label="Wrong turns left">
+            <span>Wrong turns left:</span>
+            ${[0,1,2].map(i => `<span class="leaf ${i >= state.demerits ? 'lost' : ''}">🍃</span>`).join('')}
+          </div>
+          <div class="toggle-wrap">
+            <span>Read-aloud ${state.readAloud ? 'on' : 'off'}</span>
+            <button class="switch ${state.readAloud ? 'on' : ''}" data-action="toggle-read" aria-pressed="${state.readAloud}">
+              <span></span>
+            </button>
+            <button class="ghost-btn" data-action="read-now" style="padding:10px 14px;font-size:16px;min-height:42px;">🔊 Read this screen</button>
+          </div>
+        </div>
+      </div>
+      <div class="screen-card">
+        ${screenHtml()}
+        ${state.gameOver ? `
+          <div class="gameover" aria-live="assertive">
+            <div class="gameover-box">
+              <h2>Trail restart!</h2>
+              <p>The fruit explorers took too many wrong turns. The whole trail is restarting now.</p>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+    bindDetailsToggle();
+    autoReadIfNeeded();
+  }
+
+  function screenHtml(){
+    switch(state.screen){
+      case 0: return renderStartScreen();
+      case 1: return renderSolveFirstScreen();
+      case 2: return renderFruitPClueScreen();
+      case 3: return renderFruitPPathScreen();
+      case 4: return renderFruitQClueScreen();
+      case 5: return renderFruitQPathScreen();
+      case 6: return renderFinalSetScreen();
+      case 7: return renderTransferScreen();
+      default: return '';
+    }
+  }
+
+  function screenShell(eyebrow, title, subtitle, body){
+    return `
+      <div class="title-row">
+        <div>
+          <div class="eyebrow">${eyebrow}</div>
+          <div class="instruction">${title}</div>
+          <p class="subtext">${subtitle}</p>
+        </div>
+      </div>
+      ${body}
+    `;
+  }
+
+  function renderStartScreen(){
+    return screenShell(
+      'Question first',
+      'Read the question. Then tap to start the mission.',
+      'First classify Fruit P and Fruit Q. Then choose the matching set.',
+      `
+        <div class="question-box">
+          <h2 class="question-title">Original question</h2>
+          ${fullQuestionHtml(false)}
+        </div>
+        <div class="actions">
+          <button class="primary-btn" data-action="start">Start mission</button>
+        </div>
+      `
+    );
+  }
+
+  function renderSolveFirstScreen(){
+    const data = state.single.solveFirst;
+    return screenShell(
+      'Step 1',
+      'What should you find first?',
+      'First use the chart to find where Fruit P and Fruit Q go.',
+      `
+        <div class="option-grid three">
+          ${state.orders.solveFirst.map(opt => optionCardHtml('solve-first-pick', opt.id, opt.text, data)).join('')}
+        </div>
+        ${feedbackHtml(data.feedback, data.feedbackType)}
+        <div class="actions">
+          <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+        </div>
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderFruitPClueScreen(){
+    const data = state.single.pClue;
+    return screenShell(
+      'Step 2',
+      'Tap the clue you can see on Fruit P.',
+      'Look closely before you enter the chart.',
+      `
+        <div class="mini-layout">
+          <div class="mini-card">
+            <h3>Fruit P</h3>
+            ${fruitPSVG(false)}
+            <div class="fruit-label">Fruit P</div>
+          </div>
+          <div>
+            <div class="option-grid three">
+              ${state.orders.pClue.map(opt => optionCardHtml('p-clue-pick', opt.id, opt.text, data)).join('')}
+            </div>
+            ${feedbackHtml(data.feedback, data.feedbackType)}
+            <div class="actions">
+              <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+            </div>
+          </div>
+        </div>
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderFruitPPathScreen(){
+    const data = state.path.p;
+    const checks = data.attempts > 1 ? [
+      data.selected[0] === 'No',
+      data.selected[1] === 'No',
+      data.selected[2] === 'Yes'
+    ] : [null,null,null];
+    return screenShell(
+      'Step 3',
+      'Build Fruit P’s path. Then tap Check.',
+      'Help Fruit P travel through the chart like an adventure trail.',
+      `
+        <div class="mini-layout">
+          <div class="mini-card">
+            <h3>Fruit P</h3>
+            ${fruitPSVG(false)}
+            <div class="fruit-label">Fruit P</div>
+            <p class="choice-note">Remember the clue you found.</p>
+          </div>
+          <div class="flow-wrap">
+            ${flowchartSvg(data.solved ? ['start-animal','animal-no','husk-no','wing-yes'] : [], data.solved ? {label:'P', box:'Z'} : null, false)}
+          </div>
+        </div>
+        <div class="path-builder">
+          ${pathRowHtml('p-path-row', 0, 'Do animals help to disperse its seeds?', data.selected[0], checks[0])}
+          ${pathRowHtml('p-path-row', 1, 'Does it have a fibrous husk?', data.selected[1], checks[1])}
+          ${pathRowHtml('p-path-row', 2, 'Does it have a wing-like structure?', data.selected[2], checks[2])}
+        </div>
+        <div class="actions">
+          <button class="check-btn" data-action="p-path-check" ${data.solved ? 'disabled' : ''}>Check</button>
+          <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+        </div>
+        ${feedbackHtml(data.feedback, data.feedbackType)}
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderFruitQClueScreen(){
+    const data = state.single.qClue;
+    return screenShell(
+      'Step 4',
+      'Tap the clue you can see on Fruit Q.',
+      'Look closely at the fruit before you answer.',
+      `
+        <div class="mini-layout">
+          <div class="mini-card">
+            <h3>Fruit Q</h3>
+            ${fruitQSVG(false)}
+            <div class="fruit-label">Fruit Q</div>
+          </div>
+          <div>
+            <div class="option-grid three">
+              ${state.orders.qClue.map(opt => optionCardHtml('q-clue-pick', opt.id, opt.text, data)).join('')}
+            </div>
+            ${feedbackHtml(data.feedback, data.feedbackType)}
+            <div class="actions">
+              <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+            </div>
+          </div>
+        </div>
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderFruitQPathScreen(){
+    const data = state.path.q;
+    const checks = data.attempts > 1 ? [
+      data.selected[0] === 'Yes',
+      data.selected[1] === 'Yes'
+    ] : [null,null];
+    return screenShell(
+      'Step 5',
+      'Build Fruit Q’s path. Then tap Check.',
+      'Start at the top. Hooks can catch onto animal fur, so animals can help to disperse this fruit’s seeds.',
+      `
+        <div class="mini-layout">
+          <div class="mini-card">
+            <h3>Fruit Q</h3>
+            ${fruitQSVG(false)}
+            <div class="fruit-label">Fruit Q</div>
+            <p class="choice-note">If the hooks catch on fur, animals can carry the fruit to a new place.</p>
+          </div>
+          <div class="flow-wrap">
+            ${flowchartSvg(data.solved ? ['start-animal','animal-yes','hooks-yes'] : [], data.solved ? {label:'Q', box:'W'} : null, false)}
+          </div>
+        </div>
+        <div class="path-builder">
+          ${pathRowHtml('q-path-row', 0, 'Do animals help to disperse its seeds?', data.selected[0], checks[0])}
+          ${pathRowHtml('q-path-row', 1, 'Does it have stiff hooks?', data.selected[1], checks[1])}
+        </div>
+        <div class="actions">
+          <button class="check-btn" data-action="q-path-check" ${data.solved ? 'disabled' : ''}>Check</button>
+          <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+        </div>
+        ${feedbackHtml(data.feedback, data.feedbackType)}
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderFinalSetScreen(){
+    const data = state.single.finalSet;
+    return screenShell(
+      'Step 6',
+      'Tap the set that matches your two answers.',
+      'Use the two box letters you worked out for Fruit P and Fruit Q.',
+      `
+        <div class="helper-strip">
+          <span class="helper-badge">Match both fruits, not just one</span>
+        </div>
+        <div class="set-grid">
+          ${state.orders.finalSet.map(opt => setCardHtml(opt, data)).join('')}
+        </div>
+        ${feedbackHtml(data.feedback, data.feedbackType)}
+        <div class="actions">
+          <button class="primary-btn" data-action="next" ${data.solved ? '' : 'disabled'}>Continue</button>
+        </div>
+        ${questionPanelHtml()}
+      `
+    );
+  }
+
+  function renderTransferScreen(){
+    const data = state.single.transfer;
+    return screenShell(
+      'Step 7',
+      'A fruit has a fibrous husk. Tap the box it would reach.',
+      'This is your short transfer check.',
+      `
+        <div class="option-grid two">
+          ${state.orders.transfer.map(opt => optionCardHtml('transfer-pick', opt.id, opt.text, data)).join('')}
+        </div>
+        ${feedbackHtml(data.feedback, data.feedbackType)}
+        ${data.solved ? `
+          <div class="completion">
+            <h3>Trail complete!</h3>
+            <p>You solved the printed question by spotting a clue, following the chart, and matching the correct set. In the original question, the correct printed answer is <strong>option 3</strong>.</p>
+          </div>
+        ` : ''}
+      `
+    );
+  }
+
+  function optionCardHtml(action, id, text, data){
+    const selected = data.selected === id ? 'selected' : '';
+    const correct = data.solved && data.selected === id ? 'correct' : '';
+    const wrong = !data.solved && data.selected === id && data.feedbackType === 'bad' ? 'wrong' : '';
+    return `<button class="option-card ${selected} ${correct} ${wrong}" data-action="${action}" data-id="${id}">${text}</button>`;
+  }
+
+  function setCardHtml(opt, data){
+    const selected = data.selected === opt.id ? 'selected' : '';
+    const correct = data.solved && data.selected === opt.id ? 'correct' : '';
+    const wrong = !data.solved && data.selected === opt.id && data.feedbackType === 'bad' ? 'wrong' : '';
+    return `
+      <button class="set-card ${selected} ${correct} ${wrong}" data-action="final-set-pick" data-id="${opt.id}">
+        <div class="set-line">Fruit P = ${opt.p}</div>
+        <div class="set-line">Fruit Q = ${opt.q}</div>
+      </button>
+    `;
+  }
+
+  function pathRowHtml(action, rowIndex, question, selected, rowCheck){
+    const order = rowIndex % 2 === 0 ? ['Yes','No'] : ['No','Yes'];
+    return `
+      <div class="path-row">
+        <div>
+          <div class="question">${question}</div>
+          ${rowCheck === null ? '' : `<div class="row-state ${rowCheck ? 'good' : 'bad'}">${rowCheck ? 'This checkpoint is right.' : 'Check this checkpoint again.'}</div>`}
+        </div>
+        <div class="choice-pills">
+          ${order.map(value => `<button class="pill ${selected === value ? 'selected' : ''}" data-action="${action}" data-row="${rowIndex}" data-value="${value}">${value}</button>`).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function feedbackHtml(message, type){
+    if(!message) return '';
+    return `<div class="feedback ${type || 'warn'}">${message}</div>`;
+  }
+
+  function questionPanelHtml(){
+    return `
+      <details class="question-toggle" ${state.questionOpen ? 'open' : ''}>
+        <summary>Show the full question</summary>
+        <div class="inside">${fullQuestionHtml(true)}</div>
+      </details>
+    `;
+  }
+
+  function fullQuestionHtml(compact){
+    return `
+      <p class="question-stem">
+        The <span class="hl">chart</span> below shows how some fruits are classified.
+        Which set correctly shows how <span class="hl">Fruit P</span> and <span class="hl">Fruit Q</span> can be classified?
+      </p>
+      <div class="question-layout">
+        <div class="flow-wrap">
+          ${flowchartSvg([], null, compact)}
+        </div>
+        <div>
+          <div class="fruit-row">
+            <div class="fruit-card">
+              ${fruitPSVG(compact)}
+              <div class="fruit-label">Fruit P</div>
+            </div>
+            <div class="fruit-card">
+              ${fruitQSVG(compact)}
+              <div class="fruit-label">Fruit Q</div>
+            </div>
+          </div>
+          <table class="source-choices" aria-label="Printed answer sets">
+            <thead>
+              <tr><th></th><th>Fruit P</th><th>Fruit Q</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>(1)</td><td>X</td><td>W</td></tr>
+              <tr><td>(2)</td><td>Y</td><td>Z</td></tr>
+              <tr><td>(3)</td><td>Z</td><td>W</td></tr>
+              <tr><td>(4)</td><td>Z</td><td>X</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function fruitPSVG(compact){
+    const w = compact ? 170 : 220;
+    const h = compact ? 160 : 190;
+    return `
+      <svg viewBox="0 0 220 190" width="${w}" height="${h}" aria-label="Fruit P with a wing-like structure">
+        <defs>
+          <linearGradient id="wingGrad" x1="0%" x2="100%">
+            <stop offset="0%" stop-color="#e6e9ee"/>
+            <stop offset="100%" stop-color="#aab7c9"/>
+          </linearGradient>
+          <linearGradient id="seedGrad" x1="0%" x2="100%">
+            <stop offset="0%" stop-color="#8f5a2b"/>
+            <stop offset="100%" stop-color="#6d401d"/>
+          </linearGradient>
+        </defs>
+        <path d="M66 140 C45 95, 52 58, 82 24 C113 43, 134 76, 138 118 C120 128, 93 137, 66 140 Z" fill="url(#wingGrad)" stroke="#7f91a5" stroke-width="2.2"/>
+        <ellipse cx="102" cy="146" rx="26" ry="16" fill="url(#seedGrad)" stroke="#5f381a" stroke-width="2.4" transform="rotate(-24 102 146)"/>
+        <path d="M90 137 Q105 126 124 118" fill="none" stroke="#54677b" stroke-width="2.2"/>
+      </svg>
+    `;
+  }
+
+  function fruitQSVG(compact){
+    const w = compact ? 170 : 220;
+    const h = compact ? 160 : 190;
+    let spikes = '';
+    for(let i=0;i<20;i++){
+      const angle = (Math.PI * 2 * i) / 20;
+      const x1 = 110 + Math.cos(angle) * 46;
+      const y1 = 95 + Math.sin(angle) * 46;
+      const x2 = 110 + Math.cos(angle) * 64;
+      const y2 = 95 + Math.sin(angle) * 64;
+      spikes += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#7f8791" stroke-width="3" stroke-linecap="round" />`;
+      spikes += `<path d="M ${x2.toFixed(1)} ${y2.toFixed(1)} q 4 -6 8 0" fill="none" stroke="#7f8791" stroke-width="2"/>`;
+    }
+    return `
+      <svg viewBox="0 0 220 190" width="${w}" height="${h}" aria-label="Fruit Q with stiff hooks">
+        ${spikes}
+        <circle cx="110" cy="95" r="42" fill="#d9d4cb" stroke="#8e8a84" stroke-width="3"/>
+        <ellipse cx="110" cy="95" rx="21" ry="33" fill="#cfc7b8" opacity=".55"/>
+      </svg>
+    `;
+  }
+
+  function flowchartSvg(highlights, token, compact){
+    const size = compact ? '580' : '620';
+    const hl = new Set(highlights || []);
+    return `
+      <svg viewBox="0 0 620 315" width="${size}" aria-label="Fruit classification flowchart">
+        ${line(150,32,150,52, hl.has('start-animal'))}
+        ${line(150,84,270,84, hl.has('animal-yes'))}
+        ${line(150,116,150,150, hl.has('animal-no'))}
+        ${line(360,84,500,84, hl.has('hooks-yes'))}
+        ${line(360,100,360,138, hl.has('hooks-no'))}
+        ${line(150,184,270,184, hl.has('husk-yes'))}
+        ${line(150,216,150,246, hl.has('husk-no'))}
+        ${line(150,246,270,246, hl.has('wing-yes'))}
+        ${line(150,278,150,286, hl.has('wing-no'))}
+        <rect x="104" y="6" width="92" height="28" rx="8" fill="#fff" stroke="#8da4b9" stroke-width="2"/>
+        <text x="150" y="25" text-anchor="middle" font-size="16" font-weight="900" fill="#20384f">Fruits</text>
+        ${diamond(150,84,170,64,'Do animals help to\ndisperse its seeds?')}
+        ${diamond(360,84,170,64,'Does it have stiff\nhooks?')}
+        ${diamond(150,184,170,64,'Does it have a\nfibrous husk?')}
+        ${diamond(150,246,170,64,'Does it have a wing-\nlike structure?')}
+        ${box(542,84,'W')}
+        ${box(360,162,'X')}
+        ${box(300,184,'Y')}
+        ${box(300,246,'Z')}
+        ${box(150,300,'Saga')}
+        <text x="208" y="77" font-size="14" font-weight="900" fill="#41627f">Yes</text>
+        <text x="129" y="135" font-size="14" font-weight="900" fill="#41627f">No</text>
+        <text x="429" y="77" font-size="14" font-weight="900" fill="#41627f">Yes</text>
+        <text x="371" y="129" font-size="14" font-weight="900" fill="#41627f">No</text>
+        <text x="208" y="177" font-size="14" font-weight="900" fill="#41627f">Yes</text>
+        <text x="129" y="231" font-size="14" font-weight="900" fill="#41627f">No</text>
+        <text x="208" y="239" font-size="14" font-weight="900" fill="#41627f">Yes</text>
+        <text x="129" y="293" font-size="14" font-weight="900" fill="#41627f">No</text>
+        ${token ? endpointToken(token) : ''}
+      </svg>
+    `;
+  }
+
+  function line(x1,y1,x2,y2,highlight){
+    return `<line class="trail-line ${highlight ? 'hl' : ''}" x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" />`;
+  }
+
+  function diamond(cx,cy,w,h,text){
+    const points = `${cx},${cy-h/2} ${cx+w/2},${cy} ${cx},${cy+h/2} ${cx-w/2},${cy}`;
+    const lines = text.split('\n');
+    return `
+      <polygon points="${points}" fill="#fff" stroke="#8da4b9" stroke-width="2"></polygon>
+      ${lines.map((lineText, i) => `<text x="${cx}" y="${cy - 6 + i*18}" text-anchor="middle" font-size="15" font-weight="800" fill="#20384f">${lineText}</text>`).join('')}
+    `;
+  }
+
+  function box(x,y,label){
+    const width = label === 'Saga' ? 90 : 38;
+    const height = 28;
+    return `
+      <rect x="${x - width/2}" y="${y - height/2}" width="${width}" height="${height}" rx="7" fill="#fff" stroke="#8da4b9" stroke-width="2" />
+      <text x="${x}" y="${y + 6}" text-anchor="middle" font-size="16" font-weight="900" fill="#20384f">${label}</text>
+    `;
+  }
+
+  function endpointToken(token){
+    const positions = {W:{x:542,y:56}, X:{x:392,y:150}, Y:{x:333,y:156}, Z:{x:333,y:218}, Saga:{x:185,y:272}};
+    const pos = positions[token.box];
+    return `
+      <g class="endpoint-token">
+        <circle cx="${pos.x}" cy="${pos.y}" r="16" fill="#f3a93b" stroke="#b97916" stroke-width="3"></circle>
+        <text x="${pos.x}" y="${pos.y + 6}" text-anchor="middle" font-size="18" font-weight="900" fill="#fff">${token.label}</text>
+      </g>
+    `;
+  }
+
+  function bindDetailsToggle(){
+    const details = app.querySelector('details.question-toggle');
+    if(details){
+      details.addEventListener('toggle', function(){
+        state.questionOpen = details.open;
+      });
+    }
+  }
+
+  function autoReadIfNeeded(){
+    if(!state.readAloud || state.gameOver) return;
+    if(state.lastAutoReadScreen === state.screen) return;
+    state.lastAutoReadScreen = state.screen;
+    setTimeout(() => speak(readText()), 100);
+  }
+
+  function readText(){
+    switch(state.screen){
+      case 0: return 'Read the question. Then tap start mission. The chart, Fruit P, Fruit Q, and the sets are shown on screen.';
+      case 1: return 'Tap what you must work out first. Choose the box for each fruit.';
+      case 2: return 'Tap the clue you can see on Fruit P. Look for the wing-like structure.';
+      case 3: return 'Build Fruit P s path. Choose yes or no for each checkpoint. Then tap check.';
+      case 4: return 'Tap the clue you can see on Fruit Q. Look for the stiff hooks.';
+      case 5: return 'Build Fruit Q s path. Choose yes or no for each checkpoint. Then tap check.';
+      case 6: return 'Tap the set that matches your two answers.';
+      case 7: return 'A fruit has a fibrous husk. Tap the box it would reach.';
+      default: return '';
+    }
+  }
+
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.98;
+    utter.pitch = 1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  function consumeDemerit(){
+    state.demerits = Math.max(0, state.demerits - 1);
+    if(state.demerits === 0){
+      triggerRestart();
+    } else {
+      render();
+    }
+  }
+
+  function triggerRestart(){
+    state.gameOver = true;
+    if('speechSynthesis' in window) speechSynthesis.cancel();
+    render();
+    clearTimeout(state.restartTimer);
+    state.restartTimer = setTimeout(function(){
+      const keepRead = state.readAloud;
+      state = freshState(keepRead);
+      render();
+    }, 1800);
+  }
+
+  function handleSinglePick(bucket, id, correctId, wrongMsg, rightMsg, penalise){
+    const data = state.single[bucket];
+    if(data.solved || state.gameOver) return;
+    data.selected = id;
+    if(id === correctId){
+      data.solved = true;
+      data.feedback = rightMsg;
+      data.feedbackType = 'good';
+      render();
+    } else {
+      data.feedback = wrongMsg;
+      data.feedbackType = 'bad';
+      if(penalise) consumeDemerit(); else render();
+    }
+  }
+
+  function handlePathChoice(bucket, row, value){
+    const data = state.path[bucket];
+    if(data.solved || state.gameOver) return;
+    data.selected[row] = value;
+    render();
+  }
+
+  function handlePathCheck(bucket, answerKey, firstClue, secondClue, successMsg){
+    const data = state.path[bucket];
+    if(data.solved || state.gameOver) return;
+    if(data.selected.some(v => v === null)){
+      data.feedback = 'Choose Yes or No for every checkpoint before you check.';
+      data.feedbackType = 'warn';
+      render();
+      return;
+    }
+    const correct = data.selected.every((value, index) => value === answerKey[index]);
+    data.attempts += 1;
+    if(correct){
+      data.solved = true;
+      data.feedback = successMsg;
+      data.feedbackType = 'good';
+      render();
+    } else {
+      data.feedback = data.attempts === 1 ? firstClue : secondClue;
+      data.feedbackType = 'bad';
+      consumeDemerit();
+    }
+  }
+
+  function handleQPathCheck(){
+    const data = state.path.q;
+    if(data.solved || state.gameOver) return;
+    if(data.selected.some(v => v === null)){
+      data.feedback = 'Choose Yes or No for every checkpoint before you check.';
+      data.feedbackType = 'warn';
+      render();
+      return;
+    }
+    const correct = data.selected[0] === 'Yes' && data.selected[1] === 'Yes';
+    data.attempts += 1;
+    if(correct){
+      data.solved = true;
+      data.feedback = 'Correct. Fruit Q reaches W because its stiff hooks can catch onto animal fur, so animals help to disperse its seeds.';
+      data.feedbackType = 'good';
+      render();
+    } else {
+      if(data.selected[0] === 'No'){
+        data.feedback = 'Fruit Q has stiff hooks. The hooks can catch onto animal fur, so animals can carry the fruit to a new place. That means the first answer should be Yes.';
+      } else if(data.selected[1] === 'No'){
+        data.feedback = 'Look at Fruit Q again. It does have stiff hooks, so the second answer should be Yes.';
+      } else if(data.attempts === 1){
+        data.feedback = 'Start at the top. Ask first whether animals can help to disperse the seeds.';
+      } else {
+        data.feedback = 'Fruit Q has stiff hooks, so animals can help to disperse it. Follow Yes, then Yes.';
+      }
+      data.feedbackType = 'bad';
+      consumeDemerit();
+    }
+  }
+
+  app.addEventListener('click', function(event){
+    const button = event.target.closest('[data-action]');
+    if(!button || state.gameOver) return;
+    const action = button.dataset.action;
+
+    if(action === 'toggle-read'){
+      state.readAloud = !state.readAloud;
+      state.lastAutoReadScreen = null;
+      render();
+      if(state.readAloud) setTimeout(() => speak(readText()), 120);
+      else if('speechSynthesis' in window) speechSynthesis.cancel();
+      return;
+    }
+
+    if(action === 'read-now'){
+      speak(readText());
+      return;
+    }
+
+    if(action === 'start'){
+      state.screen = 1;
+      render();
+      return;
+    }
+
+    if(action === 'next'){
+      if(state.screen < TOTAL_SCREENS - 1){
+        state.screen += 1;
+        render();
+      }
+      return;
+    }
+
+    if(action === 'solve-first-pick'){
+      handleSinglePick('solveFirst', button.dataset.id, 'boxes', 'Not yet. The option number does not tell you the answer. First use the chart to find where Fruit P and Fruit Q go.', 'Yes. First find where Fruit P goes and where Fruit Q goes in the chart.', true);
+      return;
+    }
+
+    if(action === 'p-clue-pick'){
+      handleSinglePick('pClue', button.dataset.id, 'wing', 'Look for the part that helps Fruit P move through air.', 'Yes. Fruit P has a wing-like structure.', true);
+      return;
+    }
+
+    if(action === 'q-clue-pick'){
+      handleSinglePick('qClue', button.dataset.id, 'hooks', 'Look for the feature that can catch on animal fur.', 'Yes. Fruit Q has stiff hooks. The hooks can catch onto animal fur.', true);
+      return;
+    }
+
+    if(action === 'final-set-pick'){
+      handleSinglePick('finalSet', button.dataset.id, 'set3', 'Check both fruits again. Match the pair, not just one fruit.', 'Correct. This set matches your two answers.', true);
+      return;
+    }
+
+    if(action === 'transfer-pick'){
+      handleSinglePick('transfer', button.dataset.id, 'Y', 'Go down the "No animals" path first.', 'Yes. No animals, then fibrous husk, so it reaches Y.', false);
+      return;
+    }
+
+    if(action === 'p-path-row'){
+      handlePathChoice('p', Number(button.dataset.row), button.dataset.value);
+      return;
+    }
+
+    if(action === 'q-path-row'){
+      handlePathChoice('q', Number(button.dataset.row), button.dataset.value);
+      return;
+    }
+
+    if(action === 'p-path-check'){
+      handlePathCheck('p', ['No','No','Yes'],
+        'Start at the top. Follow the questions in order.',
+        'Check each checkpoint again. Fruit P does not go on the animal path.',
+        'Correct. Fruit P reaches Z.'
+      );
+      return;
+    }
+
+    if(action === 'q-path-check'){
+      handleQPathCheck();
+      return;
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>

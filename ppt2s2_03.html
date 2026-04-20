@@ -1,0 +1,1643 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppt2s2_3</title>
+  <style>
+    :root{
+      --bg:#f6fbff;
+      --panel:#ffffff;
+      --ink:#17324d;
+      --muted:#5b7288;
+      --line:#cfe1ef;
+      --brand:#2f80c1;
+      --brand2:#7a57d1;
+      --good:#18794e;
+      --bad:#c62828;
+      --soft-good:#e8f7ef;
+      --soft-bad:#fff1f1;
+      --chip:#eef6ff;
+      --shadow:0 10px 30px rgba(20,57,91,0.08);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(122,87,209,.10), transparent 24%),
+        radial-gradient(circle at top right, rgba(47,128,193,.12), transparent 24%),
+        linear-gradient(180deg, #f7fbff 0%, #eef6ff 100%);
+      color:var(--ink);
+      min-height:100vh;
+    }
+    .app{
+      max-width:1100px;
+      margin:0 auto;
+      padding:16px 16px 28px;
+    }
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      background:linear-gradient(90deg, rgba(47,128,193,.12), rgba(122,87,209,.10));
+      border:1px solid rgba(47,128,193,.18);
+      border-radius:18px;
+      padding:12px 14px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .topbar-left,.topbar-right{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:10px;
+    }
+    .title-mini{
+      font-weight:800;
+      color:var(--brand2);
+      font-size:14px;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .stars{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      padding:8px 10px;
+      background:rgba(255,255,255,.8);
+      border-radius:999px;
+      border:1px solid rgba(122,87,209,.15);
+    }
+    .star{
+      width:28px;
+      height:28px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      background:#fff;
+      border:2px solid #ffd166;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .star.lost{
+      opacity:.35;
+      filter:grayscale(100%);
+      transform:scale(.9);
+    }
+    .control-btn, .nav-btn, .option-btn, .check-btn, .blank-chip, .bank-chip, .toggle-btn{
+      border:none;
+      background:#fff;
+      color:var(--ink);
+      cursor:pointer;
+      font:inherit;
+      border-radius:16px;
+      transition:transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    button:disabled{cursor:not-allowed; opacity:.55;}
+    .control-btn, .toggle-btn{
+      padding:10px 14px;
+      border:1px solid var(--line);
+      box-shadow:0 4px 12px rgba(20,57,91,.06);
+      min-height:44px;
+      font-weight:700;
+    }
+    .toggle-btn.on{
+      background:linear-gradient(90deg, rgba(47,128,193,.14), rgba(122,87,209,.14));
+      border-color:rgba(47,128,193,.35);
+    }
+    .progress{
+      background:rgba(255,255,255,.8);
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .screen{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .screen-head{
+      padding:18px 22px 8px;
+      border-bottom:1px solid rgba(207,225,239,.75);
+      background:
+        linear-gradient(90deg, rgba(47,128,193,.09), rgba(122,87,209,.08));
+    }
+    .screen-title{
+      font-size:32px;
+      font-weight:900;
+      line-height:1.15;
+      margin:0 0 8px;
+      color:#163d66;
+    }
+    .screen-subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.5;
+    }
+    .screen-body{
+      padding:18px 22px 10px;
+    }
+    .instruction{
+      font-size:30px;
+      font-weight:900;
+      line-height:1.2;
+      background:linear-gradient(90deg, rgba(47,128,193,.10), rgba(122,87,209,.10));
+      border:1px solid rgba(47,128,193,.16);
+      border-radius:20px;
+      padding:16px 18px;
+      margin:0 0 16px;
+      color:#163d66;
+    }
+    .main-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+    }
+    .question-block{
+      display:grid;
+      gap:16px;
+    }
+    .question-title{
+      font-size:22px;
+      font-weight:800;
+      margin:0;
+    }
+    .question-text{
+      font-size:20px;
+      line-height:1.5;
+      margin:0;
+    }
+    .highlight{
+      background:#fff0a8;
+      padding:0 4px;
+      border-radius:6px;
+      font-weight:800;
+    }
+    .question-layout{
+      display:grid;
+      grid-template-columns: minmax(280px, 1.1fr) minmax(300px, .95fr);
+      gap:20px;
+      align-items:start;
+    }
+    .question-stem{
+      display:grid;
+      gap:12px;
+    }
+    .info-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:var(--chip);
+      color:#215883;
+      border:1px solid rgba(47,128,193,.16);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:800;
+      width:max-content;
+      max-width:100%;
+    }
+    .callout{
+      background:#f8fbff;
+      border:1px dashed rgba(47,128,193,.35);
+      border-radius:18px;
+      padding:12px 14px;
+      color:#315472;
+      font-size:18px;
+      line-height:1.45;
+    }
+    .question-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:18px;
+      background:#fff;
+      overflow:hidden;
+      border-radius:16px;
+    }
+    .question-table th,
+    .question-table td{
+      border:1px solid #9ab8cf;
+      padding:10px 12px;
+      text-align:center;
+    }
+    .question-table th{
+      background:#ecf5fd;
+      font-weight:800;
+    }
+    .option-grid{
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .option-btn{
+      min-height:78px;
+      border:2px solid var(--line);
+      padding:16px 16px;
+      text-align:left;
+      font-size:22px;
+      line-height:1.35;
+      box-shadow:0 6px 16px rgba(20,57,91,.06);
+    }
+    .option-btn:hover, .control-btn:hover, .nav-btn:hover, .check-btn:hover, .blank-chip:hover, .bank-chip:hover, .toggle-btn:hover{
+      transform:translateY(-1px);
+    }
+    .option-btn.selected,
+    .blank-chip.selected,
+    .bank-chip.selected{
+      border-color:var(--brand);
+      background:#eef7ff;
+      box-shadow:0 0 0 4px rgba(47,128,193,.12);
+    }
+    .option-btn.correct{
+      border-color:var(--good);
+      background:var(--soft-good);
+    }
+    .option-btn.wrong{
+      border-color:var(--bad);
+      background:var(--soft-bad);
+    }
+    .option-btn.small{
+      min-height:64px;
+      font-size:20px;
+    }
+    .feedback{
+      min-height:66px;
+      margin-top:14px;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:21px;
+      font-weight:700;
+      display:none;
+      line-height:1.4;
+    }
+    .feedback.show{display:block}
+    .feedback.good{
+      background:var(--soft-good);
+      border:1px solid rgba(24,121,78,.25);
+      color:var(--good);
+    }
+    .feedback.bad{
+      background:var(--soft-bad);
+      border:1px solid rgba(198,40,40,.25);
+      color:var(--bad);
+    }
+    .nav{
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      padding:0 22px 22px;
+      align-items:center;
+    }
+    .nav-spacer{flex:1}
+    .nav-btn, .check-btn{
+      min-height:52px;
+      padding:12px 18px;
+      border:1px solid var(--line);
+      font-weight:800;
+      font-size:18px;
+      box-shadow:0 6px 18px rgba(20,57,91,.08);
+    }
+    .nav-btn.primary, .check-btn{
+      color:#fff;
+      border-color:transparent;
+      background:linear-gradient(90deg, var(--brand), var(--brand2));
+    }
+    .question-toggle-wrap{
+      padding:0 22px 20px;
+    }
+    .question-toggle{
+      width:100%;
+      text-align:left;
+      font-size:18px;
+      font-weight:800;
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fbfdff;
+      color:#23425f;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+    .question-panel{
+      margin-top:10px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      background:#fcfeff;
+    }
+
+    .diagram-card{
+      background:#fdfefe;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:14px;
+    }
+    .diagram-wrap{
+      position:relative;
+      width:100%;
+      aspect-ratio: 1.1 / 1;
+      margin:0 auto;
+      max-width:420px;
+      border-radius:18px;
+      background:linear-gradient(180deg, #ffffff 0%, #f7fbff 100%);
+      border:1px solid rgba(47,128,193,.12);
+      overflow:hidden;
+    }
+    .diagram-wrap svg{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .hotspot{
+      position:absolute;
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      border-radius:50%;
+      box-shadow:none;
+      z-index:3;
+    }
+    .hotspot:focus-visible{
+      outline:3px solid rgba(47,128,193,.5);
+      outline-offset:2px;
+    }
+    .hotspot.r{left:9%; top:18%; width:22%; height:22%;}
+    .hotspot.p{left:34%; top:18%; width:32%; height:48%; border-radius:40%}
+    .hotspot.q{left:40%; top:68%; width:20%; height:24%; border-radius:30%}
+    .diagram-overlay{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      z-index:2;
+    }
+    .diagram-ring{
+      position:absolute;
+      border:4px solid rgba(47,128,193,.8);
+      background:rgba(47,128,193,.12);
+      display:none;
+    }
+    .diagram-ring.show{display:block}
+    .diagram-ring.r{left:11%; top:19%; width:18%; height:18%; border-radius:50%}
+    .diagram-ring.p{left:35%; top:19%; width:30%; height:46%; border-radius:40%}
+    .diagram-ring.q{left:41%; top:69%; width:18%; height:22%; border-radius:30%}
+    .diagram-ring.correct{border-color:rgba(24,121,78,.9); background:rgba(24,121,78,.14)}
+    .diagram-ring.wrong{border-color:rgba(198,40,40,.9); background:rgba(198,40,40,.14)}
+    .diagram-caption{
+      margin-top:10px;
+      font-size:17px;
+      color:var(--muted);
+      text-align:center;
+    }
+
+    .choice-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .sentence-frame{
+      display:grid;
+      gap:14px;
+      margin-bottom:14px;
+    }
+    .frame-line{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px;
+      font-size:24px;
+      line-height:1.35;
+    }
+    .blank-chip{
+      min-width:84px;
+      min-height:54px;
+      padding:10px 16px;
+      border:2px dashed var(--line);
+      background:#f8fbff;
+      font-size:26px;
+      font-weight:900;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .blank-chip.filled{
+      border-style:solid;
+      background:#eef7ff;
+      border-color:var(--brand);
+    }
+    .blank-chip.correct{
+      border-color:var(--good);
+      background:var(--soft-good);
+    }
+    .blank-chip.wrong{
+      border-color:var(--bad);
+      background:var(--soft-bad);
+    }
+    .bank-area{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      padding:14px;
+      background:#f8fbff;
+      border:1px solid var(--line);
+      border-radius:18px;
+    }
+    .bank-chip{
+      min-height:52px;
+      min-width:74px;
+      padding:8px 18px;
+      border:2px solid var(--line);
+      font-size:26px;
+      font-weight:900;
+    }
+    .bank-chip.used{
+      opacity:.45;
+    }
+    .screen-footer-note{
+      color:var(--muted);
+      font-size:16px;
+      margin-top:10px;
+    }
+    .blank-chip.wide{
+      min-width:220px;
+      justify-content:flex-start;
+      text-align:left;
+      font-size:20px;
+      line-height:1.25;
+      padding:12px 14px;
+    }
+    .bank-chip.long{
+      min-width:220px;
+      max-width:100%;
+      white-space:normal;
+      text-align:left;
+      font-size:18px;
+      font-weight:700;
+      line-height:1.25;
+      padding:12px 14px;
+    }
+    .diagram-card.compact{
+      margin-bottom:16px;
+    }
+    .tiny-help{
+      color:var(--muted);
+      font-size:17px;
+      margin:6px 0 0;
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(20,39,58,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:20;
+    }
+    .overlay.show{display:flex}
+    .overlay-card{
+      max-width:560px;
+      width:100%;
+      border-radius:24px;
+      background:#fff;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      padding:28px 24px;
+      text-align:center;
+    }
+    .overlay-card h2{
+      margin:0 0 12px;
+      font-size:34px;
+      color:#183b64;
+    }
+    .overlay-card p{
+      margin:0;
+      font-size:22px;
+      line-height:1.45;
+      color:#335874;
+    }
+    .kbd{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      font-weight:800;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#f0f6ff;
+      border:1px solid rgba(47,128,193,.15);
+      color:#315472;
+      font-size:16px;
+    }
+    @media (max-width: 860px){
+      .question-layout{
+        grid-template-columns:1fr;
+      }
+      .screen-title{font-size:28px}
+      .instruction{font-size:26px}
+      .question-text{font-size:18px}
+      .option-btn{font-size:20px}
+      .frame-line{font-size:22px}
+    }
+    @media (max-width: 560px){
+      .app{padding:10px 10px 20px}
+      .screen-head,.screen-body,.nav,.question-toggle-wrap{padding-left:14px; padding-right:14px}
+      .screen-title{font-size:24px}
+      .instruction{font-size:23px; padding:14px}
+      .option-grid{grid-template-columns:1fr}
+      .question-table th,.question-table td{padding:8px; font-size:16px}
+      .topbar{padding:10px 12px}
+      .topbar-left,.topbar-right{width:100%}
+      .topbar-right{justify-content:space-between}
+      .control-btn,.toggle-btn,.nav-btn,.check-btn{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="topbar" aria-label="Top controls and demerit tracker">
+      <div class="topbar-left">
+        <div class="title-mini">Careful Scientist Stars</div>
+        <div id="starStrip" class="stars" aria-live="polite"></div>
+        <div class="progress" id="progressText">Screen 1 of 10</div>
+      </div>
+      <div class="topbar-right">
+        <button id="toggleReadBtn" class="toggle-btn" type="button" aria-pressed="false">Read-aloud: Off</button>
+        <button id="readNowBtn" class="control-btn" type="button">Read this screen</button>
+        <button id="restartBtn" class="control-btn" type="button">Restart</button>
+      </div>
+    </div>
+
+    <main id="appRoot" class="screen" aria-live="polite"></main>
+  </div>
+
+  <div id="restartOverlay" class="overlay" aria-hidden="true">
+    <div class="overlay-card" role="alertdialog" aria-modal="true" aria-labelledby="overlayTitle">
+      <h2 id="overlayTitle">All stars used</h2>
+      <p>The whole interactive is restarting so you can try again carefully.</p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const SCREENS_TOTAL = 10;
+
+      const sourceQuestionTextPlain = [
+        "The diagram below shows the female human reproductive system.",
+        "Which of the following correctly shows where the eggs are formed and where the baby is developed?"
+      ];
+
+      const originalAnswerRows = [
+        ["(1)", "P", "Q"],
+        ["(2)", "P", "R"],
+        ["(3)", "R", "Q"],
+        ["(4)", "R", "P"]
+      ];
+
+      const appState = {
+        current: 0,
+        readAloudOn: false,
+        starsTotal: 3,
+        starsLeft: 3,
+        questionPanelOpen: false,
+        feedbackClass: "",
+        feedbackText: "",
+        canNext: false,
+        lockedCorrect: false,
+        restartTimeout: null,
+        screenState: {}
+      };
+
+      const screens = [
+        { id:"s1", title:"Read the whole question", subtitle:"Start by looking carefully at the full question.", penalize:false },
+        { id:"s2", title:"Spot the two things to find", subtitle:"Find the two ideas named in the question.", penalize:true },
+        { id:"s3", title:"Find the egg-forming part", subtitle:"Use the diagram carefully.", penalize:false },
+        { id:"s4", title:"Name the labelled part", subtitle:"Label the body part you found.", penalize:false },
+        { id:"s5", title:"Match the ovary to its job", subtitle:"Connect the part to its function.", penalize:false },
+        { id:"s6", title:"Find where the baby develops", subtitle:"Use the same diagram again.", penalize:false },
+        { id:"s7", title:"Label P and Q", subtitle:"Use the diagram to name both parts.", penalize:false },
+        { id:"s8", title:"Match each part to its job", subtitle:"Connect the body part names to their functions.", penalize:false },
+        { id:"s9", title:"Build both matches", subtitle:"Complete both blanks before checking.", penalize:true },
+        { id:"s10", title:"Choose the full answer", subtitle:"Now use both correct matches together.", penalize:true },
+        { id:"s11", title:"Transfer check", subtitle:"Try the same science on a new diagram.", penalize:false },
+        { id:"s12", title:"Completion", subtitle:"You are done.", penalize:false }
+      ];
+
+      const appRoot = document.getElementById("appRoot");
+      const progressText = document.getElementById("progressText");
+      const starStrip = document.getElementById("starStrip");
+      const toggleReadBtn = document.getElementById("toggleReadBtn");
+      const readNowBtn = document.getElementById("readNowBtn");
+      const restartBtn = document.getElementById("restartBtn");
+      const restartOverlay = document.getElementById("restartOverlay");
+
+      function escapeHtml(str){
+        return String(str)
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#39;");
+      }
+
+      function shuffle(array){
+        const arr = array.slice();
+        for(let i = arr.length - 1; i > 0; i--){
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function ensureShuffled(items, isBadOrder){
+        let tries = 0;
+        let out = shuffle(items);
+        while(isBadOrder(out) && tries < 25){
+          out = shuffle(items);
+          tries++;
+        }
+        return out;
+      }
+
+      function updateStarStrip(){
+        starStrip.innerHTML = "";
+        for(let i=0;i<appState.starsTotal;i++){
+          const span = document.createElement("span");
+          span.className = "star" + (i < appState.starsLeft ? "" : " lost");
+          span.setAttribute("aria-hidden", "true");
+          span.textContent = "⭐";
+          starStrip.appendChild(span);
+        }
+      }
+
+      function updateTopbar(){
+        progressText.textContent = `Screen ${appState.current + 1} of ${SCREENS_TOTAL}`;
+        toggleReadBtn.textContent = `Read-aloud: ${appState.readAloudOn ? "On" : "Off"}`;
+        toggleReadBtn.classList.toggle("on", appState.readAloudOn);
+        toggleReadBtn.setAttribute("aria-pressed", String(appState.readAloudOn));
+        updateStarStrip();
+      }
+
+      function setFeedback(type, text){
+        appState.feedbackClass = type;
+        appState.feedbackText = text;
+        render();
+        if(appState.readAloudOn){
+          speakCurrentScreen(true);
+        }
+      }
+
+      function clearFeedback(){
+        appState.feedbackClass = "";
+        appState.feedbackText = "";
+      }
+
+      function deductStarIfNeeded(){
+        if(appState.starsLeft <= 0) return;
+        appState.starsLeft--;
+        updateStarStrip();
+        if(appState.starsLeft <= 0){
+          restartAfterLoss();
+        }
+      }
+
+      function restartAfterLoss(){
+        if(appState.restartTimeout){
+          clearTimeout(appState.restartTimeout);
+        }
+        restartOverlay.classList.add("show");
+        restartOverlay.setAttribute("aria-hidden", "false");
+        window.speechSynthesis?.cancel?.();
+        appState.restartTimeout = setTimeout(() => {
+          hardReset();
+          restartOverlay.classList.remove("show");
+          restartOverlay.setAttribute("aria-hidden", "true");
+        }, 1500);
+      }
+
+      function hardReset(){
+        appState.current = 0;
+        appState.readAloudOn = false;
+        appState.starsLeft = appState.starsTotal;
+        appState.questionPanelOpen = false;
+        appState.feedbackClass = "";
+        appState.feedbackText = "";
+        appState.canNext = false;
+        appState.lockedCorrect = false;
+        appState.screenState = {};
+        render();
+      }
+
+      function nextScreen(){
+        if(appState.current < SCREENS_TOTAL - 1){
+          appState.current += 1;
+          clearFeedback();
+          appState.canNext = false;
+          appState.lockedCorrect = false;
+          render();
+        }
+      }
+
+      function getScreenState(key, fallback){
+        if(!(key in appState.screenState)){
+          appState.screenState[key] = fallback;
+        }
+        return appState.screenState[key];
+      }
+
+      function questionPromptHtml(prominent=false){
+        const highlightStem = prominent
+          ? `<p class="question-text">Which of the following correctly shows where the <span class="highlight">eggs are formed</span> and where the <span class="highlight">baby is developed</span>?</p>`
+          : `<p class="question-text">Which of the following correctly shows where the eggs are formed and where the baby is developed?</p>`;
+
+        return `
+          <div class="question-block">
+            <div class="question-layout">
+              <div class="question-stem">
+                <div class="info-pill">Source question</div>
+                <p class="question-text">The diagram below shows the female human reproductive system.</p>
+                ${highlightStem}
+                ${prominent ? `<div class="callout">Look for <strong>two places</strong>: one where eggs are formed and one where the baby develops.</div>` : ``}
+              </div>
+              <div class="diagram-card">
+                ${diagramHtml({interactive:false})}
+                <div class="diagram-caption">Clean interactive diagram with the same labels P, Q and R.</div>
+              </div>
+            </div>
+            <div class="main-card" style="padding:0; overflow:hidden;">
+              <table class="question-table" aria-label="Original answer table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Where eggs are formed</th>
+                    <th>Where baby is developed</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${originalAnswerRows.map(row => `
+                    <tr>
+                      <td>${escapeHtml(row[0])}</td>
+                      <td>${escapeHtml(row[1])}</td>
+                      <td>${escapeHtml(row[2])}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `;
+      }
+
+      function questionToggleHtml(){
+        return `
+          <div class="question-toggle-wrap">
+            <button id="questionToggle" class="question-toggle" type="button" aria-expanded="${appState.questionPanelOpen}">
+              <span>${appState.questionPanelOpen ? "Hide question and diagram" : "Show question and diagram"}</span>
+              <span aria-hidden="true">${appState.questionPanelOpen ? "▴" : "▾"}</span>
+            </button>
+            ${appState.questionPanelOpen ? `<div class="question-panel">${questionPromptHtml(false)}</div>` : ``}
+          </div>
+        `;
+      }
+
+      function diagramHtml({interactive=false, selected="", selectedClass="", labels={R:"R", P:"P", Q:"Q"}} = {}){
+        const showR = selected === "R";
+        const showP = selected === "P";
+        const showQ = selected === "Q";
+        const labelR = labels.R ?? "R";
+        const labelP = labels.P ?? "P";
+        const labelQ = labels.Q ?? "Q";
+        return `
+          <div class="diagram-wrap" ${interactive ? `role="group" aria-label="Interactive reproductive system diagram"` : `aria-hidden="false"`}>
+            <svg viewBox="0 0 460 380" aria-hidden="true">
+              <defs>
+                <style>
+                  .line{fill:none;stroke:#53697d;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round}
+                  .thin{fill:none;stroke:#70889a;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round}
+                  .label{font: 700 30px 'Segoe UI', Arial, sans-serif; fill:#172c3d}
+                </style>
+              </defs>
+
+              <path class="line" d="M226 72 C208 46, 169 31, 128 38 C94 44, 70 65, 60 95" />
+              <path class="line" d="M234 72 C252 46, 291 31, 332 38 C366 44, 390 65, 400 95" />
+              <path class="line" d="M210 86 C183 95, 159 110, 139 127" />
+              <path class="line" d="M250 86 C277 95, 301 110, 321 127" />
+
+              <ellipse class="line" cx="98" cy="112" rx="18" ry="14" />
+              <ellipse class="line" cx="362" cy="112" rx="18" ry="14" />
+
+              <path class="thin" d="M83 126 L66 144" />
+              <path class="thin" d="M95 128 L90 150" />
+              <path class="thin" d="M107 128 L112 150" />
+              <path class="thin" d="M119 126 L136 144" />
+
+              <path class="thin" d="M341 144 L324 126" />
+              <path class="thin" d="M350 150 L355 128" />
+              <path class="thin" d="M369 150 L364 128" />
+              <path class="thin" d="M384 144 L401 126" />
+
+              <path class="line" d="M209 92 C180 110, 164 154, 169 198 C174 235, 190 262, 199 289" />
+              <path class="line" d="M251 92 C280 110, 296 154, 291 198 C286 235, 270 262, 261 289" />
+
+              <path class="thin" d="M216 106 C205 129, 201 158, 204 184 C207 206, 214 225, 221 245" />
+              <path class="thin" d="M244 106 C255 129, 259 158, 256 184 C253 206, 246 225, 239 245" />
+              <path class="thin" d="M206 289 C220 304, 240 304, 254 289" />
+
+              <path class="line" d="M210 289 L210 346" />
+              <path class="line" d="M250 289 L250 346" />
+              <path class="line" d="M196 346 L264 346" />
+
+              <path class="thin" d="M32 140 L80 118" />
+              <path class="thin" d="M326 154 L245 154" />
+              <path class="thin" d="M314 320 L250 320" />
+
+              <text class="label" x="14" y="149">${labelR}</text>
+              <text class="label" x="336" y="164">${labelP}</text>
+              <text class="label" x="323" y="329">${labelQ}</text>
+            </svg>
+            ${interactive ? `
+              <div class="diagram-overlay">
+                <div class="diagram-ring r ${showR ? `show ${selectedClass}` : ``}"></div>
+                <div class="diagram-ring p ${showP ? `show ${selectedClass}` : ``}"></div>
+                <div class="diagram-ring q ${showQ ? `show ${selectedClass}` : ``}"></div>
+              </div>
+              <button class="hotspot r" data-part="R" aria-label="Select ${labelR}"></button>
+              <button class="hotspot p" data-part="P" aria-label="Select ${labelP}"></button>
+              <button class="hotspot q" data-part="Q" aria-label="Select ${labelQ}"></button>
+            ` : ``}
+          </div>
+        `;
+      }
+
+      function transferPromptHtml(){
+        return `
+          <div class="question-block">
+            <div class="question-layout">
+              <div class="question-stem">
+                <div class="info-pill">New diagram</div>
+                <p class="question-text">This time, the same body parts are labelled with new letters.</p>
+                <p class="question-text">Use the new diagram. Then choose the correct sentence.</p>
+              </div>
+              <div class="question-visual">
+                ${diagramHtml({interactive:false, labels:{R:"T", P:"S", Q:"U"}})}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderFeedback(){
+        if(!appState.feedbackText) return `<div class="feedback"></div>`;
+        return `<div class="feedback show ${appState.feedbackClass === "good" ? "good" : "bad"}" id="feedbackBox">${escapeHtml(appState.feedbackText)}</div>`;
+      }
+
+      function renderScreenWrapper(inner, screenIndex){
+        const screen = screens[screenIndex];
+        appRoot.innerHTML = `
+          <section>
+            <div class="screen-head">
+              <h1 class="screen-title">${escapeHtml(screen.title)}</h1>
+              <p class="screen-subtitle">${escapeHtml(screen.subtitle)}</p>
+            </div>
+            <div class="screen-body">
+              ${inner}
+            </div>
+          </section>
+        `;
+        bindCommonButtons();
+        updateTopbar();
+        if(appState.readAloudOn){
+          setTimeout(() => speakCurrentScreen(false), 80);
+        }
+      }
+
+      function bindCommonButtons(){
+        const toggle = document.getElementById("questionToggle");
+        if(toggle){
+          toggle.addEventListener("click", () => {
+            appState.questionPanelOpen = !appState.questionPanelOpen;
+            render();
+          });
+        }
+        const next = document.getElementById("nextBtn");
+        if(next){
+          next.addEventListener("click", nextScreen);
+        }
+      }
+
+      function render(){
+        updateTopbar();
+        switch(appState.current){
+          case 0: return renderScreen1();
+          case 1: return renderScreen2();
+          case 2: return renderScreen3();
+          case 3: return renderScreen4();
+          case 4: return renderScreen5();
+          case 5: return renderScreen6();
+          case 6: return renderScreen7();
+          case 7: return renderScreen8();
+          case 8: return renderScreen9();
+          case 9: return renderScreen10();
+          case 10: return renderScreen11();
+          case 11: return renderScreen12();
+          default: return renderScreen1();
+        }
+      }
+
+      function renderScreen1(){
+        appState.canNext = true;
+        appState.lockedCorrect = true;
+        const inner = `
+          <p class="instruction">Read the question. Then tap “I have read it.”</p>
+          <div class="main-card">
+            ${questionPromptHtml(true)}
+          </div>
+          <div class="feedback show good" id="feedbackBox">Good. This question asks for two places.</div>
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="nav-btn primary" id="nextBtn" type="button">I have read it</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, 0);
+      }
+
+      function renderScreen2(){
+        const key = "s2";
+        const st = getScreenState(key, {
+          order: ensureShuffled([
+            {id:"eggs", text:"where eggs are formed"},
+            {id:"baby", text:"where the baby is developed"},
+            {id:"eat", text:"what the baby eats"},
+            {id:"labels", text:"how many labels there are"}
+          ], arr => arr[0].id === "eggs" && arr[1].id === "baby"),
+          selected: [],
+          checkedWrongOnce: false
+        });
+
+        const inner = `
+          <p class="instruction">Choose the two things you need to work out. Then tap Check.</p>
+          <div class="main-card">
+            <div class="option-grid" id="s2Grid">
+              ${st.order.map(item => `
+                <button type="button" class="option-btn small ${st.selected.includes(item.id) ? "selected" : ""}" data-id="${item.id}">
+                  ${escapeHtml(item.text)}
+                </button>
+              `).join("")}
+            </div>
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="check-btn" id="s2Check" type="button">Check</button>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>Next</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, 1);
+
+        document.querySelectorAll("#s2Grid .option-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const id = btn.dataset.id;
+            if(st.selected.includes(id)){
+              st.selected = st.selected.filter(x => x !== id);
+            } else if(st.selected.length < 2){
+              st.selected = st.selected.concat(id);
+            }
+            clearFeedback();
+            render();
+          });
+        });
+
+        document.getElementById("s2Check").addEventListener("click", () => {
+          const ok = st.selected.length === 2 && st.selected.includes("eggs") && st.selected.includes("baby");
+          if(ok){
+            appState.canNext = true;
+            appState.lockedCorrect = true;
+            setFeedback("good", "Yes. You need both of these.");
+          } else {
+            if(!st.checkedWrongOnce){
+              deductStarIfNeeded();
+              st.checkedWrongOnce = true;
+            }
+            setFeedback("bad", "Pick the two ideas named in the question.");
+          }
+        });
+      }
+
+      function renderDiagramSelectionScreen({screenIndex, stateKey, instruction, target, correctText, wrongText, nextLabel="Next"}){
+        const st = getScreenState(stateKey, { selected:"", revealedClass:"" });
+        const inner = `
+          ${topHtml}
+          <p class="instruction">${escapeHtml(instruction)}</p>
+          <div class="main-card">
+            <div class="diagram-card">
+              ${diagramHtml({interactive:true, selected:st.selected, selectedClass:st.revealedClass})}
+              <div class="diagram-caption">Tap a labelled part on the diagram.</div>
+            </div>
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>${escapeHtml(nextLabel)}</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, screenIndex);
+
+        document.querySelectorAll(".hotspot").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const part = btn.dataset.part;
+            st.selected = part;
+            if(part === target){
+              st.revealedClass = "correct";
+              appState.canNext = true;
+              appState.lockedCorrect = true;
+              setFeedback("good", correctText);
+            } else {
+              st.revealedClass = "wrong";
+              setFeedback("bad", wrongText);
+            }
+          });
+        });
+      }
+
+      function renderScreen3(){
+        renderDiagramSelectionScreen({
+          screenIndex:2,
+          stateKey:"s3",
+          instruction:"Tap the labelled part where eggs are formed.",
+          target:"R",
+          correctText:"Yes. R is an ovary. Eggs are formed there.",
+          wrongText:"Look at the small oval part at the side."
+        });
+      }
+
+      function renderSingleChoice({screenIndex, stateKey, instruction, options, correctId, correctFeedback, wrongFeedback, note="", nextLabel="Next", topHtml=""}){
+        const st = getScreenState(stateKey, {
+          order: ensureShuffled(options, arr => arr[0].id === correctId),
+          selected:"",
+          marked:{}
+        });
+        const inner = `
+          ${topHtml}
+          <p class="instruction">${escapeHtml(instruction)}</p>
+          <div class="main-card">
+            <div class="option-grid" id="${stateKey}Grid">
+              ${st.order.map(item => {
+                const classes = [
+                  "option-btn",
+                  st.selected === item.id ? "selected" : "",
+                  appState.feedbackClass && appState.lockedCorrect && item.id === correctId ? "correct" : "",
+                  appState.feedbackClass === "bad" && st.selected === item.id && item.id !== correctId ? "wrong" : ""
+                ].filter(Boolean).join(" ");
+                return `<button type="button" class="${classes}" data-id="${item.id}">${escapeHtml(item.text)}</button>`;
+              }).join("")}
+            </div>
+            ${note ? `<p class="tiny-help">${escapeHtml(note)}</p>` : ``}
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>${escapeHtml(nextLabel)}</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, screenIndex);
+
+        document.querySelectorAll(`#${stateKey}Grid .option-btn`).forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const id = btn.dataset.id;
+            st.selected = id;
+            if(id === correctId){
+              appState.canNext = true;
+              appState.lockedCorrect = true;
+              setFeedback("good", correctFeedback);
+            } else {
+              setFeedback("bad", wrongFeedback);
+            }
+          });
+        });
+      }
+
+
+      function renderScreen4(){
+        renderSingleChoice({
+          screenIndex:3,
+          stateKey:"s4",
+          instruction:"Choose the correct name for R.",
+          options:[
+            {id:"ovary", text:"R is the ovary."},
+            {id:"womb", text:"R is the womb."},
+            {id:"vagina", text:"R is the vagina."}
+          ],
+          correctId:"ovary",
+          correctFeedback:"Yes. R is the ovary.",
+          wrongFeedback:"Look at the small oval part at the side."
+        });
+      }
+
+      function renderScreen5(){
+        renderSingleChoice({
+          screenIndex:4,
+          stateKey:"s5",
+          instruction:"Choose the true sentence about the ovary.",
+          options:[
+            {id:"eggs", text:"Eggs are formed in the ovary."},
+            {id:"baby", text:"The baby develops in the ovary."},
+            {id:"passage", text:"The ovary is the passage leading from the womb to the outside of the body."}
+          ],
+          correctId:"eggs",
+          correctFeedback:"Yes. The ovary is where eggs are formed.",
+          wrongFeedback:"This screen is about the ovary's job."
+        });
+      }
+
+      function renderScreen6(){
+        renderDiagramSelectionScreen({
+          screenIndex:5,
+          stateKey:"s6",
+          instruction:"Tap the labelled part where the baby develops.",
+          target:"P",
+          correctText:"Yes. P is the womb. The baby develops there.",
+          wrongText:"Look at the large middle part."
+        });
+      }
+
+      function renderPairBlankScreen({screenIndex, stateKey, instruction, promptHtml="", rows, bank, correctFeedback, firstWrongFeedback, laterWrongFeedback, footerNote="", nextLabel="Next", blankWide=false, bankLong=false, penalize=false}){
+        const st = getScreenState(stateKey, {
+          bank: ensureShuffled(bank, arr => arr.map(item => item.id).join("|") === bank.map(item => item.id).join("|")),
+          blanks: rows.map(() => null),
+          activeBlank: null,
+          checkedAttempts: 0,
+          showMarking: false
+        });
+
+        const labelMap = Object.fromEntries(bank.map(item => [item.id, item.text]));
+
+        const blankClasses = (index) => {
+          const classes = ["blank-chip"];
+          if(blankWide) classes.push("wide");
+          if(st.activeBlank === index) classes.push("selected");
+          if(st.blanks[index]) classes.push("filled");
+          if(st.showMarking){
+            const correct = rows[index].correct;
+            if(st.blanks[index] === correct) classes.push("correct");
+            else classes.push("wrong");
+          }
+          return classes.join(" ");
+        };
+
+        const inner = `
+          <p class="instruction">${escapeHtml(instruction)}</p>
+          <div class="main-card">
+            ${promptHtml}
+            <div class="sentence-frame">
+              ${rows.map((row, index) => `
+                <div class="frame-line">
+                  <span>${escapeHtml(row.before)}</span>
+                  <button type="button" class="${blankClasses(index)}" data-blank="${index}">${st.blanks[index] ? escapeHtml(labelMap[st.blanks[index]]) : "?"}</button>
+                  <span>${escapeHtml(row.after || ".")}</span>
+                </div>
+              `).join("")}
+            </div>
+            <div class="bank-area" id="${stateKey}Bank">
+              ${st.bank.map(item => {
+                const used = st.blanks.includes(item.id);
+                return `<button type="button" class="bank-chip ${bankLong ? "long" : ""} ${used ? "used" : ""}" data-value="${item.id}" ${used ? "disabled" : ""}>${escapeHtml(item.text)}</button>`;
+              }).join("")}
+            </div>
+            ${footerNote ? `<p class="screen-footer-note">${escapeHtml(footerNote)}</p>` : ``}
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="check-btn" id="${stateKey}Check" type="button">Check</button>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>${escapeHtml(nextLabel)}</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, screenIndex);
+
+        document.querySelectorAll("[data-blank]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const idx = Number(btn.dataset.blank);
+            if(st.blanks[idx]){
+              st.blanks[idx] = null;
+            } else {
+              st.activeBlank = idx;
+            }
+            st.showMarking = false;
+            clearFeedback();
+            render();
+          });
+        });
+
+        document.querySelectorAll(`#${stateKey}Bank .bank-chip`).forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const value = btn.dataset.value;
+            if(st.activeBlank === null){
+              st.activeBlank = st.blanks.findIndex(v => v === null);
+              if(st.activeBlank === -1) st.activeBlank = 0;
+            }
+            st.blanks[st.activeBlank] = value;
+            const nextEmpty = st.blanks.findIndex(v => v === null);
+            st.activeBlank = nextEmpty >= 0 ? nextEmpty : null;
+            st.showMarking = false;
+            clearFeedback();
+            render();
+          });
+        });
+
+        document.getElementById(`${stateKey}Check`).addEventListener("click", () => {
+          const allFilled = st.blanks.every(Boolean);
+          const correct = allFilled && rows.every((row, index) => st.blanks[index] === row.correct);
+          if(correct){
+            appState.canNext = true;
+            appState.lockedCorrect = true;
+            st.showMarking = false;
+            setFeedback("good", correctFeedback);
+          } else {
+            if(penalize) deductStarIfNeeded();
+            st.checkedAttempts += 1;
+            if(st.checkedAttempts === 1){
+              st.showMarking = false;
+              setFeedback("bad", firstWrongFeedback);
+            } else {
+              st.showMarking = true;
+              setFeedback("bad", laterWrongFeedback);
+            }
+          }
+        });
+      }
+
+      function renderScreen7(){
+        renderPairBlankScreen({
+          screenIndex:6,
+          stateKey:"s7",
+          instruction:"Label P and Q with their names. Then tap Check.",
+          promptHtml:`<div class="diagram-card compact">${diagramHtml({interactive:false})}<div class="diagram-caption">Use the diagram to help you label the parts.</div></div>`,
+          rows:[
+            {before:"P is the", correct:"womb"},
+            {before:"Q is the", correct:"vagina"}
+          ],
+          bank:[
+            {id:"womb", text:"womb"},
+            {id:"vagina", text:"vagina"}
+          ],
+          correctFeedback:"Good. P is the womb and Q is the vagina.",
+          firstWrongFeedback:"Check the middle part and the lower passage carefully.",
+          laterWrongFeedback:"Now check which label name is right and which one needs fixing.",
+          footerNote:"Tap a blank first. Then tap a word from the bank. Tap a filled blank to clear it.",
+          blankWide:true,
+          bankLong:true
+        });
+      }
+
+      function renderScreen8(){
+        renderPairBlankScreen({
+          screenIndex:7,
+          stateKey:"s8",
+          instruction:"Match each body part to its job. Then tap Check.",
+          rows:[
+            {before:"The womb is", correct:"baby"},
+            {before:"The vagina is the", correct:"passage"}
+          ],
+          bank:[
+            {id:"baby", text:"where the baby develops"},
+            {id:"passage", text:"passage leading from the womb to the outside of the body"}
+          ],
+          correctFeedback:"Yes. The womb is where the baby develops, and the vagina is the passage leading from the womb to the outside of the body.",
+          firstWrongFeedback:"Check which part is the womb and which part is the vagina.",
+          laterWrongFeedback:"Now check which function belongs to each body part.",
+          footerNote:"Tap a blank first. Then tap a job from the bank. Tap a filled blank to clear it.",
+          blankWide:true,
+          bankLong:true
+        });
+      }
+
+      function renderScreen9(){
+        const key = "s9";
+        const st = getScreenState(key, {
+          bank: ensureShuffled(["P","Q","R"], arr => arr.join("|") === "P|Q|R"),
+          blanks: [null, null],
+          activeBlank: null,
+          checkedAttempts: 0
+        });
+
+        const blankClasses = (index) => {
+          const classes = ["blank-chip"];
+          if(st.activeBlank === index) classes.push("selected");
+          if(st.blanks[index]) classes.push("filled");
+          if(st.showMarking){
+            const correct = index === 0 ? "R" : "P";
+            if(st.blanks[index] === correct) classes.push("correct");
+            else classes.push("wrong");
+          }
+          return classes.join(" ");
+        };
+
+        const inner = `
+          <p class="instruction">Fill both blanks. Then tap Check.</p>
+          <div class="main-card">
+            <div class="sentence-frame">
+              <div class="frame-line">
+                <span>Eggs are formed in</span>
+                <button type="button" class="${blankClasses(0)}" data-blank="0">${st.blanks[0] ? escapeHtml(st.blanks[0]) : "?"}</button>
+                <span>.</span>
+              </div>
+              <div class="frame-line">
+                <span>The baby is developed in</span>
+                <button type="button" class="${blankClasses(1)}" data-blank="1">${st.blanks[1] ? escapeHtml(st.blanks[1]) : "?"}</button>
+                <span>.</span>
+              </div>
+            </div>
+            <div class="bank-area" id="s9Bank">
+              ${st.bank.map(item => {
+                const used = st.blanks.includes(item);
+                return `<button type="button" class="bank-chip ${used ? "used" : ""}" data-value="${item}" ${used ? "disabled" : ""}>${escapeHtml(item)}</button>`;
+              }).join("")}
+            </div>
+            <p class="screen-footer-note">Tap a blank first. Then tap a letter from the bank. Tap a filled blank to clear it.</p>
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="check-btn" id="s9Check" type="button">Check</button>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>Next</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, 8);
+
+        document.querySelectorAll("[data-blank]").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const idx = Number(btn.dataset.blank);
+            if(st.blanks[idx]){
+              st.blanks[idx] = null;
+            } else {
+              st.activeBlank = idx;
+            }
+            st.showMarking = false;
+            clearFeedback();
+            render();
+          });
+        });
+
+        document.querySelectorAll("#s9Bank .bank-chip").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const value = btn.dataset.value;
+            if(st.activeBlank === null){
+              st.activeBlank = st.blanks.findIndex(v => v === null);
+              if(st.activeBlank === -1) st.activeBlank = 0;
+            }
+            st.blanks[st.activeBlank] = value;
+            const nextEmpty = st.blanks.findIndex(v => v === null);
+            st.activeBlank = nextEmpty >= 0 ? nextEmpty : null;
+            st.showMarking = false;
+            clearFeedback();
+            render();
+          });
+        });
+
+        document.getElementById("s9Check").addEventListener("click", () => {
+          const allFilled = st.blanks.every(Boolean);
+          const correct = allFilled && st.blanks[0] === "R" && st.blanks[1] === "P";
+          if(correct){
+            appState.canNext = true;
+            appState.lockedCorrect = true;
+            st.showMarking = false;
+            setFeedback("good", "Good. Eggs → R. Baby develops → P.");
+          } else {
+            deductStarIfNeeded();
+            st.checkedAttempts += 1;
+            if(st.checkedAttempts === 1){
+              st.showMarking = false;
+              setFeedback("bad", "Check each blank one at a time.");
+            } else {
+              st.showMarking = true;
+              setFeedback("bad", "Now check which blank is right and which blank needs fixing.");
+            }
+          }
+        });
+      }
+
+      function renderScreen10(){
+        const key = "s10";
+        const cards = [
+          {id:"pq", eggs:"P", baby:"Q"},
+          {id:"pr", eggs:"P", baby:"R"},
+          {id:"rq", eggs:"R", baby:"Q"},
+          {id:"rp", eggs:"R", baby:"P"}
+        ];
+        const st = getScreenState(key, {
+          order: ensureShuffled(cards, arr => arr[0].id === "rp"),
+          selected:"",
+          lostOnce:false
+        });
+
+        const inner = `
+          <p class="instruction">Choose the answer that gets both columns correct.</p>
+          <div class="main-card">
+            <div class="option-grid" id="s10Grid">
+              ${st.order.map(card => {
+                const classes = [
+                  "option-btn",
+                  st.selected === card.id ? "selected" : "",
+                  appState.lockedCorrect && card.id === "rp" ? "correct" : "",
+                  appState.feedbackClass === "bad" && st.selected === card.id && card.id !== "rp" ? "wrong" : ""
+                ].filter(Boolean).join(" ");
+                return `
+                  <button type="button" class="${classes}" data-id="${card.id}">
+                    <div><strong>Eggs are formed in</strong> ${escapeHtml(card.eggs)}</div>
+                    <div><strong>Baby is developed in</strong> ${escapeHtml(card.baby)}</div>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+            ${renderFeedback()}
+          </div>
+          ${questionToggleHtml()}
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="nav-btn primary" id="nextBtn" type="button" ${appState.canNext ? "" : "disabled"}>Next</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, 9);
+
+        document.querySelectorAll("#s10Grid .option-btn").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(appState.lockedCorrect) return;
+            const id = btn.dataset.id;
+            st.selected = id;
+            if(id === "rp"){
+              appState.canNext = true;
+              appState.lockedCorrect = true;
+              setFeedback("good", "Yes. That answer gets both parts right.");
+            } else {
+              if(!st.lostOnce){
+                deductStarIfNeeded();
+                st.lostOnce = true;
+              }
+              setFeedback("bad", "One part may look right, but both columns must be correct.");
+            }
+          });
+        });
+      }
+
+      function renderScreen11(){
+        renderSingleChoice({
+          screenIndex:10,
+          stateKey:"s11",
+          instruction:"Use the new diagram. Choose the correct sentence.",
+          options:[
+            {id:"correct", text:"T is the ovary where eggs are formed, and S is the womb where the baby develops."},
+            {id:"wrong1", text:"S is the ovary where eggs are formed, and U is the womb where the baby develops."},
+            {id:"wrong2", text:"U is the ovary where eggs are formed, and T is the womb where the baby develops."}
+          ],
+          correctId:"correct",
+          correctFeedback:"Yes. You used the new labels and body part names correctly.",
+          wrongFeedback:"Look again at the ovary and the womb on the new diagram.",
+          note:"",
+          nextLabel:"Next",
+          topHtml: transferPromptHtml()
+        });
+      }
+
+      function renderScreen12(){
+        appState.canNext = false;
+        appState.lockedCorrect = true;
+        const inner = `
+          <p class="instruction">Tap Finish.</p>
+          <div class="main-card">
+            <p class="question-title">You checked the body part names and functions before choosing the answer.</p>
+            <p class="question-text">That careful method helps with labelled diagram questions like this one.</p>
+            <div class="callout">
+              Final answer for the original question: <strong>eggs are formed in R</strong> and <strong>the baby develops in P</strong>.
+            </div>
+            <p class="tiny-help">You can restart to practise again.</p>
+          </div>
+          <div class="nav">
+            <div class="nav-spacer"></div>
+            <button class="nav-btn primary" id="finishBtn" type="button">Finish</button>
+          </div>
+        `;
+        renderScreenWrapper(inner, 11);
+        document.getElementById("finishBtn").addEventListener("click", () => {
+          hardReset();
+        });
+      }
+
+
+      function buildReadText(){
+        const screen = screens[appState.current];
+        const bits = [screen.title, screen.subtitle];
+
+        switch(appState.current){
+          case 0:
+            bits.push("Read the question. Then tap I have read it.");
+            bits.push("The diagram below shows the female human reproductive system.");
+            bits.push("Which of the following correctly shows where the eggs are formed and where the baby is developed?");
+            bits.push("Answer table. Option 1. P and Q. Option 2. P and R. Option 3. R and Q. Option 4. R and P.");
+            break;
+          case 1:
+            bits.push("Choose the two things you need to work out. Then tap Check.");
+            bits.push("Options: where eggs are formed. where the baby is developed. what the baby eats. how many labels there are.");
+            break;
+          case 2:
+            bits.push("Tap the labelled part where eggs are formed.");
+            bits.push("Tap a labelled part on the diagram.");
+            break;
+          case 3:
+            bits.push("Choose the correct name for R.");
+            bits.push("Options: R is the ovary. R is the womb. R is the vagina.");
+            break;
+          case 4:
+            bits.push("Choose the true sentence about the ovary.");
+            bits.push("Options: Eggs are formed in the ovary. The baby develops in the ovary. The ovary is the passage leading from the womb to the outside of the body.");
+            break;
+          case 5:
+            bits.push("Tap the labelled part where the baby develops.");
+            bits.push("Tap a labelled part on the diagram.");
+            break;
+          case 6:
+            bits.push("Label P and Q with their names. Then tap Check.");
+            bits.push("Sentence one. P is the blank. Sentence two. Q is the blank. Word bank: womb, vagina.");
+            break;
+          case 7:
+            bits.push("Match each body part to its job. Then tap Check.");
+            bits.push("Sentence one. The womb is blank. Sentence two. The vagina is the blank. Option bank: where the baby develops. passage leading from the womb to the outside of the body.");
+            break;
+          case 8:
+            bits.push("Fill both blanks. Then tap Check.");
+            bits.push("Sentence one. Eggs are formed in blank. Sentence two. The baby is developed in blank. Option bank: P, Q, R.");
+            break;
+          case 9:
+            bits.push("Choose the answer that gets both columns correct.");
+            bits.push("Choose one answer card.");
+            break;
+          case 10:
+            bits.push("Use the new diagram. Choose the correct sentence.");
+            bits.push("The new diagram uses different letters for the same body parts.");
+            bits.push("Options: T is the ovary where eggs are formed, and S is the womb where the baby develops. S is the ovary where eggs are formed, and U is the womb where the baby develops. U is the ovary where eggs are formed, and T is the womb where the baby develops.");
+            break;
+          case 11:
+            bits.push("Tap Finish.");
+            bits.push("You checked the body part names and functions before choosing the answer.");
+            break;
+        }
+
+        if(appState.feedbackText){
+          bits.push("Feedback.");
+          bits.push(appState.feedbackText);
+        }
+        return bits.join(" ");
+      }
+
+      function speakCurrentScreen(force){
+        if(!("speechSynthesis" in window)) return;
+        if(!appState.readAloudOn && !force) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(buildReadText());
+        utterance.rate = 0.95;
+        utterance.pitch = 1;
+        utterance.lang = "en-SG";
+        window.speechSynthesis.speak(utterance);
+      }
+
+      toggleReadBtn.addEventListener("click", () => {
+        appState.readAloudOn = !appState.readAloudOn;
+        updateTopbar();
+        if(appState.readAloudOn){
+          speakCurrentScreen(true);
+        } else {
+          window.speechSynthesis?.cancel?.();
+        }
+      });
+
+      readNowBtn.addEventListener("click", () => speakCurrentScreen(true));
+      restartBtn.addEventListener("click", hardReset);
+
+      render();
+    })();
+  </script>
+</body>
+</html>

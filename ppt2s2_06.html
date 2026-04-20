@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppt2s2_6</title>
+  <style>
+    :root{
+      --bg:#eef7ff;
+      --panel:#ffffff;
+      --ink:#18324a;
+      --muted:#5a7288;
+      --line:#cfe4f4;
+      --primary:#1677c8;
+      --primary-dark:#0f5f9f;
+      --accent:#e8f5ff;
+      --good:#1f8f47;
+      --bad:#c63d3d;
+      --warn:#f59f00;
+      --shadow:0 10px 24px rgba(16,60,95,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Arial, Helvetica, sans-serif;background:linear-gradient(180deg,#f7fbff 0%, #eef7ff 100%);color:var(--ink);}
+    body{min-height:100vh}
+    .page{
+      width:min(1040px, 96vw);
+      margin:18px auto 28px;
+    }
+    .top-strip{
+      background:linear-gradient(135deg,#dff2ff 0%, #f8fdff 100%);
+      border:1px solid #c8e8fb;
+      border-radius:20px;
+      box-shadow:var(--shadow);
+      padding:14px 16px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:12px 16px;
+      margin-bottom:18px;
+    }
+    .title-block{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:220px;
+      flex:1 1 260px;
+    }
+    .eyebrow{
+      font-size:.86rem;
+      color:var(--muted);
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    .main-title{
+      font-size:1.35rem;
+      font-weight:800;
+      line-height:1.2;
+    }
+    .top-chip{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:700;
+      font-size:0.98rem;
+      color:var(--ink);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .drops{
+      display:flex;
+      gap:4px;
+      align-items:center;
+      font-size:1.15rem;
+      letter-spacing:1px;
+    }
+    .drop.off{opacity:.2; filter:grayscale(1);}
+    .small-muted{
+      color:var(--muted);
+      font-size:.93rem;
+      font-weight:600;
+    }
+    .toggle-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:700;
+    }
+    .switch{
+      position:relative;
+      width:54px;
+      height:30px;
+      flex:0 0 auto;
+    }
+    .switch input{opacity:0;width:0;height:0}
+    .slider{
+      position:absolute;inset:0;
+      background:#bfd8ea;
+      border-radius:999px;
+      transition:.2s ease;
+      cursor:pointer;
+    }
+    .slider:before{
+      content:"";
+      position:absolute;
+      height:22px;width:22px;
+      left:4px;top:4px;
+      background:#fff;
+      border-radius:50%;
+      box-shadow:0 2px 4px rgba(0,0,0,.15);
+      transition:.2s ease;
+    }
+    .switch input:checked + .slider{background:var(--primary)}
+    .switch input:checked + .slider:before{transform:translateX(24px)}
+    .app-shell{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .screen-card{
+      background:var(--panel);
+      border:1px solid #d8ebf7;
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:22px;
+    }
+    .screen-head{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px 14px;
+      margin-bottom:10px;
+    }
+    .screen-count{
+      color:var(--muted);
+      font-weight:700;
+      font-size:.97rem;
+    }
+    .read-btn{
+      appearance:none;
+      border:none;
+      background:#edf7ff;
+      color:var(--primary-dark);
+      border-radius:999px;
+      padding:10px 14px;
+      font-weight:800;
+      font-size:.96rem;
+      cursor:pointer;
+    }
+    .instruction{
+      font-size:clamp(1.55rem, 2vw + 1rem, 2rem);
+      line-height:1.2;
+      font-weight:900;
+      color:#123456;
+      margin:6px 0 14px;
+    }
+    .subprompt{
+      font-size:1.06rem;
+      line-height:1.5;
+      color:#274a66;
+      margin:0 0 14px;
+      font-weight:700;
+    }
+    .intro-block{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .question-box{
+      background:#f9fcff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+    }
+    .question-stem{
+      font-size:1.08rem;
+      line-height:1.65;
+    }
+    mark{
+      background:#fff4a8;
+      color:inherit;
+      padding:.06em .18em;
+      border-radius:.3em;
+    }
+    .table-wrap{
+      overflow-x:auto;
+      margin-top:14px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:1rem;
+      min-width:420px;
+      background:#fff;
+      border-radius:18px;
+      overflow:hidden;
+    }
+    th, td{
+      border:1px solid #bddcf0;
+      padding:12px 10px;
+      text-align:center;
+    }
+    th{
+      background:#dff2ff;
+      color:#123d5c;
+      font-weight:800;
+    }
+    td:first-child, th:first-child{font-weight:800}
+    .question-footer{
+      margin-top:14px;
+      font-weight:800;
+      color:#21445e;
+      line-height:1.5;
+    }
+    .options-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+    .option-card, .pair-card{
+      border:2px solid #d5e7f4;
+      border-radius:20px;
+      background:#fff;
+      padding:16px;
+      cursor:pointer;
+      transition:transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
+      min-height:84px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:8px;
+      text-align:left;
+    }
+    .option-card:hover, .pair-card:hover{transform:translateY(-1px); box-shadow:0 8px 18px rgba(17,70,110,.08)}
+    .option-card.selected, .pair-card.selected{
+      border-color:var(--primary);
+      background:#edf7ff;
+      box-shadow:0 0 0 4px rgba(22,119,200,.10);
+    }
+    .option-card.correct, .pair-card.correct{border-color:var(--good); background:#eefaf2}
+    .option-card.wrong, .pair-card.wrong{border-color:var(--bad); background:#fff1f1}
+    .option-title{
+      font-weight:900;
+      font-size:1.08rem;
+      color:#133b57;
+    }
+    .option-meta{
+      color:#48677f;
+      font-weight:700;
+      line-height:1.45;
+      font-size:.97rem;
+    }
+    .slot-grid{
+      display:grid;
+      gap:12px;
+      margin:16px 0 10px;
+    }
+    .sentence-frame{
+      background:#f7fbff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      line-height:2.1;
+      font-size:1.07rem;
+      font-weight:800;
+      color:#234864;
+    }
+    .blank{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:120px;
+      margin:0 .2em;
+      padding:10px 12px;
+      border-radius:14px;
+      border:2px dashed #9cc8e5;
+      background:#fff;
+      color:#456a86;
+      cursor:pointer;
+      vertical-align:middle;
+    }
+    .blank.active{border-style:solid; border-color:var(--primary); background:#edf7ff}
+    .blank.filled{border-style:solid; border-color:#82b7da; color:#123456}
+    .blank.correct{border-color:var(--good); background:#eefaf2}
+    .blank.wrong{border-color:var(--bad); background:#fff1f1}
+    .word-bank{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:16px;
+    }
+    .word-chip{
+      padding:12px 16px;
+      border-radius:999px;
+      border:2px solid #cde2f1;
+      background:#fff;
+      font-weight:900;
+      color:#17415e;
+      cursor:pointer;
+      min-width:100px;
+      text-align:center;
+    }
+    .word-chip:hover{border-color:var(--primary)}
+    .word-chip.disabled{opacity:.45; cursor:not-allowed}
+    .check-row, .nav-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      margin-top:18px;
+    }
+    .primary-btn, .ghost-btn, .next-btn{
+      appearance:none;
+      border:none;
+      border-radius:16px;
+      padding:14px 18px;
+      font-size:1rem;
+      font-weight:900;
+      cursor:pointer;
+      min-width:140px;
+    }
+    .primary-btn{background:var(--primary); color:#fff}
+    .primary-btn:hover{background:var(--primary-dark)}
+    .ghost-btn{background:#edf7ff; color:var(--primary-dark)}
+    .next-btn{
+      background:#173b59;
+      color:#fff;
+      margin-left:auto;
+    }
+    .next-btn[disabled]{
+      background:#aec7d8;
+      cursor:not-allowed;
+      color:#f6fbff;
+    }
+    .feedback{
+      margin-top:14px;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:1rem;
+      font-weight:800;
+      line-height:1.5;
+    }
+    .feedback.good{background:#edf9f1; color:#1b6d3a; border:1px solid #bfe2cb}
+    .feedback.bad{background:#fff3f3; color:#9a2f2f; border:1px solid #f0c4c4}
+    details.question-panel{
+      background:#ffffff;
+      border:1px solid #d7e9f5;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:14px 16px;
+      margin-top:8px;
+    }
+    details.question-panel summary{
+      cursor:pointer;
+      font-weight:900;
+      color:#17415e;
+      list-style:none;
+      outline:none;
+    }
+    details.question-panel summary::-webkit-details-marker{display:none}
+    details.question-panel[open] summary{margin-bottom:12px}
+    .panel-hint{
+      margin-top:8px;
+      color:var(--muted);
+      font-size:.95rem;
+      font-weight:700;
+    }
+    .transfer-box{
+      background:#f9fcff;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:16px;
+      margin-top:8px;
+    }
+    .completion-box{
+      text-align:center;
+      padding:18px 10px 8px;
+    }
+    .completion-badge{
+      width:90px;height:90px;border-radius:50%;
+      display:inline-flex;align-items:center;justify-content:center;
+      font-size:2.2rem;font-weight:900;
+      background:linear-gradient(135deg,#dff2ff 0%,#eefaf2 100%);
+      border:3px solid #c8e8fb;
+      margin-bottom:16px;
+    }
+    .completion-text{
+      font-size:1.18rem;
+      line-height:1.6;
+      font-weight:800;
+      color:#1f4360;
+      max-width:660px;
+      margin:0 auto 10px;
+    }
+    .micro-note{
+      color:var(--muted);
+      font-size:.98rem;
+      line-height:1.5;
+      font-weight:700;
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(10,35,57,.68);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      z-index:1000;
+    }
+    .overlay.show{display:flex}
+    .overlay-card{
+      width:min(520px, 92vw);
+      background:#fff;
+      border-radius:28px;
+      padding:24px;
+      text-align:center;
+      box-shadow:0 18px 36px rgba(0,0,0,.2);
+      border:1px solid #d7e9f5;
+    }
+    .overlay-card h2{
+      margin:0 0 10px;
+      font-size:1.8rem;
+      color:#173b59;
+    }
+    .overlay-card p{
+      margin:0;
+      font-size:1.06rem;
+      line-height:1.6;
+      color:#34566f;
+      font-weight:700;
+    }
+
+    @media (max-width: 760px){
+      .page{width:min(680px, 96vw)}
+      .options-grid{grid-template-columns:1fr}
+      .top-strip{padding:12px}
+      .screen-card{padding:18px}
+      .instruction{font-size:1.55rem}
+      .next-btn{width:100%; margin-left:0}
+      .primary-btn, .ghost-btn, .next-btn{width:100%}
+      .check-row{flex-direction:column; align-items:stretch}
+      .sentence-frame{line-height:2.35}
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay" id="gameOverOverlay" aria-hidden="true">
+    <div class="overlay-card">
+      <h2>All the water drops dried up!</h2>
+      <p>Let’s restart the whole interactive and try again with more careful checking.</p>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="top-strip" id="topStrip"></div>
+    <div class="app-shell">
+      <main id="app"></main>
+    </div>
+  </div>
+
+  <script>
+    const originalQuestion = {
+      stem: `Putera conducted an experiment to find out how the amount of exposed surface area affects the rate of evaporation. He placed four set-ups in a basketball court.`,
+      questionLine: `Which of the above set-ups should he use to ensure a fair test?`,
+      table: [
+        { beaker: "P", volume: 200, area: 20 },
+        { beaker: "Q", volume: 150, area: 30 },
+        { beaker: "R", volume: 200, area: 30 },
+        { beaker: "S", volume: 250, area: 20 }
+      ],
+      sourceOptions: [
+        { id: "PR", text: "P and R" },
+        { id: "PS", text: "P and S" },
+        { id: "QR", text: "Q and R" },
+        { id: "QS", text: "Q and S" }
+      ]
+    };
+
+    const transferQuestion = {
+      stem: `A scientist wants to find out how the size of the opening of a container affects the rate of evaporation.`,
+      questionLine: `Which pair should be chosen for a fair test?`,
+      table: [
+        { beaker: "A", volume: 100, area: 10 },
+        { beaker: "B", volume: 150, area: 10 },
+        { beaker: "C", volume: 100, area: 20 },
+        { beaker: "D", volume: 150, area: 20 }
+      ]
+    };
+
+    const screens = [
+      { id: "intro", type: "intro", countLabel: "1 of 10" },
+      {
+        id: "changeVar",
+        type: "single",
+        countLabel: "2 of 10",
+        instruction: "Tap the factor Putera changed.",
+        prompt: "What is Putera changing in this experiment?",
+        applyDemerit: true,
+        options: [
+          { id: "surface", text: "amount of exposed surface area" },
+          { id: "rate", text: "rate of evaporation" },
+          { id: "volume", text: "volume of water" },
+          { id: "court", text: "basketball court" }
+        ],
+        correctId: "surface",
+        correctFeedback: "Yes. The aim tells us this is the factor being changed.",
+        wrongFeedback: "Look at the aim. Which factor is Putera testing?"
+      },
+      {
+        id: "measureVar",
+        type: "single",
+        countLabel: "3 of 10",
+        instruction: "Tap what Putera is finding out.",
+        prompt: "What is the result he wants to measure?",
+        applyDemerit: true,
+        options: [
+          { id: "rate", text: "rate of evaporation" },
+          { id: "surface", text: "amount of exposed surface area" },
+          { id: "volume", text: "volume of water" },
+          { id: "letters", text: "the beaker letters" }
+        ],
+        correctId: "rate",
+        correctFeedback: "Yes. This is the result he wants to measure.",
+        wrongFeedback: "The changed factor and the measured result are not the same."
+      },
+      {
+        id: "constantVar",
+        type: "single",
+        countLabel: "4 of 10",
+        instruction: "Tap the value in the table that should stay the same for a fair test here.",
+        prompt: "Putera already used the same place. Based on the table, which value should be the same in the two set-ups you choose?",
+        applyDemerit: true,
+        options: [
+          { id: "volume", text: "volume of water" },
+          { id: "surface", text: "exposed surface area" },
+          { id: "letter", text: "beaker letter" },
+          { id: "both", text: "both values in the table" }
+        ],
+        correctId: "volume",
+        correctFeedback: "Yes. The place is already the same. From the table, the value to keep the same is the volume of water.",
+        wrongFeedback: "The tested factor should be different. Look for the other table value that should stay the same."
+      },
+      {
+        id: "ruleBuild",
+        type: "fill",
+        countLabel: "5 of 10",
+        instruction: "Fill both blanks to build the fair-test rule.",
+        prompt: "Complete the sentence.",
+        applyDemerit: true,
+        sentenceParts: ["Choose two set-ups with the", "volume of water and", "exposed surface area."],
+        bank: [
+          { id: "sameA", value: "same" },
+          { id: "differentA", value: "different" }
+        ],
+        correctValues: ["same", "different"],
+        generalClue: "One condition stays the same. The tested factor changes.",
+        preciseClue: "Check both blanks carefully: volume stays the same, but exposed surface area changes."
+      },
+      {
+        id: "sameVolumePairs",
+        type: "multi",
+        countLabel: "6 of 10",
+        instruction: "Tap all pairs that have the same volume of water. Then tap Check.",
+        prompt: "Look only at the volume column on this screen.",
+        applyDemerit: true,
+        options: [
+          { id: "PR", title: "P and R", meta: "200 ml and 200 ml" },
+          { id: "PS", title: "P and S", meta: "200 ml and 250 ml" },
+          { id: "QR", title: "Q and R", meta: "150 ml and 200 ml" },
+          { id: "QS", title: "Q and S", meta: "150 ml and 250 ml" }
+        ],
+        correctIds: ["PR"],
+        // Revised to keep the screen cleaner and prevent a near-duplicate logic path.
+        // Students choose the fair pair directly after they have already built the rule.
+        feedbackOnCorrect: "Good. P and R keeps the volume the same.",
+        wrongFeedback: "Check the volume numbers for both beakers in the pair."
+      },
+      {
+        id: "surfaceFilter",
+        type: "singleRich",
+        countLabel: "7 of 10",
+        instruction: "Now tap the pair that changes exposed surface area but keeps volume the same.",
+        prompt: "Use both parts of the fair-test rule.",
+        applyDemerit: true,
+        options: [
+          { id: "PR", title: "P and R", meta: "Volume: 200 ml and 200 ml • Surface area: 20 cm² and 30 cm²" },
+          { id: "PS", title: "P and S", meta: "Volume: 200 ml and 250 ml • Surface area: 20 cm² and 20 cm²" },
+          { id: "QR", title: "Q and R", meta: "Volume: 150 ml and 200 ml • Surface area: 30 cm² and 30 cm²" },
+          { id: "QS", title: "Q and S", meta: "Volume: 150 ml and 250 ml • Surface area: 30 cm² and 20 cm²" }
+        ],
+        correctId: "PR",
+        correctFeedback: "Yes. P and R keeps the volume the same and changes exposed surface area.",
+        wrongFeedback: "Use both checks: same volume and different exposed surface area."
+      },
+      {
+        id: "finalRetry",
+        type: "single",
+        countLabel: "8 of 10",
+        instruction: "Answer the original question.",
+        prompt: "Choose the best answer.",
+        applyDemerit: true,
+        options: [
+          { id: "PR", text: "P and R" },
+          { id: "PS", text: "P and S" },
+          { id: "QR", text: "Q and R" },
+          { id: "QS", text: "Q and S" }
+        ],
+        correctId: "PR",
+        correctFeedback: "Correct. P and R is the fair-test pair.",
+        wrongFeedback: "Use both checks before choosing: same volume, different exposed surface area."
+      },
+      {
+        id: "transfer",
+        type: "transfer",
+        countLabel: "9 of 10",
+        instruction: "Try one more fair-test question.",
+        prompt: "Use the same idea in a new question.",
+        applyDemerit: false
+      },
+      {
+        id: "completion",
+        type: "completion",
+        countLabel: "10 of 10"
+      }
+    ];
+
+    const teachingCheckableScreens = screens.filter(s => s.applyDemerit).length;
+    const maxDemerits = Math.ceil(teachingCheckableScreens / 2);
+
+    const defaultScreenState = {
+      selectedId: null,
+      selectedIds: [],
+      attempts: 0,
+      feedback: "",
+      feedbackType: "",
+      completed: false,
+      blanks: ["", ""],
+      activeBlank: 0,
+      checkedOnce: false
+    };
+
+    const state = {
+      screenIndex: 0,
+      readAloudOn: false,
+      questionPanelOpen: false,
+      remainingDemerits: maxDemerits,
+      screenStates: {}
+    };
+
+    function getScreenState(id){
+      if(!state.screenStates[id]){
+        state.screenStates[id] = JSON.parse(JSON.stringify(defaultScreenState));
+      }
+      return state.screenStates[id];
+    }
+
+    function resetProgress(keepReadAloud = true){
+      const readSetting = keepReadAloud ? state.readAloudOn : false;
+      state.screenIndex = 0;
+      state.readAloudOn = readSetting;
+      state.questionPanelOpen = false;
+      state.remainingDemerits = maxDemerits;
+      state.screenStates = {};
+      stopSpeech();
+      render();
+    }
+
+    function shuffleArray(arr){
+      const copy = arr.map(item => ({...item}));
+      let originalIds = copy.map(x => x.id || x.value).join("|");
+      let shuffled = [];
+      do{
+        shuffled = copy.slice();
+        for(let i = shuffled.length - 1; i > 0; i--){
+          const j = Math.floor(Math.random() * (i + 1));
+          [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+      } while (shuffled.map(x => x.id || x.value).join("|") === originalIds && shuffled.length > 1);
+      return shuffled;
+    }
+
+    function getRenderedOptions(screen){
+      const sState = getScreenState(screen.id);
+      if(!sState.renderedOptions){
+        if(screen.type === "single" || screen.type === "singleRich"){
+          sState.renderedOptions = shuffleArray(screen.options);
+        } else if(screen.type === "multi"){
+          sState.renderedOptions = shuffleArray(screen.options);
+        } else if(screen.type === "transfer"){
+          sState.renderedOptions = shuffleArray([
+            { id: "AB", text: "A and B" },
+            { id: "AC", text: "A and C" },
+            { id: "BD", text: "B and D" },
+            { id: "CD", text: "C and D" }
+          ]);
+        }
+      }
+      return sState.renderedOptions;
+    }
+
+    function getRenderedBank(screen){
+      const sState = getScreenState(screen.id);
+      if(!sState.renderedBank){
+        sState.renderedBank = shuffleArray(screen.bank);
+      }
+      return sState.renderedBank;
+    }
+
+    function stopSpeech(){
+      if("speechSynthesis" in window){
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function speakCurrentScreen(){
+      stopSpeech();
+      if(!("speechSynthesis" in window)){ return; }
+      const card = document.querySelector(".screen-card");
+      if(!card){ return; }
+      const text = card.innerText.replace(/\s+/g, " ").trim();
+      if(!text){ return; }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.95;
+      utterance.pitch = 1;
+      utterance.lang = "en-SG";
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function maybeAutoRead(){
+      if(state.readAloudOn){
+        setTimeout(() => speakCurrentScreen(), 120);
+      }
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderQuestionTable(questionObj){
+      const rows = questionObj.table.map(row => `
+        <tr>
+          <td>${escapeHtml(row.beaker)}</td>
+          <td>${escapeHtml(row.volume)}</td>
+          <td>${escapeHtml(row.area)}</td>
+        </tr>
+      `).join("");
+      return `
+        <div class="table-wrap">
+          <table aria-label="Experiment table">
+            <thead>
+              <tr>
+                <th>Beaker</th>
+                <th>Volume of water (ml)</th>
+                <th>Exposed surface area of beaker (cm²)</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      `;
+    }
+
+    function renderOriginalQuestionPanel(){
+      return `
+        <details class="question-panel" ${state.questionPanelOpen ? "open" : ""} id="questionPanel">
+          <summary>Show question and table</summary>
+          <div class="question-box">
+            <div class="question-stem">${escapeHtml(originalQuestion.stem)}</div>
+            ${renderQuestionTable(originalQuestion)}
+            <div class="question-footer">${escapeHtml(originalQuestion.questionLine)}</div>
+          </div>
+        </details>
+        <div class="panel-hint">The full question stays here if you want to check it again.</div>
+      `;
+    }
+
+    function updateTopStrip(){
+      const used = maxDemerits - state.remainingDemerits;
+      const drops = Array.from({length:maxDemerits}, (_, idx) => {
+        const on = idx < state.remainingDemerits;
+        return `<span class="drop ${on ? "" : "off"}">💧</span>`;
+      }).join("");
+      const strip = document.getElementById("topStrip");
+      strip.innerHTML = `
+        <div class="title-block">
+          <div class="eyebrow">Science interactive</div>
+          <div class="main-title">Fair Test: Evaporation</div>
+        </div>
+        <div class="top-chip" aria-live="polite">
+          <span>Water drops left</span>
+          <span class="drops" aria-hidden="true">${drops}</span>
+          <span class="small-muted">${state.remainingDemerits} left</span>
+        </div>
+        <div class="top-chip">
+          <span>Progress</span>
+          <span class="small-muted">${state.screenIndex + 1} / ${screens.length}</span>
+        </div>
+        <label class="toggle-wrap">
+          <span>Read-aloud</span>
+          <span class="switch">
+            <input type="checkbox" id="readToggle" ${state.readAloudOn ? "checked" : ""} />
+            <span class="slider"></span>
+          </span>
+          <span class="small-muted">${state.readAloudOn ? "On" : "Off"}</span>
+        </label>
+      `;
+      document.getElementById("readToggle").addEventListener("change", (e) => {
+        state.readAloudOn = e.target.checked;
+        updateTopStrip();
+        if(state.readAloudOn){
+          speakCurrentScreen();
+        }else{
+          stopSpeech();
+        }
+      });
+    }
+
+    function renderIntro(screen){
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">Read the question. Then tap to begin.</div>
+          <div class="intro-block">
+            <div class="question-box">
+              <div class="question-stem">
+                Putera conducted an experiment to find out how the
+                <mark>amount of exposed surface area</mark>
+                affects the <mark>rate of evaporation</mark>.
+                He placed four set-ups in a basketball court.
+              </div>
+              ${renderQuestionTable(originalQuestion)}
+              <div class="question-footer">${escapeHtml(originalQuestion.questionLine)}</div>
+            </div>
+            <div class="check-row">
+              <button class="primary-btn" id="startBtn" type="button">I have read the question</button>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderSingle(screen){
+      const sState = getScreenState(screen.id);
+      const options = getRenderedOptions(screen);
+      const optionCards = options.map(opt => {
+        const classes = ["option-card"];
+        if(sState.selectedId === opt.id){ classes.push("selected"); }
+        if(sState.feedback){
+          if(opt.id === screen.correctId && sState.completed){ classes.push("correct"); }
+          else if(opt.id === sState.selectedId && !sState.completed){ classes.push("wrong"); }
+        }
+        return `
+          <button class="${classes.join(" ")}" type="button" data-role="single-option" data-option-id="${escapeHtml(opt.id)}">
+            <span class="option-title">${escapeHtml(opt.text)}</span>
+          </button>
+        `;
+      }).join("");
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">${escapeHtml(screen.instruction)}</div>
+          <p class="subprompt">${escapeHtml(screen.prompt)}</p>
+          <div class="options-grid">${optionCards}</div>
+          ${renderFeedback(sState)}
+          <div class="nav-row">
+            <button class="next-btn" id="nextBtn" type="button" ${sState.completed ? "" : "disabled"}>Next</button>
+          </div>
+        </section>
+        ${renderOriginalQuestionPanel()}
+      `;
+    }
+
+    function renderSingleRich(screen){
+      const sState = getScreenState(screen.id);
+      const options = getRenderedOptions(screen);
+      const optionCards = options.map(opt => {
+        const classes = ["pair-card"];
+        if(sState.selectedId === opt.id){ classes.push("selected"); }
+        if(sState.feedback){
+          if(opt.id === screen.correctId && sState.completed){ classes.push("correct"); }
+          else if(opt.id === sState.selectedId && !sState.completed){ classes.push("wrong"); }
+        }
+        return `
+          <button class="${classes.join(" ")}" type="button" data-role="single-option" data-option-id="${escapeHtml(opt.id)}">
+            <span class="option-title">${escapeHtml(opt.title)}</span>
+            <span class="option-meta">${escapeHtml(opt.meta)}</span>
+          </button>
+        `;
+      }).join("");
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">${escapeHtml(screen.instruction)}</div>
+          <p class="subprompt">${escapeHtml(screen.prompt)}</p>
+          <div class="options-grid">${optionCards}</div>
+          ${renderFeedback(sState)}
+          <div class="nav-row">
+            <button class="next-btn" id="nextBtn" type="button" ${sState.completed ? "" : "disabled"}>Next</button>
+          </div>
+        </section>
+        ${renderOriginalQuestionPanel()}
+      `;
+    }
+
+    function renderFill(screen){
+      const sState = getScreenState(screen.id);
+      const bank = getRenderedBank(screen);
+      const slots = sState.blanks.map((value, idx) => {
+        const cls = ["blank"];
+        if(sState.activeBlank === idx){ cls.push("active"); }
+        if(value){ cls.push("filled"); }
+        if(sState.checkedOnce && sState.attempts > 1){
+          if(value === screen.correctValues[idx]) cls.push("correct");
+          else cls.push("wrong");
+        }
+        return `<button type="button" class="${cls.join(" ")}" data-role="blank-slot" data-slot-index="${idx}">${value ? escapeHtml(value) : "Blank " + (idx + 1)}</button>`;
+      });
+      const bankHtml = bank.map(word => {
+        const isUsedCount = sState.blanks.filter(v => v === word.value).length;
+        const disabled = isUsedCount >= 1 ? "disabled" : "";
+        return `<button type="button" class="word-chip ${disabled ? "disabled" : ""}" data-role="word-choice" data-word="${escapeHtml(word.value)}" ${disabled}>${escapeHtml(word.value)}</button>`;
+      }).join("");
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">${escapeHtml(screen.instruction)}</div>
+          <p class="subprompt">${escapeHtml(screen.prompt)}</p>
+          <div class="sentence-frame">
+            ${escapeHtml(screen.sentenceParts[0])}
+            ${slots[0]}
+            ${escapeHtml(screen.sentenceParts[1])}
+            ${slots[1]}
+            ${escapeHtml(screen.sentenceParts[2])}
+          </div>
+          <div class="word-bank" aria-label="Word bank">
+            ${bankHtml}
+          </div>
+          ${renderFeedback(sState)}
+          <div class="check-row">
+            <button class="ghost-btn" id="clearFillBtn" type="button">Clear blanks</button>
+            <button class="primary-btn" id="checkFillBtn" type="button">Check</button>
+            <button class="next-btn" id="nextBtn" type="button" ${sState.completed ? "" : "disabled"}>Next</button>
+          </div>
+        </section>
+        ${renderOriginalQuestionPanel()}
+      `;
+    }
+
+    function renderMulti(screen){
+      const sState = getScreenState(screen.id);
+      const options = getRenderedOptions(screen);
+      const cards = options.map(opt => {
+        const selected = sState.selectedIds.includes(opt.id);
+        const cls = ["pair-card"];
+        if(selected) cls.push("selected");
+        if(sState.checkedOnce){
+          if(selected && screen.correctIds.includes(opt.id)) cls.push("correct");
+          if(selected && !screen.correctIds.includes(opt.id)) cls.push("wrong");
+        }
+        return `
+          <button class="${cls.join(" ")}" type="button" data-role="multi-option" data-option-id="${escapeHtml(opt.id)}">
+            <span class="option-title">${escapeHtml(opt.title)}</span>
+            <span class="option-meta">${escapeHtml(opt.meta)}</span>
+          </button>
+        `;
+      }).join("");
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">${escapeHtml(screen.instruction)}</div>
+          <p class="subprompt">${escapeHtml(screen.prompt)}</p>
+          <div class="options-grid">${cards}</div>
+          ${renderFeedback(sState)}
+          <div class="check-row">
+            <button class="ghost-btn" id="clearMultiBtn" type="button">Clear choices</button>
+            <button class="primary-btn" id="checkMultiBtn" type="button">Check</button>
+            <button class="next-btn" id="nextBtn" type="button" ${sState.completed ? "" : "disabled"}>Next</button>
+          </div>
+        </section>
+        ${renderOriginalQuestionPanel()}
+      `;
+    }
+
+    function renderTransfer(screen){
+      const sState = getScreenState(screen.id);
+      const options = getRenderedOptions(screen);
+      const optionCards = options.map(opt => {
+        const classes = ["option-card"];
+        if(sState.selectedId === opt.id){ classes.push("selected"); }
+        if(sState.feedback){
+          if(opt.id === "AC" && sState.completed){ classes.push("correct"); }
+          else if(opt.id === sState.selectedId && !sState.completed){ classes.push("wrong"); }
+        }
+        return `
+          <button class="${classes.join(" ")}" type="button" data-role="transfer-option" data-option-id="${escapeHtml(opt.id)}">
+            <span class="option-title">${escapeHtml(opt.text)}</span>
+          </button>
+        `;
+      }).join("");
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">${escapeHtml(screen.instruction)}</div>
+          <p class="subprompt">${escapeHtml(screen.prompt)}</p>
+          <div class="transfer-box">
+            <div class="question-stem">${escapeHtml(transferQuestion.stem)}</div>
+            ${renderQuestionTable(transferQuestion)}
+            <div class="question-footer">${escapeHtml(transferQuestion.questionLine)}</div>
+          </div>
+          <div class="options-grid" style="margin-top:16px">${optionCards}</div>
+          ${renderFeedback(sState)}
+          <div class="nav-row">
+            <button class="next-btn" id="nextBtn" type="button" ${sState.completed ? "" : "disabled"}>Next</button>
+          </div>
+        </section>
+        ${renderOriginalQuestionPanel()}
+      `;
+    }
+
+    function renderCompletion(screen){
+      return `
+        <section class="screen-card" id="screenCard">
+          <div class="screen-head">
+            <div class="screen-count">Screen ${screen.countLabel}</div>
+            <button class="read-btn" type="button" id="readScreenBtn">🔊 Read this screen</button>
+          </div>
+          <div class="instruction">Tap Finish.</div>
+          <div class="completion-box">
+            <div class="completion-badge">✓</div>
+            <div class="completion-text">Well done. You checked what changes and what stays the same to choose a fair test.</div>
+            <p class="micro-note">The key idea was: keep the volume of water the same, but use different exposed surface areas.</p>
+            <div class="check-row" style="justify-content:center; margin-top:18px">
+              <button class="primary-btn" id="finishBtn" type="button">Finish</button>
+            </div>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderFeedback(sState){
+      if(!sState.feedback){ return ""; }
+      return `<div class="feedback ${sState.feedbackType === "good" ? "good" : "bad"}">${escapeHtml(sState.feedback)}</div>`;
+    }
+
+    function render(){
+      updateTopStrip();
+      const app = document.getElementById("app");
+      const screen = screens[state.screenIndex];
+      let html = "";
+      if(screen.type === "intro") html = renderIntro(screen);
+      if(screen.type === "single") html = renderSingle(screen);
+      if(screen.type === "singleRich") html = renderSingleRich(screen);
+      if(screen.type === "fill") html = renderFill(screen);
+      if(screen.type === "multi") html = renderMulti(screen);
+      if(screen.type === "transfer") html = renderTransfer(screen);
+      if(screen.type === "completion") html = renderCompletion(screen);
+      app.innerHTML = html;
+      bindGlobalButtons();
+      maybeBindQuestionPanel();
+      maybeAutoRead();
+    }
+
+    function bindGlobalButtons(){
+      const screen = screens[state.screenIndex];
+      const readBtn = document.getElementById("readScreenBtn");
+      if(readBtn){
+        readBtn.addEventListener("click", speakCurrentScreen);
+      }
+
+      const nextBtn = document.getElementById("nextBtn");
+      if(nextBtn){
+        nextBtn.addEventListener("click", () => {
+          stopSpeech();
+          if(state.screenIndex < screens.length - 1){
+            state.screenIndex += 1;
+            render();
+          }
+        });
+      }
+
+      const startBtn = document.getElementById("startBtn");
+      if(startBtn){
+        startBtn.addEventListener("click", () => {
+          state.screenIndex += 1;
+          render();
+        });
+      }
+
+      const finishBtn = document.getElementById("finishBtn");
+      if(finishBtn){
+        finishBtn.addEventListener("click", () => {
+          resetProgress(true);
+        });
+      }
+
+      if(screen.type === "single" || screen.type === "singleRich"){
+        document.querySelectorAll("[data-role='single-option']").forEach(btn => {
+          btn.addEventListener("click", () => handleSingleChoice(screen, btn.dataset.optionId));
+        });
+      }
+
+      if(screen.type === "fill"){
+        document.querySelectorAll("[data-role='blank-slot']").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const sState = getScreenState(screen.id);
+            sState.activeBlank = Number(btn.dataset.slotIndex);
+            render();
+          });
+        });
+        document.querySelectorAll("[data-role='word-choice']").forEach(btn => {
+          btn.addEventListener("click", () => {
+            if(btn.disabled) return;
+            const sState = getScreenState(screen.id);
+            sState.blanks[sState.activeBlank] = btn.dataset.word;
+            sState.feedback = "";
+            sState.feedbackType = "";
+            if(sState.activeBlank < 1) sState.activeBlank += 1;
+            render();
+          });
+        });
+        const clearBtn = document.getElementById("clearFillBtn");
+        clearBtn.addEventListener("click", () => {
+          const sState = getScreenState(screen.id);
+          sState.blanks = ["", ""];
+          sState.activeBlank = 0;
+          sState.feedback = "";
+          sState.feedbackType = "";
+          render();
+        });
+        document.getElementById("checkFillBtn").addEventListener("click", () => handleFillCheck(screen));
+      }
+
+      if(screen.type === "multi"){
+        document.querySelectorAll("[data-role='multi-option']").forEach(btn => {
+          btn.addEventListener("click", () => {
+            const sState = getScreenState(screen.id);
+            const id = btn.dataset.optionId;
+            if(sState.selectedIds.includes(id)){
+              sState.selectedIds = sState.selectedIds.filter(x => x !== id);
+            }else{
+              sState.selectedIds = [...sState.selectedIds, id];
+            }
+            sState.feedback = "";
+            sState.feedbackType = "";
+            render();
+          });
+        });
+        document.getElementById("clearMultiBtn").addEventListener("click", () => {
+          const sState = getScreenState(screen.id);
+          sState.selectedIds = [];
+          sState.feedback = "";
+          sState.feedbackType = "";
+          sState.checkedOnce = false;
+          render();
+        });
+        document.getElementById("checkMultiBtn").addEventListener("click", () => handleMultiCheck(screen));
+      }
+
+      if(screen.type === "transfer"){
+        document.querySelectorAll("[data-role='transfer-option']").forEach(btn => {
+          btn.addEventListener("click", () => handleTransferChoice(btn.dataset.optionId));
+        });
+      }
+    }
+
+    function maybeBindQuestionPanel(){
+      const panel = document.getElementById("questionPanel");
+      if(panel){
+        panel.addEventListener("toggle", () => {
+          state.questionPanelOpen = panel.open;
+        });
+      }
+    }
+
+    function handleSingleChoice(screen, optionId){
+      const sState = getScreenState(screen.id);
+      sState.selectedId = optionId;
+      if(optionId === screen.correctId){
+        sState.completed = true;
+        sState.feedback = screen.correctFeedback;
+        sState.feedbackType = "good";
+      }else{
+        sState.feedback = screen.wrongFeedback;
+        sState.feedbackType = "bad";
+        if(screen.applyDemerit){
+          applyDemerit();
+        }
+      }
+      render();
+    }
+
+    function handleFillCheck(screen){
+      const sState = getScreenState(screen.id);
+      if(sState.blanks.some(v => !v)){
+        sState.feedback = "Fill both blanks before you check.";
+        sState.feedbackType = "bad";
+        render();
+        return;
+      }
+      const correct = sState.blanks.every((value, idx) => value === screen.correctValues[idx]);
+      if(correct){
+        sState.completed = true;
+        sState.feedback = "Yes. A fair pair has the same volume of water and different exposed surface area.";
+        sState.feedbackType = "good";
+      }else{
+        sState.attempts += 1;
+        sState.checkedOnce = true;
+        sState.feedback = sState.attempts === 1 ? screen.generalClue : screen.preciseClue;
+        sState.feedbackType = "bad";
+        if(screen.applyDemerit){
+          applyDemerit();
+        }
+      }
+      render();
+    }
+
+    function handleMultiCheck(screen){
+      const sState = getScreenState(screen.id);
+      if(sState.selectedIds.length === 0){
+        sState.feedback = "Choose at least one pair before you check.";
+        sState.feedbackType = "bad";
+        render();
+        return;
+      }
+      const selectedSorted = [...sState.selectedIds].sort().join("|");
+      const correctSorted = [...screen.correctIds].sort().join("|");
+      sState.checkedOnce = true;
+      if(selectedSorted === correctSorted){
+        sState.completed = true;
+        sState.feedback = screen.feedbackOnCorrect;
+        sState.feedbackType = "good";
+      }else{
+        sState.feedback = screen.wrongFeedback;
+        sState.feedbackType = "bad";
+        if(screen.applyDemerit){
+          applyDemerit();
+        }
+      }
+      render();
+    }
+
+    function handleTransferChoice(optionId){
+      const screen = screens[state.screenIndex];
+      const sState = getScreenState(screen.id);
+      sState.selectedId = optionId;
+      if(optionId === "AC"){
+        sState.completed = true;
+        sState.feedback = "Good. A and C keep the volume the same but change the opening size.";
+        sState.feedbackType = "good";
+      }else{
+        sState.feedback = "Check which factor should change and what must stay the same.";
+        sState.feedbackType = "bad";
+      }
+      render();
+    }
+
+    function applyDemerit(){
+      state.remainingDemerits = Math.max(0, state.remainingDemerits - 1);
+      if(state.remainingDemerits === 0){
+        const overlay = document.getElementById("gameOverOverlay");
+        overlay.classList.add("show");
+        overlay.setAttribute("aria-hidden", "false");
+        stopSpeech();
+        setTimeout(() => {
+          overlay.classList.remove("show");
+          overlay.setAttribute("aria-hidden", "true");
+          resetProgress(true);
+        }, 1700);
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>

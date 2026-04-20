@@ -1,0 +1,1710 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt2s2_7b</title>
+<style>
+  :root{
+    --bg:#f3f8ff;
+    --panel:#ffffff;
+    --ink:#14324a;
+    --muted:#5b7287;
+    --line:#d7e5f3;
+    --sea:#bfe8ff;
+    --sea-deep:#7dc9f2;
+    --land:#edf1d6;
+    --accent:#1264a3;
+    --accent-2:#1e8e5a;
+    --warn:#c45b1a;
+    --danger:#b8322f;
+    --good:#116d52;
+    --soft:#f8fbff;
+    --highlight:#ffef9d;
+    --shadow:0 10px 26px rgba(20,50,74,.12);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(180deg,#eaf4ff 0%, #f8fbff 100%);
+    color:var(--ink);
+  }
+  .shell{
+    max-width:1100px;
+    margin:0 auto;
+    padding:18px 16px 28px;
+  }
+  .topbar{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:14px 16px;
+    box-shadow:var(--shadow);
+    margin-bottom:16px;
+  }
+  .topbar-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .progress{
+    font-weight:800;
+    font-size:1rem;
+  }
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .audio-toggle{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    background:#f2f8ff;
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:8px 12px;
+    font-weight:700;
+  }
+  .toggle-btn{
+    border:0;
+    border-radius:999px;
+    padding:9px 14px;
+    font-weight:800;
+    cursor:pointer;
+    background:#dceaf8;
+    color:var(--ink);
+    min-width:70px;
+  }
+  .toggle-btn.on{
+    background:var(--accent);
+    color:white;
+  }
+  .demerit-bar{
+    margin-top:14px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:14px;
+    align-items:center;
+    border-top:2px dashed var(--line);
+    padding-top:12px;
+  }
+  .demerit-title{
+    font-weight:800;
+    color:var(--warn);
+  }
+  .lives{
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  .life{
+    width:40px;height:40px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#fff9f1;
+    border:2px solid #f4d7bb;
+    font-size:1.25rem;
+    transition:transform .2s ease, opacity .2s ease, filter .2s ease;
+  }
+  .life.lost{
+    opacity:.25;
+    filter:grayscale(1);
+    transform:scale(.9);
+  }
+  #app{
+    min-height:70vh;
+  }
+  .screen{
+    background:var(--panel);
+    border:2px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .instruction{
+    font-size:clamp(1.35rem, 2vw, 1.8rem);
+    line-height:1.2;
+    font-weight:900;
+    margin:0 0 8px;
+  }
+  .subtext{
+    color:var(--muted);
+    font-size:1rem;
+    margin:0 0 16px;
+  }
+  .toolbar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  button{
+    font-family:inherit;
+  }
+  .btn{
+    border:0;
+    border-radius:16px;
+    padding:13px 18px;
+    font-size:1rem;
+    font-weight:800;
+    cursor:pointer;
+    background:var(--accent);
+    color:white;
+    min-height:52px;
+    transition:transform .08s ease, filter .18s ease, background .18s ease;
+  }
+  .btn:hover{filter:brightness(1.02)}
+  .btn:active{transform:translateY(1px)}
+  .btn.secondary{
+    background:#eef6ff;
+    color:var(--ink);
+    border:2px solid var(--line);
+  }
+  .btn.ghost{
+    background:#fff;
+    color:var(--accent);
+    border:2px solid #b9d7ee;
+  }
+  .btn.check{
+    background:var(--accent-2);
+  }
+  .btn.next{
+    background:var(--accent);
+  }
+  .btn.warn{
+    background:var(--warn);
+  }
+  .question-card{
+    background:linear-gradient(180deg,#f8fbff 0%, #f0f8ff 100%);
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+    margin-bottom:16px;
+  }
+  .question-text{
+    font-size:1.1rem;
+    line-height:1.45;
+    font-weight:700;
+    margin-bottom:12px;
+  }
+  .hl{
+    background:var(--highlight);
+    padding:1px 4px;
+    border-radius:8px;
+  }
+  .two-col{
+    display:grid;
+    grid-template-columns:1.2fr .85fr;
+    gap:16px;
+    align-items:start;
+  }
+  .panel{
+    background:#fff;
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:14px;
+  }
+  .grid-2, .grid-3, .grid-4{
+    display:grid;
+    gap:14px;
+  }
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .card{
+    background:#fff;
+    border:3px solid #d7e6f3;
+    border-radius:22px;
+    padding:14px;
+    min-height:118px;
+    cursor:pointer;
+    transition:transform .12s ease, border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    gap:10px;
+    font-weight:800;
+    line-height:1.25;
+    user-select:none;
+  }
+  .card:hover{transform:translateY(-1px)}
+  .card.selected{
+    border-color:var(--accent);
+    box-shadow:0 0 0 5px rgba(18,100,163,.12);
+    background:#f3f9ff;
+  }
+  .card.correct{
+    border-color:var(--good);
+    background:#eefbf5;
+    box-shadow:0 0 0 5px rgba(17,109,82,.12);
+  }
+  .card.wrong{
+    border-color:var(--danger);
+    background:#fff3f3;
+    box-shadow:0 0 0 5px rgba(184,50,47,.12);
+  }
+  .card.disabled{
+    opacity:.72;
+  }
+  .small-note{
+    font-size:.95rem;
+    color:var(--muted);
+    font-weight:700;
+  }
+  .feedback{
+    min-height:60px;
+    background:#f6fbff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:12px 14px;
+    font-weight:800;
+    margin-top:14px;
+  }
+  .feedback.good{
+    background:#edf9f3;
+    border-color:#bde3cf;
+    color:var(--good);
+  }
+  .feedback.bad{
+    background:#fff3f2;
+    border-color:#efc6c3;
+    color:var(--danger);
+  }
+  .action-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:14px;
+  }
+  .legend-mini{
+    font-size:.95rem;
+    color:var(--muted);
+    font-weight:800;
+  }
+  .question-toggle{
+    margin-top:16px;
+  }
+  .question-panel{
+    margin-top:14px;
+    border:2px solid var(--line);
+    border-radius:22px;
+    background:#f9fcff;
+    padding:14px;
+  }
+  .question-panel[hidden]{
+    display:none !important;
+  }
+  .question-panel h3{
+    margin:0 0 10px;
+    font-size:1.1rem;
+  }
+  .seed-row{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-top:12px;
+  }
+  .seed-mini{
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:8px;
+    background:white;
+    text-align:center;
+    font-size:.9rem;
+    font-weight:800;
+  }
+  .preview{
+    background:linear-gradient(180deg,#f9fcff 0%, #eef7ff 100%);
+    border:2px solid var(--line);
+    border-radius:22px;
+    padding:14px;
+    min-height:190px;
+    display:grid;
+    place-items:center;
+    margin-bottom:14px;
+    text-align:center;
+  }
+  .preview .hint{
+    color:var(--muted);
+    font-weight:800;
+  }
+  .reason-wrap{
+    display:grid;
+    gap:10px;
+  }
+  .reason-scene{
+    position:relative;
+    min-height:220px;
+    border:2px solid var(--line);
+    border-radius:20px;
+    overflow:hidden;
+    background:linear-gradient(180deg,#f8fcff 0%, #eef7ff 100%);
+  }
+  .reason-scene svg{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+  .scene-seed{
+    position:absolute;
+    width:110px;
+    top:76px;
+    left:24px;
+    pointer-events:none;
+  }
+  .scene-seed .seed-svg{
+    width:110px;
+    height:auto;
+  }
+  .scene-label{
+    position:absolute;
+    font-size:.92rem;
+    font-weight:900;
+    background:rgba(255,255,255,.92);
+    border:2px solid var(--line);
+    border-radius:999px;
+    padding:6px 10px;
+  }
+  .scene-label.start{ left:14px; top:12px; }
+  .scene-label.end{ right:14px; bottom:12px; }
+  .reason-title{
+    font-size:1.12rem;
+    font-weight:900;
+  }
+  .reason-note{
+    color:var(--muted);
+    font-weight:700;
+    line-height:1.45;
+  }
+  .shoreline-hint{
+    background:#fffaf0;
+    border:2px solid #f4d7bb;
+    border-radius:18px;
+    padding:12px 14px;
+    font-weight:800;
+  }
+  .water-seed{
+    animation:toShore 4s ease-in-out infinite;
+  }
+  .wind-seed{
+    top:42px;
+    animation:windAcross 3.6s ease-in-out infinite;
+  }
+  .animal-seed{
+    top:110px;
+    animation:animalAcross 3.8s ease-in-out infinite;
+  }
+  .explosive-seed{
+    top:104px;
+    left:96px;
+  }
+  .wind-line-1,.wind-line-2,.wind-line-3{
+    animation:windPush 1.8s ease-in-out infinite;
+  }
+  .paw1,.paw2,.paw3{
+    animation:pawPulse 2.2s ease-in-out infinite;
+  }
+  .paw2{ animation-delay:.25s; }
+  .paw3{ animation-delay:.5s; }
+  .burst-dot-1{ animation:scatter1 1.8s ease-in-out infinite; }
+  .burst-dot-2{ animation:scatter2 1.8s ease-in-out infinite; }
+  .burst-dot-3{ animation:scatter3 1.8s ease-in-out infinite; }
+  .scene-wave-1,.scene-wave-2{
+    animation:wave 1.4s ease-in-out infinite;
+  }
+  .scene-wave-2{ animation-delay:.18s; }
+  @keyframes toShore{
+    0%{ transform:translate(0,0) rotate(-4deg); }
+    50%{ transform:translate(135px,-8px) rotate(2deg); }
+    100%{ transform:translate(255px,10px) rotate(5deg); }
+  }
+  @keyframes windAcross{
+    0%{ transform:translate(0,0) rotate(-8deg); }
+    50%{ transform:translate(120px,-22px) rotate(5deg); }
+    100%{ transform:translate(238px,-42px) rotate(14deg); }
+  }
+  @keyframes animalAcross{
+    0%{ transform:translate(0,0); }
+    50%{ transform:translate(120px,-6px); }
+    100%{ transform:translate(240px,4px); }
+  }
+  @keyframes windPush{
+    0%,100%{ transform:translateX(0); opacity:.45; }
+    50%{ transform:translateX(16px); opacity:.95; }
+  }
+  @keyframes pawPulse{
+    0%,100%{ opacity:.2; transform:scale(.95); }
+    50%{ opacity:.9; transform:scale(1.08); }
+  }
+  @keyframes scatter1{
+    0%{ transform:translate(0,0); opacity:.95; }
+    100%{ transform:translate(70px,-24px); opacity:0; }
+  }
+  @keyframes scatter2{
+    0%{ transform:translate(0,0); opacity:.95; }
+    100%{ transform:translate(76px,6px); opacity:0; }
+  }
+  @keyframes scatter3{
+    0%{ transform:translate(0,0); opacity:.95; }
+    100%{ transform:translate(52px,36px); opacity:0; }
+  }
+  .summary-list{
+    display:grid;
+    gap:10px;
+  }
+  .summary-item{
+    background:#f7fbff;
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:12px 14px;
+    font-weight:800;
+  }
+  .diagram-wrap{
+    background:#fff;
+    border:2px solid var(--line);
+    border-radius:20px;
+    padding:8px;
+  }
+  svg{
+    max-width:100%;
+    height:auto;
+    display:block;
+  }
+  .top-space{margin-top:8px}
+  .inline-icon{
+    width:54px;height:54px;
+  }
+  .toast{
+    position:fixed;
+    inset:auto 16px 16px 16px;
+    margin:auto;
+    max-width:560px;
+    background:#173852;
+    color:#fff;
+    padding:16px 18px;
+    border-radius:18px;
+    box-shadow:var(--shadow);
+    font-weight:800;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(12px);
+    transition:opacity .2s ease, transform .2s ease;
+    z-index:20;
+  }
+  .toast.show{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .center{
+    text-align:center;
+  }
+  .big-emoji{
+    font-size:3rem;
+    margin-bottom:10px;
+  }
+  .footnote{
+    font-size:.92rem;
+    color:var(--muted);
+    font-weight:700;
+    margin-top:10px;
+  }
+  .visually-tight p{
+    margin:0 0 10px;
+  }
+
+  .anim-water .move-coconut{ animation:bob 2.4s ease-in-out infinite; transform-origin:center; }
+  .anim-water .wave1{ animation:wave 1.4s ease-in-out infinite; }
+  .anim-water .wave2{ animation:wave 1.4s ease-in-out .18s infinite; }
+  .anim-wind .seed-drift{ animation:drift 2.2s ease-in-out infinite; }
+  .anim-animal .spike-move{ animation:stickMove 2.1s ease-in-out infinite; }
+  .anim-animal .fur-mark{ animation:furPulse 2.1s ease-in-out infinite; }
+  .anim-explosive .pod-core{ animation:podPulse 1.9s ease-in-out infinite; transform-origin:center; }
+  .anim-explosive .burst1{ animation:burst1 1.9s ease-in-out infinite; }
+  .anim-explosive .burst2{ animation:burst2 1.9s ease-in-out infinite; }
+  .anim-explosive .burst3{ animation:burst3 1.9s ease-in-out infinite; }
+
+  @keyframes bob{
+    0%,100%{transform:translate(-12px,0) rotate(-3deg)}
+    50%{transform:translate(12px,-6px) rotate(3deg)}
+  }
+  @keyframes wave{
+    0%,100%{transform:translateX(0)}
+    50%{transform:translateX(10px)}
+  }
+  @keyframes drift{
+    0%{transform:translate(-28px,14px) rotate(-5deg)}
+    50%{transform:translate(10px,-8px) rotate(7deg)}
+    100%{transform:translate(28px,-14px) rotate(-2deg)}
+  }
+  @keyframes stickMove{
+    0%{transform:translateX(-34px)}
+    42%{transform:translateX(10px)}
+    100%{transform:translateX(10px)}
+  }
+  @keyframes furPulse{
+    0%,100%{opacity:.35}
+    50%{opacity:1}
+  }
+  @keyframes podPulse{
+    0%,100%{transform:scale(1)}
+    40%{transform:scale(1.06)}
+    55%{transform:scale(.96)}
+  }
+  @keyframes burst1{
+    0%,28%{transform:translate(0,0); opacity:0}
+    35%{opacity:1}
+    100%{transform:translate(-36px,-18px); opacity:0}
+  }
+  @keyframes burst2{
+    0%,28%{transform:translate(0,0); opacity:0}
+    35%{opacity:1}
+    100%{transform:translate(38px,-10px); opacity:0}
+  }
+  @keyframes burst3{
+    0%,28%{transform:translate(0,0); opacity:0}
+    35%{opacity:1}
+    100%{transform:translate(12px,28px); opacity:0}
+  }
+
+  @media (max-width: 880px){
+    .two-col{grid-template-columns:1fr}
+    .grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .seed-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  }
+  @media (max-width: 620px){
+    .grid-2,.grid-3,.grid-4,.seed-row{grid-template-columns:1fr}
+    .shell{padding:12px 10px 24px}
+    .screen{padding:14px}
+    .card{min-height:100px}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <div class="topbar-row">
+      <div class="progress" id="progressText">Screen 1 of 9</div>
+      <div class="controls">
+        <div class="audio-toggle" aria-label="Read-aloud setting">
+          <span>Read-aloud</span>
+          <button id="audioToggle" class="toggle-btn" type="button" aria-pressed="false">Off</button>
+        </div>
+      </div>
+    </div>
+    <div class="demerit-bar">
+      <div class="demerit-title">Demerit chances</div>
+      <div class="lives" id="livesRow" aria-label="Remaining demerit chances"></div>
+    </div>
+  </div>
+  <main id="app"></main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const TOTAL_LIVES = 3;
+  const TEACHING_SCREENS_WITH_DEMERITS = new Set([1,2,3,4]); // zero-based indexes for screens 2-5
+  const app = document.getElementById('app');
+  const progressText = document.getElementById('progressText');
+  const audioToggleBtn = document.getElementById('audioToggle');
+  const livesRow = document.getElementById('livesRow');
+  const toast = document.getElementById('toast');
+
+  const state = {
+    screenIndex: 0,
+    lives: TOTAL_LIVES,
+    autoRead: false,
+    panelOpen: false,
+    perScreen: {},
+    restarting: false
+  };
+
+  const screenCount = 6;
+
+  function screenState(idx){
+    if(!state.perScreen[idx]) state.perScreen[idx] = {};
+    return state.perScreen[idx];
+  }
+
+  function updateTopbar(){
+    progressText.textContent = `Screen ${state.screenIndex + 1} of ${screenCount}`;
+    audioToggleBtn.textContent = state.autoRead ? 'On' : 'Off';
+    audioToggleBtn.classList.toggle('on', state.autoRead);
+    audioToggleBtn.setAttribute('aria-pressed', String(state.autoRead));
+    livesRow.innerHTML = '';
+    for(let i=0;i<TOTAL_LIVES;i++){
+      const span = document.createElement('div');
+      span.className = 'life' + (i >= state.lives ? ' lost' : '');
+      span.textContent = '⭐';
+      span.setAttribute('aria-hidden','true');
+      livesRow.appendChild(span);
+    }
+  }
+
+  function showToast(msg, ms=1600){
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(showToast._timer);
+    showToast._timer = setTimeout(() => toast.classList.remove('show'), ms);
+  }
+
+  function stopSpeaking(){
+    if('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    stopSpeaking();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.95;
+    utter.pitch = 1;
+    utter.volume = 1;
+    window.speechSynthesis.speak(utter);
+  }
+
+  function maybeAutoRead(text){
+    if(state.autoRead){
+      setTimeout(() => speak(text), 120);
+    }
+  }
+
+  function shuffle(arr){
+    const copy = arr.slice();
+    for(let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function nextScreen(){
+    stopSpeaking();
+    state.screenIndex = Math.min(screenCount - 1, state.screenIndex + 1);
+    render();
+  }
+
+  function restartInteractive(message){
+    if(state.restarting) return;
+    state.restarting = true;
+    stopSpeaking();
+    showToast(message || 'Restarting…');
+    setTimeout(() => {
+      state.screenIndex = 0;
+      state.lives = TOTAL_LIVES;
+      state.perScreen = {};
+      state.panelOpen = false;
+      state.restarting = false;
+      render();
+    }, 1500);
+  }
+
+  function deductLife(){
+    state.lives -= 1;
+    updateTopbar();
+    if(state.lives <= 0){
+      restartInteractive('All your chances are used up. Restarting the whole interactive…');
+      return true;
+    }
+    return false;
+  }
+
+  function renderSeedIcon(kind, animated=false){
+    const klass = animated ? `seed-svg ${animated}` : 'seed-svg';
+    if(kind === 'explosive'){
+      return `
+      <svg class="${klass}" viewBox="0 0 160 120" aria-hidden="true">
+        <g class="${animated ? 'pod-core' : ''}">
+          <path d="M80 52 C64 26, 34 28, 22 54 C44 54, 57 63, 67 86 C69 67, 72 59, 80 52 Z" fill="#85624b" stroke="#5f4230" stroke-width="4"/>
+          <path d="M80 52 C96 26, 126 28, 138 54 C116 54, 103 63, 93 86 C91 67, 88 59, 80 52 Z" fill="#9a7358" stroke="#5f4230" stroke-width="4"/>
+          <path d="M80 52 C58 50, 46 76, 54 98 C65 82, 76 76, 80 52 Z" fill="#7b5a44" stroke="#5f4230" stroke-width="4"/>
+          <path d="M80 52 C102 50, 114 76, 106 98 C95 82, 84 76, 80 52 Z" fill="#7b5a44" stroke="#5f4230" stroke-width="4"/>
+          <circle cx="80" cy="58" r="6" fill="#fff2d2" stroke="#5f4230" stroke-width="3"/>
+        </g>
+        ${animated ? `
+          <circle class="burst1" cx="80" cy="58" r="6" fill="#d8b277" />
+          <circle class="burst2" cx="80" cy="58" r="6" fill="#d8b277" />
+          <circle class="burst3" cx="80" cy="58" r="6" fill="#d8b277" />
+        ` : ''}
+      </svg>`;
+    }
+    if(kind === 'animal'){
+      return `
+      <svg class="${klass}" viewBox="0 0 160 120" aria-hidden="true">
+        <g class="${animated ? 'fur-mark' : ''}">
+          ${animated ? `<path d="M112 66 q12 -20 24 0 q12 -16 20 2 q-6 12 -18 18 q-15 8 -34 3 z" fill="#d7c3a6" opacity=".85"/>` : ''}
+        </g>
+        <g class="${animated ? 'spike-move' : ''}">
+          <ellipse cx="72" cy="62" rx="28" ry="22" fill="#d9c27d" stroke="#7f5f2f" stroke-width="4"/>
+          ${Array.from({length:14}).map((_,i)=>{
+            const angle = i * (360/14);
+            const x1 = 72 + Math.cos(angle*Math.PI/180)*22;
+            const y1 = 62 + Math.sin(angle*Math.PI/180)*18;
+            const x2 = 72 + Math.cos(angle*Math.PI/180)*34;
+            const y2 = 62 + Math.sin(angle*Math.PI/180)*28;
+            return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#7f5f2f" stroke-width="4" stroke-linecap="round"/>`;
+          }).join('')}
+          <ellipse cx="74" cy="62" rx="10" ry="8" fill="#f5eed0"/>
+        </g>
+      </svg>`;
+    }
+    if(kind === 'coconut'){
+      return `
+      <svg class="${klass}" viewBox="0 0 160 120" aria-hidden="true">
+        ${animated ? `
+          <path class="wave1" d="M16 90 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#67bde8" stroke-width="4" stroke-linecap="round"/>
+          <path class="wave2" d="M10 98 q10 -6 20 0 t20 0 t20 0 t20 0 t20 0 t20 0" fill="none" stroke="#8fd4f5" stroke-width="4" stroke-linecap="round"/>
+        ` : ''}
+        <g class="${animated ? 'move-coconut' : ''}">
+          <ellipse cx="78" cy="64" rx="28" ry="34" fill="#8e5e36" stroke="#5c3c22" stroke-width="4"/>
+          <ellipse cx="82" cy="64" rx="18" ry="24" fill="#a66f40" opacity=".55"/>
+          <path d="M54 62 q-18 -16 -14 -30" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M49 74 q-18 0 -28 -12" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M51 84 q-18 10 -22 24" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M104 52 q18 -12 24 -28" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M110 66 q18 0 28 -10" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M108 82 q14 12 18 26" stroke="#caa072" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="70" cy="52" r="2.8" fill="#5c3c22"/>
+          <circle cx="78" cy="48" r="2.8" fill="#5c3c22"/>
+          <circle cx="86" cy="52" r="2.8" fill="#5c3c22"/>
+        </g>
+      </svg>`;
+    }
+    if(kind === 'wind'){
+      return `
+      <svg class="${klass}" viewBox="0 0 160 120" aria-hidden="true">
+        ${animated ? `<path d="M10 70 q22 -14 44 0 q18 10 32 0 q18 -12 34 0" fill="none" stroke="#d8edf8" stroke-width="5" stroke-linecap="round"/>` : ''}
+        <g class="${animated ? 'seed-drift' : ''}">
+          <ellipse cx="76" cy="82" rx="8" ry="11" fill="#8a622c" stroke="#5c4018" stroke-width="3"/>
+          ${Array.from({length:12}).map((_,i)=>{
+            const angle = -70 + i*8;
+            const x2 = 76 + Math.cos(angle*Math.PI/180)*48;
+            const y2 = 82 + Math.sin(angle*Math.PI/180)*48;
+            return `<line x1="76" y1="74" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="#7e8fa3" stroke-width="3" stroke-linecap="round"/>`;
+          }).join('')}
+        </g>
+      </svg>`;
+    }
+    return '';
+  }
+
+  function seedLabel(kind){
+    return ({
+      explosive:'bursting pod',
+      animal:'hooks / spikes',
+      coconut:'coconut',
+      wind:'winged seed'
+    })[kind];
+  }
+
+  function featureLabel(kind){
+    return ({
+      fibrous:'fibrous husk that floats',
+      wings:'wings that catch air',
+      hooks:'hooks / spikes that stick to animals',
+      burst:'pod that bursts open'
+    })[kind];
+  }
+
+  function renderQuestionDiagram(includeOptions=false){
+    return `
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 820 470" aria-label="Cleaner version of the source diagram">
+          <defs>
+            <marker id="arrowHead" markerWidth="10" markerHeight="8" refX="8" refY="4" orient="auto">
+              <polygon points="0,0 10,4 0,8" fill="#14324a"></polygon>
+            </marker>
+          </defs>
+
+          <rect x="18" y="18" width="610" height="320" rx="18" fill="#fcfcfc" stroke="#5f5f5f" stroke-width="2"/>
+          <path d="M18 184
+                   C88 188, 130 168, 174 120
+                   C200 90, 236 102, 258 60
+                   L258 18
+                   L18 18 Z"
+                fill="#edf1d6" stroke="#555" stroke-width="2"/>
+          <path d="M628 18
+                   L628 338
+                   L500 338
+                   C488 286, 480 262, 472 224
+                   C462 172, 470 112, 486 76
+                   C500 44, 536 26, 562 18 Z"
+                fill="#edf1d6" stroke="#555" stroke-width="2"/>
+
+          <text x="32" y="38" font-size="28" font-weight="800" fill="#14324a">Land X</text>
+          <text x="548" y="292" font-size="28" font-weight="800" fill="#14324a">Land Y</text>
+          <text x="292" y="242" font-size="34" font-weight="800" fill="#14324a">Sea</text>
+
+          <!-- wave marks -->
+          ${[
+            [330,66],[425,42],[505,62],[385,102],[282,140],[458,146],[360,184],[110,226],
+            [232,186],[314,268],[414,246],[286,308]
+          ].map(([x,y])=>`<path d="M${x} ${y} h34" stroke="#666" stroke-width="2.5" stroke-linecap="round"/>`).join('')}
+
+          <!-- Plant T -->
+          <g aria-label="Parent plant T">
+            <polygon points="144,72 160,46 188,46 204,72 188,98 160,98" fill="#5893d6" stroke="#14324a" stroke-width="3"/>
+          </g>
+          ${[[94,54],[118,58],[136,40],[176,34],[196,56],[114,84],[136,100],[176,88]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="6" fill="#fff" stroke="#14324a" stroke-width="2"/>`).join('')}
+
+          <!-- Plant U on Land X -->
+          <polygon points="44,160 56,134 68,160" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <polygon points="78,164 84,152 90,164" fill="none" stroke="#14324a" stroke-width="2"/>
+          <polygon points="110,154 116,142 122,154" fill="none" stroke="#14324a" stroke-width="2"/>
+          <polygon points="252,34 268,4 284,34" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <polygon points="248,62 256,46 264,62" fill="none" stroke="#14324a" stroke-width="2"/>
+          <polygon points="256,82 264,66 272,82" fill="none" stroke="#14324a" stroke-width="2"/>
+
+          <!-- Plant U on Land Y -->
+          <polygon points="492,214 504,188 516,214" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <polygon points="530,144 542,118 554,144" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <polygon points="616,128 628,102 640,128" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <polygon points="478,182 486,166 494,182" fill="none" stroke="#14324a" stroke-width="2"/>
+          <polygon points="572,102 580,86 588,102" fill="none" stroke="#14324a" stroke-width="2"/>
+          <polygon points="562,322 570,306 578,322" fill="none" stroke="#14324a" stroke-width="2"/>
+
+          <!-- Wind arrow -->
+          <line x1="46" y1="306" x2="138" y2="306" stroke="#14324a" stroke-width="3" marker-end="url(#arrowHead)"/>
+          <text x="32" y="342" font-size="24" font-weight="800" fill="#14324a">Wind direction</text>
+
+          <!-- Legend -->
+          <rect x="646" y="28" width="156" height="210" fill="#fff7ee" stroke="#555" stroke-width="2" rx="14"/>
+          <text x="662" y="54" font-size="24" font-weight="800" fill="#14324a">Legend</text>
+
+          <polygon points="670,92 682,72 704,72 716,92 704,112 682,112" fill="#5893d6" stroke="#14324a" stroke-width="3"/>
+          <text x="728" y="98" font-size="22" fill="#14324a">Parent plant T</text>
+
+          <circle cx="692" cy="138" r="6" fill="#fff" stroke="#14324a" stroke-width="2"/>
+          <text x="728" y="144" font-size="22" fill="#14324a">Young plant T</text>
+
+          <polygon points="678,184 692,156 706,184" fill="#6da7e8" stroke="#14324a" stroke-width="3"/>
+          <text x="728" y="182" font-size="22" fill="#14324a">Parent plant U</text>
+
+          <polygon points="686,226 694,210 702,226" fill="none" stroke="#14324a" stroke-width="2"/>
+          <text x="728" y="226" font-size="22" fill="#14324a">Young plant U</text>
+        </svg>
+      </div>
+      ${includeOptions ? `
+        <div class="seed-row">
+          <div class="seed-mini">${renderSeedIcon('explosive')}<div>Bursting pod</div></div>
+          <div class="seed-mini">${renderSeedIcon('animal')}<div>Spiky fruit</div></div>
+          <div class="seed-mini">${renderSeedIcon('coconut')}<div>Coconut</div></div>
+          <div class="seed-mini">${renderSeedIcon('wind')}<div>Winged seed</div></div>
+        </div>
+      ` : ''}
+    `;
+  }
+
+  function renderQuestionPanel(){
+    const wrapper = document.createElement('div');
+    const toggleRow = document.createElement('div');
+    toggleRow.className = 'question-toggle';
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'btn secondary';
+    toggle.textContent = state.panelOpen ? 'Hide question + diagram' : 'Show question + diagram';
+    toggle.addEventListener('click', () => {
+      state.panelOpen = !state.panelOpen;
+      render();
+    });
+    toggleRow.appendChild(toggle);
+    wrapper.appendChild(toggleRow);
+
+    const panel = document.createElement('div');
+    panel.className = 'question-panel';
+    if(!state.panelOpen) panel.hidden = true;
+    panel.innerHTML = `
+      <h3>Question + cleaner diagram</h3>
+      <div class="question-text">Based on the above diagram, tick (✓) the <span class="hl">seed which best represents</span> <span class="hl">plant U</span>.</div>
+      ${renderQuestionDiagram(false)}
+    `;
+    wrapper.appendChild(panel);
+    return wrapper;
+  }
+
+  function makeToolbar(readText){
+    const bar = document.createElement('div');
+    bar.className = 'toolbar';
+    const readBtn = document.createElement('button');
+    readBtn.type = 'button';
+    readBtn.className = 'btn ghost';
+    readBtn.textContent = '🔊 Read this screen';
+    readBtn.addEventListener('click', () => speak(readText));
+    bar.appendChild(readBtn);
+    return bar;
+  }
+
+  function setFeedback(box, msg, type){
+    box.textContent = msg;
+    box.className = 'feedback' + (type ? ' ' + type : '');
+  }
+
+  function cardButton(content, onClick, extraClass=''){
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'card ' + extraClass;
+    btn.innerHTML = content;
+    btn.addEventListener('click', onClick);
+    return btn;
+  }
+
+  function getOrderedOptions(key, options){
+    const ss = screenState(state.screenIndex);
+    if(!ss[key]){
+      ss[key] = shuffle(options);
+    }
+    return ss[key];
+  }
+
+  function render(){
+    updateTopbar();
+    app.innerHTML = '';
+    const screen = document.createElement('section');
+    screen.className = 'screen';
+    app.appendChild(screen);
+
+    if(state.screenIndex === 0) return renderScreen1(screen);
+    if(state.screenIndex === 1) return renderScreen2(screen);
+    if(state.screenIndex === 2) return renderScreen3(screen);
+    if(state.screenIndex === 3) return renderScreen4(screen);
+    if(state.screenIndex === 4) return renderScreen5(screen);
+    if(state.screenIndex === 5) return renderScreen6(screen);
+  }
+
+  function renderScreen1(screen){
+    const readText = 'Read the question carefully. Based on the above diagram, tick the seed which best represents plant U. First, notice that the task is about plant U.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.innerHTML = 'Read the question. Notice <span class="hl">plant U</span>.';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'Start with the question before you choose any seed.';
+    screen.appendChild(sub);
+
+    const q = document.createElement('div');
+    q.className = 'question-card';
+    q.innerHTML = `
+      <div class="question-text">
+        Based on the above diagram, tick (✓) the <span class="hl">seed which best represents</span> <span class="hl">plant U</span>.
+      </div>
+      ${renderQuestionDiagram(true)}
+      <div class="footnote">The seed choices are shown here only so you can see the full question first.</div>
+    `;
+    screen.appendChild(q);
+
+    const actionRow = document.createElement('div');
+    actionRow.className = 'action-row';
+    const btn = document.createElement('button');
+    btn.className = 'btn next';
+    btn.type = 'button';
+    btn.textContent = 'I have read it';
+    btn.addEventListener('click', nextScreen);
+    actionRow.appendChild(btn);
+    screen.appendChild(actionRow);
+
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen2(screen){
+    const readText = 'Tap the legend symbols that belong to plant U. Then tap Check.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Tap the legend symbols that belong to plant U.';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'Choose both symbols before you tap Check.';
+    screen.appendChild(sub);
+
+    const ss = screenState(1);
+    if(!ss.selected) ss.selected = [];
+    const options = [
+      {id:'parentT', label:'Parent plant T', symbol:'<svg class="inline-icon" viewBox="0 0 64 64"><polygon points="22,10 42,10 52,28 42,46 22,46 12,28" fill="#5893d6" stroke="#14324a" stroke-width="3"/></svg>'},
+      {id:'youngT', label:'Young plant T', symbol:'<svg class="inline-icon" viewBox="0 0 64 64"><circle cx="32" cy="30" r="8" fill="#fff" stroke="#14324a" stroke-width="3"/></svg>'},
+      {id:'parentU', label:'Parent plant U', symbol:'<svg class="inline-icon" viewBox="0 0 64 64"><polygon points="32,10 46,42 18,42" fill="#6da7e8" stroke="#14324a" stroke-width="3"/></svg>'},
+      {id:'youngU', label:'Young plant U', symbol:'<svg class="inline-icon" viewBox="0 0 64 64"><polygon points="32,16 42,38 22,38" fill="none" stroke="#14324a" stroke-width="3"/></svg>'}
+    ];
+    const grid = document.createElement('div');
+    grid.className = 'grid-2';
+    options.forEach(opt => {
+      const selected = ss.selected.includes(opt.id);
+      const c = cardButton(`${opt.symbol}<div>${opt.label}</div>`, () => {
+        if(ss.correct) return;
+        if(selected){
+          ss.selected = ss.selected.filter(x => x !== opt.id);
+        }else{
+          ss.selected = ss.selected.concat(opt.id);
+        }
+        render();
+      }, selected ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Use the legend to find the two symbols for plant U.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(ss.correct) return;
+      const chosen = ss.selected.slice().sort().join('|');
+      const answer = ['parentU','youngU'].sort().join('|');
+      if(chosen === answer){
+        ss.correct = true;
+        ss.feedback = {msg:'Yes. We only need plant U.', type:'good'};
+        render();
+      }else{
+        ss.feedback = {msg:'Look for the two symbols named plant U.', type:'bad'};
+        if(TEACHING_SCREENS_WITH_DEMERITS.has(state.screenIndex) && deductLife()) return;
+        render();
+      }
+    });
+    actions.appendChild(check);
+
+    if(ss.correct){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn next';
+      next.textContent = 'Next';
+      next.addEventListener('click', nextScreen);
+      actions.appendChild(next);
+    }
+    screen.appendChild(actions);
+    screen.appendChild(renderQuestionPanel());
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen3(screen){
+    const readText = 'Choose the best sentence. Where is young plant U found?';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Choose the best sentence about young plant U.';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'Look at the small triangles for young plant U.';
+    screen.appendChild(sub);
+
+    const ss = screenState(2);
+    const opts = getOrderedOptions('order', [
+      {id:'shore', text:'Young plant U is found near the shoreline beside the sea.'},
+      {id:'inland', text:'Young plant U is found deep inland away from water.'},
+      {id:'everywhere', text:'Young plant U is evenly spread everywhere.'},
+      {id:'nextT', text:'Young plant U is only next to parent plant T.'}
+    ]);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid-2';
+    opts.forEach(opt => {
+      const c = cardButton(`<div>${opt.text}</div>`, () => {
+        if(ss.correct) return;
+        ss.selected = opt.id;
+        render();
+      }, ss.selected === opt.id ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Choose one sentence, then tap Check.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(!ss.selected){
+        setFeedback(feedback, 'Choose one sentence first.', 'bad');
+        return;
+      }
+      if(ss.selected === 'shore'){
+        ss.correct = true;
+        ss.feedback = {msg:'Yes. That is the key clue from the diagram.', type:'good'};
+        render();
+      }else{
+        ss.feedback = {msg:'Look again at the small triangles for young plant U.', type:'bad'};
+        if(TEACHING_SCREENS_WITH_DEMERITS.has(state.screenIndex) && deductLife()) return;
+        render();
+      }
+    });
+    actions.appendChild(check);
+    if(ss.correct){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn next';
+      next.textContent = 'Next';
+      next.addEventListener('click', nextScreen);
+      actions.appendChild(next);
+    }
+    screen.appendChild(actions);
+    screen.appendChild(renderQuestionPanel());
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen4(screen){
+    const readText = 'Watch how a floating fruit can move with water to the shoreline. Then choose the method that fits plant U best.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Watch the shoreline clue. Then choose the best method.';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'The right method must explain why many young plants are found beside the sea.';
+    screen.appendChild(sub);
+
+    const ss = screenState(3);
+    const kindMap = {water:'water', wind:'wind', animals:'animal', explosive:'explosive'};
+    const previewKind = kindMap[ss.previewKind || ss.selected] || 'water';
+
+    const preview = document.createElement('div');
+    preview.className = 'preview';
+    preview.innerHTML = buildReasonScene(previewKind);
+    screen.appendChild(preview);
+
+    const opts = getOrderedOptions('order', [
+      {id:'water', text:'Water'},
+      {id:'wind', text:'Wind'},
+      {id:'animals', text:'Animals'},
+      {id:'explosive', text:'Explosive action'}
+    ]);
+    const grid = document.createElement('div');
+    grid.className = 'grid-2';
+    opts.forEach(opt => {
+      const c = cardButton(`<div style="font-size:1.15rem">${opt.text}</div>`, () => {
+        if(ss.correct) return;
+        ss.selected = opt.id;
+        ss.previewKind = opt.id;
+        render();
+      }, ss.selected === opt.id ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Tap a method. The animation should match the shoreline clue.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(!ss.selected){
+        setFeedback(feedback, 'Choose one method first.', 'bad');
+        return;
+      }
+      if(ss.selected === 'water'){
+        ss.correct = true;
+        ss.previewKind = 'water';
+        ss.feedback = {msg:'Yes. Water can carry a floating fruit to the shoreline, so water dispersal fits plant U best.', type:'good'};
+        render();
+      }else{
+        ss.previewKind = ss.selected;
+        let msg = 'That method does not best explain the shoreline pattern.';
+        if(ss.selected === 'wind') msg = 'Wind can move winged seeds through air, but the stronger clue here is the shoreline beside the sea.';
+        if(ss.selected === 'animals') msg = 'Animals can carry hooked seeds, but that does not best explain why the young plants are beside the sea.';
+        if(ss.selected === 'explosive') msg = 'Explosive action throws seeds away on land. It does not best explain the shoreline pattern.';
+        ss.feedback = {msg, type:'bad'};
+        if(TEACHING_SCREENS_WITH_DEMERITS.has(state.screenIndex) && deductLife()) return;
+        render();
+      }
+    });
+    actions.appendChild(check);
+    if(ss.correct){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn next';
+      next.textContent = 'Next';
+      next.addEventListener('click', nextScreen);
+      actions.appendChild(next);
+    }
+    screen.appendChild(actions);
+    screen.appendChild(renderQuestionPanel());
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen5(screen){
+    const readText = 'Choose the feature that best helps a fruit travel by water.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Choose the feature that best helps a fruit travel by water.';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'Match the method to the fruit feature.';
+    screen.appendChild(sub);
+
+    const ss = screenState(4);
+    const opts = getOrderedOptions('order', [
+      {id:'fibrous', text:featureLabel('fibrous'), icon:renderSeedIcon('coconut')},
+      {id:'wings', text:featureLabel('wings'), icon:renderSeedIcon('wind')},
+      {id:'hooks', text:featureLabel('hooks'), icon:renderSeedIcon('animal')},
+      {id:'burst', text:featureLabel('burst'), icon:renderSeedIcon('explosive')}
+    ]);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid-2';
+    opts.forEach(opt => {
+      const c = cardButton(`${opt.icon}<div>${opt.text}</div>`, () => {
+        if(ss.correct) return;
+        ss.selected = opt.id;
+        render();
+      }, ss.selected === opt.id ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const more = document.createElement('details');
+    more.className = 'panel top-space';
+    more.innerHTML = `<summary style="cursor:pointer;font-weight:900">Why?</summary><div class="top-space small-note">A floating fruit can be carried by water to a new place.</div>`;
+    screen.appendChild(more);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Choose one feature, then tap Check.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(!ss.selected){
+        setFeedback(feedback, 'Choose one feature first.', 'bad');
+        return;
+      }
+      if(ss.selected === 'fibrous'){
+        ss.correct = true;
+        ss.feedback = {msg:'Yes. A floating fruit matches water dispersal.', type:'good'};
+        render();
+      }else{
+        ss.feedback = {msg:'That feature matches a different method of dispersal.', type:'bad'};
+        if(TEACHING_SCREENS_WITH_DEMERITS.has(state.screenIndex) && deductLife()) return;
+        render();
+      }
+    });
+    actions.appendChild(check);
+    if(ss.correct){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn next';
+      next.textContent = 'Next';
+      next.addEventListener('click', nextScreen);
+      actions.appendChild(next);
+    }
+    screen.appendChild(actions);
+    screen.appendChild(renderQuestionPanel());
+    maybeAutoRead(readText);
+  }
+
+
+  function buildReasonScene(kind){
+    const k = kind || 'water';
+    if(k === 'explosive'){
+      return `
+        <div class="reason-wrap">
+          <div class="reason-scene">
+            <svg viewBox="0 0 520 240" aria-hidden="true">
+              <rect x="0" y="0" width="520" height="240" fill="#f8fcff"/>
+              <rect x="0" y="132" width="520" height="108" fill="#edf1d6"/>
+              <path d="M0 130 H520" stroke="#879279" stroke-width="3"/>
+              <text x="24" y="28" font-size="18" font-weight="800" fill="#14324a">Seeds burst on land.</text>
+              <text x="24" y="54" font-size="16" font-weight="700" fill="#5b7287">They are thrown away from the parent plant.</text>
+              <circle class="burst-dot-1" cx="178" cy="154" r="9" fill="#d8b277"/>
+              <circle class="burst-dot-2" cx="178" cy="154" r="9" fill="#d8b277"/>
+              <circle class="burst-dot-3" cx="178" cy="154" r="9" fill="#d8b277"/>
+              <text x="332" y="180" font-size="18" font-weight="800" fill="#8c4b1f">Not a shoreline clue</text>
+            </svg>
+            <div class="scene-seed explosive-seed">${renderSeedIcon('explosive','animated')}</div>
+            <div class="scene-label start">parent plant on land</div>
+            <div class="scene-label end">scattered on land</div>
+          </div>
+          <div class="reason-title">A bursting pod does not best explain the shoreline pattern.</div>
+          <div class="reason-note">Explosive action throws seeds away from the parent plant on land. In the diagram, many young plant U plants are found along the shore beside the sea.</div>
+        </div>
+      `;
+    }
+    if(k === 'animal'){
+      return `
+        <div class="reason-wrap">
+          <div class="reason-scene">
+            <svg viewBox="0 0 520 240" aria-hidden="true">
+              <rect x="0" y="0" width="520" height="240" fill="#f8fcff"/>
+              <rect x="0" y="118" width="520" height="122" fill="#edf1d6"/>
+              <path d="M0 118 H520" stroke="#879279" stroke-width="3"/>
+              <path d="M38 164 C110 144, 168 146, 232 160 C300 174, 360 166, 468 148" fill="none" stroke="#b48b66" stroke-width="6" stroke-linecap="round" stroke-dasharray="10 10"/>
+              <text x="24" y="30" font-size="18" font-weight="800" fill="#14324a">Hooks move when animals move.</text>
+              <text x="24" y="56" font-size="16" font-weight="700" fill="#5b7287">That does not specifically explain why the young plants are near the sea.</text>
+              <g fill="#8a6a4f">
+                <circle class="paw1" cx="312" cy="138" r="7"/><circle class="paw1" cx="302" cy="126" r="4"/><circle class="paw1" cx="314" cy="122" r="4"/><circle class="paw1" cx="324" cy="130" r="4"/>
+                <circle class="paw2" cx="364" cy="160" r="7"/><circle class="paw2" cx="354" cy="148" r="4"/><circle class="paw2" cx="366" cy="144" r="4"/><circle class="paw2" cx="376" cy="152" r="4"/>
+                <circle class="paw3" cx="420" cy="144" r="7"/><circle class="paw3" cx="410" cy="132" r="4"/><circle class="paw3" cx="422" cy="128" r="4"/><circle class="paw3" cx="432" cy="136" r="4"/>
+              </g>
+            </svg>
+            <div class="scene-seed animal-seed">${renderSeedIcon('animal','animated')}</div>
+            <div class="scene-label start">sticks to an animal</div>
+            <div class="scene-label end">moves where the animal goes</div>
+          </div>
+          <div class="reason-title">This method depends on animal movement, not on the sea.</div>
+          <div class="reason-note">A hooked or spiky fruit can travel when it catches on fur. The question gives a shoreline pattern, so this is not the best match.</div>
+        </div>
+      `;
+    }
+    if(k === 'wind'){
+      return `
+        <div class="reason-wrap">
+          <div class="reason-scene">
+            <svg viewBox="0 0 520 240" aria-hidden="true">
+              <rect x="0" y="0" width="520" height="240" fill="#f8fcff"/>
+              <rect x="0" y="150" width="520" height="90" fill="#edf1d6"/>
+              <path d="M0 150 H520" stroke="#879279" stroke-width="3"/>
+              <text x="24" y="30" font-size="18" font-weight="800" fill="#14324a">Winged seeds drift in air.</text>
+              <text x="24" y="56" font-size="16" font-weight="700" fill="#5b7287">The wind arrow is not the strongest clue in this question.</text>
+              <path class="wind-line-1" d="M42 94 H168" stroke="#7dc9f2" stroke-width="6" stroke-linecap="round"/>
+              <path class="wind-line-2" d="M72 122 H222" stroke="#7dc9f2" stroke-width="6" stroke-linecap="round"/>
+              <path class="wind-line-3" d="M98 70 H260" stroke="#7dc9f2" stroke-width="6" stroke-linecap="round"/>
+              <text x="308" y="188" font-size="18" font-weight="800" fill="#8c4b1f">We still need a seed that reaches the shore by water.</text>
+            </svg>
+            <div class="scene-seed wind-seed">${renderSeedIcon('wind','animated')}</div>
+            <div class="scene-label start">drifts in air</div>
+            <div class="scene-label end">not the best shoreline clue</div>
+          </div>
+          <div class="reason-title">A winged seed matches wind dispersal, not the shoreline pattern.</div>
+          <div class="reason-note">Students may notice the wind arrow first, but the stronger clue is where the young plants are found: along the shore beside the sea.</div>
+        </div>
+      `;
+    }
+    return `
+      <div class="reason-wrap">
+        <div class="reason-scene">
+          <svg viewBox="0 0 520 240" aria-hidden="true">
+            <rect x="0" y="0" width="520" height="240" fill="#f8fcff"/>
+            <path d="M0 170 C78 174, 130 154, 176 120 C198 104, 214 96, 228 82 L228 240 L0 240 Z" fill="#edf1d6"/>
+            <path d="M520 0 L520 240 L362 240 C352 194, 346 172, 338 148 C330 124, 324 92, 332 66 C338 44, 352 24, 376 0 Z" fill="#edf1d6"/>
+            <rect x="0" y="0" width="520" height="240" fill="none" stroke="#d7e5f3" stroke-width="3"/>
+            <path class="scene-wave-1" d="M236 164 h54" stroke="#67b7df" stroke-width="4" stroke-linecap="round"/>
+            <path class="scene-wave-2" d="M296 118 h48" stroke="#67b7df" stroke-width="4" stroke-linecap="round"/>
+            <path class="scene-wave-1" d="M280 72 h42" stroke="#67b7df" stroke-width="4" stroke-linecap="round"/>
+            <text x="244" y="42" font-size="22" font-weight="800" fill="#14324a">Sea</text>
+            <text x="350" y="208" font-size="18" font-weight="800" fill="#14324a">shoreline</text>
+          </svg>
+          <div class="scene-seed water-seed">${renderSeedIcon('coconut','animated')}</div>
+          <div class="scene-label start">fruit floating in water</div>
+          <div class="scene-label end">washed to the shore</div>
+        </div>
+        <div class="reason-title">This is the pattern we need.</div>
+        <div class="reason-note">A fruit that floats can be carried by water and end up near the shoreline. That explains why many young plant U plants are beside the sea.</div>
+      </div>
+    `;
+  }
+
+  function renderScreen5(screen){
+    const readText = 'Tap a seed card to watch how it usually travels. Then choose the one that best explains why the young plants are near the shoreline.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Which seed best explains the shoreline pattern for plant U?';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'Watch what each fruit usually does, then decide which one fits the diagram best.';
+    screen.appendChild(sub);
+
+    const ss = screenState(4);
+    const opts = getOrderedOptions('order', [
+      {id:'explosive', label:seedLabel('explosive')},
+      {id:'animal', label:seedLabel('animal')},
+      {id:'coconut', label:seedLabel('coconut')},
+      {id:'wind', label:seedLabel('wind')}
+    ]);
+
+    const preview = document.createElement('div');
+    preview.className = 'preview';
+    preview.innerHTML = buildReasonScene(ss.previewKind || ss.selected || 'water');
+    screen.appendChild(preview);
+
+    const hint = document.createElement('div');
+    hint.className = 'shoreline-hint';
+    hint.textContent = 'Key idea: the correct seed must help the fruit reach the shoreline by water.';
+    screen.appendChild(hint);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid-4';
+    opts.forEach(opt => {
+      const c = cardButton(`${renderSeedIcon(opt.id)}<div>${opt.label}</div><div class="small-note">Tap to preview</div>`, () => {
+        if(ss.correct) return;
+        ss.selected = opt.id;
+        ss.previewKind = opt.id;
+        render();
+      }, ss.selected === opt.id ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Tap any seed to preview it. Then tap Check.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(!ss.selected){
+        setFeedback(feedback, 'Tap one seed card first.', 'bad');
+        return;
+      }
+      if(ss.selected === 'coconut'){
+        ss.correct = true;
+        ss.previewKind = 'coconut';
+        ss.feedback = {msg:'Yes. The coconut can float on water and be washed to the shoreline.', type:'good'};
+        render();
+      }else{
+        ss.previewKind = ss.selected;
+        let msg = 'That seed does not best explain the shoreline pattern.';
+        if(ss.selected === 'explosive') msg = 'That seed is scattered on land by explosive action, not carried to the shoreline by water.';
+        if(ss.selected === 'animal') msg = 'That seed travels with animals. The diagram’s clue is the shoreline beside the sea.';
+        if(ss.selected === 'wind') msg = 'That seed matches wind dispersal. The wind arrow is not the strongest clue here.';
+        ss.feedback = {msg, type:'bad'};
+        if(TEACHING_SCREENS_WITH_DEMERITS.has(state.screenIndex) && deductLife()) return;
+        render();
+      }
+    });
+    actions.appendChild(check);
+    if(ss.correct){
+      const next = document.createElement('button');
+      next.type = 'button';
+      next.className = 'btn next';
+      next.textContent = 'Next';
+      next.addEventListener('click', nextScreen);
+      actions.appendChild(next);
+    }
+    screen.appendChild(actions);
+    screen.appendChild(renderQuestionPanel());
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen6(screen){
+    const readText = 'Quick transfer. A fruit floats down a river and is later found on the river bank. Choose the best method.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction';
+    title.textContent = 'Quick transfer: which method fits this new clue?';
+    screen.appendChild(title);
+
+    const sub = document.createElement('p');
+    sub.className = 'subtext';
+    sub.textContent = 'A fruit floats down a river and is later found on the river bank.';
+    screen.appendChild(sub);
+
+    const ss = screenState(5);
+    const opts = getOrderedOptions('order', [
+      {id:'water', text:'Water'},
+      {id:'wind', text:'Wind'},
+      {id:'animals', text:'Animals'},
+      {id:'explosive', text:'Explosive action'}
+    ]);
+
+    const preview = document.createElement('div');
+    preview.className = 'preview';
+    preview.innerHTML = buildReasonScene(ss.selected === 'water' || ss.correct ? 'water' : 'water');
+    screen.appendChild(preview);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid-2';
+    opts.forEach(opt => {
+      const c = cardButton(`<div style="font-size:1.15rem">${opt.text}</div>`, () => {
+        if(ss.correct) return;
+        ss.selected = opt.id;
+        render();
+      }, ss.selected === opt.id ? 'selected' : '');
+      grid.appendChild(c);
+    });
+    screen.appendChild(grid);
+
+    const feedback = document.createElement('div');
+    setFeedback(feedback, 'Choose one method, then tap Check.', '');
+    if(ss.feedback) setFeedback(feedback, ss.feedback.msg, ss.feedback.type);
+    screen.appendChild(feedback);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const check = document.createElement('button');
+    check.type = 'button';
+    check.className = 'btn check';
+    check.textContent = 'Check';
+    check.addEventListener('click', () => {
+      if(!ss.selected){
+        setFeedback(feedback, 'Choose one method first.', 'bad');
+        return;
+      }
+      if(ss.selected === 'water'){
+        ss.correct = true;
+        ss.feedback = {msg:'Yes. A floating fruit is dispersed by water.', type:'good'};
+        render();
+      }else{
+        ss.feedback = {msg:'Think about the clue: the fruit floats and is later found on the river bank.', type:'bad'};
+        render();
+      }
+    });
+    actions.appendChild(check);
+
+    if(ss.correct){
+      const replay = document.createElement('button');
+      replay.type = 'button';
+      replay.className = 'btn next';
+      replay.textContent = 'Replay';
+      replay.addEventListener('click', () => restartInteractive('Starting again…'));
+      actions.appendChild(replay);
+
+      const restart = document.createElement('button');
+      restart.type = 'button';
+      restart.className = 'btn secondary';
+      restart.textContent = 'Restart now';
+      restart.addEventListener('click', () => {
+        state.screenIndex = 0;
+        state.lives = TOTAL_LIVES;
+        state.perScreen = {};
+        state.panelOpen = false;
+        render();
+      });
+      actions.appendChild(restart);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'panel center visually-tight';
+      wrap.innerHTML = `
+        <div class="big-emoji">🌊</div>
+        <p style="font-size:1.2rem;font-weight:900">Nice work. Use the distribution pattern before you choose the seed.</p>
+        <div class="summary-list top-space">
+          <div class="summary-item">1. Find the correct plant in the legend.</div>
+          <div class="summary-item">2. Notice where the young plants are found.</div>
+          <div class="summary-item">3. Ask what method could bring the seed there.</div>
+          <div class="summary-item">4. Choose the seed that matches that method.</div>
+        </div>
+        <div class="footnote">For this question: young plants near the shoreline → water dispersal → coconut.</div>
+      `;
+      screen.appendChild(wrap);
+    }
+
+    screen.appendChild(actions);
+    maybeAutoRead(readText);
+  }
+
+  function renderScreen7(screen){
+    const readText = 'Well done. Use the distribution pattern to explain the seed choice.';
+    screen.appendChild(makeToolbar(readText));
+
+    const title = document.createElement('h1');
+    title.className = 'instruction center';
+    title.textContent = 'Well done!';
+    screen.appendChild(title);
+
+    const wrap = document.createElement('div');
+    wrap.className = 'panel center visually-tight';
+    wrap.innerHTML = `
+      <div class="big-emoji">🌊🥥</div>
+      <p style="font-size:1.2rem;font-weight:900">Use the pattern before you choose the seed.</p>
+      <div class="summary-list top-space">
+        <div class="summary-item">1. Find the correct plant in the legend.</div>
+        <div class="summary-item">2. Notice where the young plants are found.</div>
+        <div class="summary-item">3. Ask what method could bring the seed there.</div>
+        <div class="summary-item">4. Choose the seed that matches that method.</div>
+      </div>
+      <div class="footnote">For this question: young plants near the shoreline → water dispersal → coconut.</div>
+    `;
+    screen.appendChild(wrap);
+
+    const actions = document.createElement('div');
+    actions.className = 'action-row';
+    const replay = document.createElement('button');
+    replay.type = 'button';
+    replay.className = 'btn next';
+    replay.textContent = 'Replay';
+    replay.addEventListener('click', () => restartInteractive('Starting again…'));
+    actions.appendChild(replay);
+
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.className = 'btn secondary';
+    retry.textContent = 'Restart now';
+    retry.addEventListener('click', () => {
+      state.screenIndex = 0;
+      state.lives = TOTAL_LIVES;
+      state.perScreen = {};
+      state.panelOpen = false;
+      render();
+    });
+    actions.appendChild(retry);
+    screen.appendChild(actions);
+
+    maybeAutoRead(readText);
+  }
+
+  audioToggleBtn.addEventListener('click', () => {
+    state.autoRead = !state.autoRead;
+    updateTopbar();
+    if(state.autoRead){
+      showToast('Read-aloud is on.');
+      render();
+    }else{
+      stopSpeaking();
+      showToast('Read-aloud is off.');
+    }
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
