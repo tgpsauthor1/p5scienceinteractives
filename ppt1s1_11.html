@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -139,6 +142,41 @@
     border-radius:18px;
     padding:18px;
   }
+
+  .flash-answer{
+    display:inline-block;
+    min-width:12px;
+    padding:0 6px;
+    font-weight:bold;
+    color:#d92d20;
+    background:#fff0f0;
+    border:2px solid #d92d20;
+    border-radius:10px;
+    animation:flashWord .8s step-end infinite;
+  }
+  @keyframes flashWord{50%{opacity:.25}}
+  details.help-panel{
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:10px 14px;
+    background:#fff;
+    margin-top:16px;
+  }
+  details.help-panel summary{
+    cursor:pointer;
+    list-style:none;
+    font-size:22px;
+    font-weight:bold;
+  }
+  details.help-panel summary::-webkit-details-marker{display:none}
+  .help-list{
+    margin:12px 0 0;
+    padding-left:26px;
+    font-size:20px;
+    line-height:1.55;
+    color:var(--ink);
+  }
+
   .revealed{
     display:inline-block;
     min-width:12px;
@@ -371,11 +409,21 @@
   <section class="screen active" id="screen-intro">
     <div class="titleband"><h1>Human Reproduction Guess the Word</h1></div>
     <div class="card">
-      <p class="lead"><strong>Use the clues to answer Questions (a), (b), and (c).</strong></p>
-      <p class="small">Type the <strong>full word</strong> each time. The first letter is shown first. After each wrong non-blank answer, one more letter will be revealed. Blank tries do not count. Each question has its own restart.</p>
+      <p class="lead"><strong>Complete Questions (a), (b), and (c).</strong></p>
       <div class="controls">
         <button class="ghost" onclick="speakIntro()">🔊 Read aloud</button>
       </div>
+      <details class="help-panel">
+        <summary>How to play</summary>
+        <ul class="help-list">
+          <li>Type the full word every time.</li>
+          <li>The first letter shows first.</li>
+          <li>After each wrong non-blank answer, one more letter appears.</li>
+          <li>Blank answers do not count.</li>
+          <li>Each word has its own number of chances.</li>
+          <li>If a word runs out of chances, only that word flashes for 10 seconds and then resets.</li>
+        </ul>
+      </details>
     </div>
 
     <div class="card">
@@ -392,7 +440,7 @@
       <div class="question-grid">
         <div>
           <p class="prompt"><strong>Use the flowchart to identify X and Y.</strong></p>
-          <p class="micro">Use <strong>plural</strong> words. Type the full missing word. After each wrong answer, one more letter will be revealed.</p>
+          <p class="micro">Look at the flowchart and use <strong>plural</strong> words.</p>
 
           <div class="diagram-card">
             <svg viewBox="0 0 760 280" aria-label="Flowchart showing male body to X to sperm and female body to Y to egg">
@@ -437,6 +485,7 @@
           <div class="check-row">
             <button onclick="checkGuess('q1')">Check</button>
             <button class="secondary" onclick="readQuestion('q1')">🔊 Read aloud</button>
+            <button class="ghost" id="q1-continue-word" onclick="continueWord('q1')" style="display:none;">Next word</button>
           </div>
 
           <div class="feedback" id="q1-feedback" aria-live="polite"></div>
@@ -448,12 +497,22 @@
           <p class="status-stage" id="q1-stage-label"></p>
           <div class="status-box"><div class="character" id="q1-character"><div class="char-face" id="q1-face"></div></div></div>
           <div class="status-message" id="q1-message"></div>
-          <div class="controls" style="margin-top:12px;">
-            <button class="danger" id="q1-restart" onclick="restartQuestion('q1')" style="display:none;">Restart this question</button>
-          </div>
         </div>
       </div>
     </div>
+
+    <details class="help-panel">
+      <summary>How to play</summary>
+      <ul class="help-list">
+        <li>Type the full word every time.</li>
+        <li>The first letter shows first.</li>
+        <li>After each wrong non-blank answer, one more letter appears.</li>
+        <li>Blank answers do not count.</li>
+        <li>Chances depend on the length of the current word.</li>
+        <li>If a word runs out of chances, only that word flashes for 10 seconds and then resets.</li>
+      </ul>
+    </details>
+
 
     <div class="controls">
       <button class="ghost" onclick="goTo('screen-intro')">Back</button>
@@ -467,7 +526,7 @@
       <div class="question-grid">
         <div>
           <p class="prompt"><strong>Label the male reproductive cell and the female reproductive cell.</strong></p>
-          <p class="micro">Type the <strong>full word</strong> each time. After each wrong answer, one more letter will be revealed.</p>
+          <p class="micro">Type the correct label for each reproductive cell.</p>
 
           <div class="diagram-card">
             <svg viewBox="0 0 760 360" aria-label="Simple diagram of a sperm cell and an egg cell with clear label lines">
@@ -506,6 +565,7 @@
           <div class="check-row">
             <button onclick="checkGuess('q2')">Check</button>
             <button class="secondary" onclick="readQuestion('q2')">🔊 Read aloud</button>
+            <button class="ghost" id="q2-continue-word" onclick="continueWord('q2')" style="display:none;">Next word</button>
           </div>
 
           <div class="feedback" id="q2-feedback" aria-live="polite"></div>
@@ -517,12 +577,22 @@
           <p class="status-stage" id="q2-stage-label"></p>
           <div class="status-box"><div class="character" id="q2-character"><div class="char-face" id="q2-face"></div></div></div>
           <div class="status-message" id="q2-message"></div>
-          <div class="controls" style="margin-top:12px;">
-            <button class="danger" id="q2-restart" onclick="restartQuestion('q2')" style="display:none;">Restart this question</button>
-          </div>
         </div>
       </div>
     </div>
+
+    <details class="help-panel">
+      <summary>How to play</summary>
+      <ul class="help-list">
+        <li>Type the full word every time.</li>
+        <li>The first letter shows first.</li>
+        <li>After each wrong non-blank answer, one more letter appears.</li>
+        <li>Blank answers do not count.</li>
+        <li>Chances depend on the length of the current word.</li>
+        <li>If a word runs out of chances, only that word flashes for 10 seconds and then resets.</li>
+      </ul>
+    </details>
+
 
     <div class="controls">
       <button class="ghost" onclick="goTo('screen-q1')">Back</button>
@@ -536,7 +606,7 @@
       <div class="question-grid">
         <div>
           <p class="prompt"><strong>Name the process shown.</strong></p>
-          <p class="micro">Watch the animation showing the sperm moving to the egg and fusing. Then type the full missing word. After each wrong answer, one more letter will be revealed.</p>
+          <p class="micro">Watch the animation and then name the process.</p>
 
           <div class="diagram-card">
             <div class="fusion-stage">
@@ -575,6 +645,7 @@
           <div class="check-row">
             <button onclick="checkGuess('q3')">Check</button>
             <button class="secondary" onclick="readQuestion('q3')">🔊 Read aloud</button>
+            <button class="ghost" id="q3-continue-word" onclick="continueWord('q3')" style="display:none;">Next word</button>
           </div>
 
           <div class="feedback" id="q3-feedback" aria-live="polite"></div>
@@ -586,12 +657,22 @@
           <p class="status-stage" id="q3-stage-label"></p>
           <div class="status-box"><div class="character" id="q3-character"><div class="char-face" id="q3-face"></div></div></div>
           <div class="status-message" id="q3-message"></div>
-          <div class="controls" style="margin-top:12px;">
-            <button class="danger" id="q3-restart" onclick="restartQuestion('q3')" style="display:none;">Restart this question</button>
-          </div>
         </div>
       </div>
     </div>
+
+    <details class="help-panel">
+      <summary>How to play</summary>
+      <ul class="help-list">
+        <li>Type the full word every time.</li>
+        <li>The first letter shows first.</li>
+        <li>After each wrong non-blank answer, one more letter appears.</li>
+        <li>Blank answers do not count.</li>
+        <li>Chances depend on the length of the current word.</li>
+        <li>If a word runs out of chances, only that word flashes for 10 seconds and then resets.</li>
+      </ul>
+    </details>
+
 
     <div class="controls">
       <button class="ghost" onclick="goTo('screen-q2')">Back</button>
@@ -617,6 +698,7 @@
   </section>
 </div>
 
+
 <script>
 const labTheme = {
   faces: ["🔬\n^_^","🔬\n^‿^","🔬\n-_-","🔬\n•︵•","🔬\nಠ_ಠ","🔬\nಠ益ಠ","🔬\n◣_◢","🔬\n!!","⬛\nX"],
@@ -629,9 +711,11 @@ const labTheme = {
     "The lab focus is almost gone.",
     "One more wrong try and the lab view will go dark.",
     "Last chance.",
-    "The lab view has gone dark. Restart this question."
+    "The lab view has gone dark for this word."
   ]
 };
+
+const FLASH_DURATION = 10000;
 
 const questions = {
   q1: {
@@ -644,14 +728,12 @@ const questions = {
       { type:"word", key:"ovaries" },
       { type:"text", value:" for Y." }
     ],
-    words: ["testes","ovaries"],
-    limit: 8
+    words: ["testes","ovaries"]
   },
   q2: {
     type: "diagram_labels",
     prompt: "Label the male reproductive cell and the female reproductive cell.",
-    words: ["sperm","egg"],
-    limit: 8
+    words: ["sperm","egg"]
   },
   q3: {
     type: "passage",
@@ -661,10 +743,30 @@ const questions = {
       { type:"word", key:"fertilisation" },
       { type:"text", value:"." }
     ],
-    words: ["fertilisation"],
-    limit: 8
+    words: ["fertilisation"]
   }
 };
+
+function prepareQuestions() {
+  Object.values(questions).forEach(q => {
+    q.wordSequence = [...q.words];
+    q.tokens = q.tokens || [];
+
+    let occurrence = 0;
+    q.tokens = q.tokens.map(token => {
+      if (token.type === "word") {
+        return { ...token, occurrence: occurrence++ };
+      }
+      return token;
+    });
+
+    q.labels = (q.type === "diagram_labels")
+      ? q.words.map((word, occurrence) => ({ word, occurrence }))
+      : [];
+  });
+}
+
+prepareQuestions();
 
 const state = {
   q1: makeState(),
@@ -676,10 +778,12 @@ function makeState() {
   return {
     currentIndex: 0,
     solved: {},
+    revealedCounts: {},
     wrongAttempts: 0,
     completed: false,
-    failed: false,
-    revealedCounts: {}
+    showingAnswer: false,
+    awaitingAdvance: false,
+    answerTimer: null
   };
 }
 
@@ -688,14 +792,17 @@ function normalize(text) {
 }
 
 function currentWord(id) {
-  return questions[id].words[state[id].currentIndex];
+  const q = questions[id];
+  return q.wordSequence[state[id].currentIndex] || "";
 }
 
-function revealedCount(id, word) {
-  return state[id].revealedCounts[word] || 0;
+function currentLimit(id) {
+  return Math.max(currentWord(id).length - 2, 1);
 }
 
-function revealedPrefix(word, extraCount) {
+function currentPrefix(id) {
+  const word = currentWord(id);
+  const extraCount = state[id].revealedCounts[state[id].currentIndex] || 0;
   return word.slice(0, Math.min(1 + extraCount, word.length));
 }
 
@@ -707,13 +814,18 @@ function renderLetterLines(remaining) {
 }
 
 function renderFutureBlank(word) {
-  const prefix = revealedPrefix(word, 0);
-  const remaining = Math.max(word.length - prefix.length, 0);
+  const prefix = word.slice(0, 1);
+  const remaining = Math.max(word.length - 1, 0);
   return `<span class="blank-inline"><span class="first-letter">${escapeHtml(prefix)}</span>${renderLetterLines(remaining)}</span>`;
 }
 
+function renderHiddenBlank(word) {
+  return `<span class="blank-inline">${renderLetterLines(word.length)}</span>`;
+}
+
 function renderActiveBlank(id, word) {
-  const prefix = revealedPrefix(word, revealedCount(id, word));
+  const revealed = state[id].revealedCounts[state[id].currentIndex] || 0;
+  const prefix = word.slice(0, Math.min(1 + revealed, word.length));
   return `<span class="blank-inline">
     <span class="first-letter">${escapeHtml(prefix)}</span>
     ${renderLetterLines(Math.max(word.length - prefix.length, 0))}
@@ -739,40 +851,62 @@ function renderPassage(id) {
   document.getElementById(`${id}-passage`).innerHTML = q.tokens.map(token => {
     if (token.type === "text") return escapeHtml(token.value);
 
-    const solved = !!st.solved[token.key];
+    const solved = !!st.solved[token.occurrence];
     if (solved) return `<span class="revealed">${escapeHtml(token.key)}</span>`;
 
-    const isCurrent = !st.completed && !st.failed && token.key === currentWord(id) && !activeRendered;
+    if (st.showingAnswer && token.occurrence === st.currentIndex && !activeRendered) {
+      activeRendered = true;
+      return `<span class="flash-answer">${escapeHtml(token.key)}</span>`;
+    }
+
+    const isCurrent = !st.completed && !st.showingAnswer && !st.awaitingAdvance && token.occurrence === st.currentIndex && !activeRendered;
     if (isCurrent) {
       activeRendered = true;
       return renderActiveBlank(id, token.key);
     }
+
+    if (st.awaitingAdvance && token.occurrence > st.currentIndex) {
+      return renderHiddenBlank(token.key);
+    }
+
     return renderFutureBlank(token.key);
   }).join("");
 
   bindCurrentInput(id);
 }
 
-function renderLabelContent(id, word) {
+function renderLabelContent(id, label) {
   const st = state[id];
-  if (st.solved[word]) return `<span class="revealed">${escapeHtml(word)}</span>`;
+  if (st.solved[label.occurrence]) return `<span class="revealed">${escapeHtml(label.word)}</span>`;
 
-  const isCurrent = !st.completed && !st.failed && word === currentWord(id);
-  if (isCurrent) return renderActiveBlank(id, word);
+  if (st.showingAnswer && label.occurrence === st.currentIndex) {
+    return `<span class="flash-answer">${escapeHtml(label.word)}</span>`;
+  }
 
-  return renderFutureBlank(word);
+  const isCurrent = !st.completed && !st.showingAnswer && !st.awaitingAdvance && label.occurrence === st.currentIndex;
+  if (isCurrent) return renderActiveBlank(id, label.word);
+
+  if (st.awaitingAdvance && label.occurrence > st.currentIndex) {
+    return renderHiddenBlank(label.word);
+  }
+
+  return renderFutureBlank(label.word);
 }
 
 function renderDiagramLabels(id) {
-  document.getElementById("q2-label-sperm").innerHTML = renderLabelContent(id, "sperm");
-  document.getElementById("q2-label-egg").innerHTML = renderLabelContent(id, "egg");
+  const q = questions[id];
+  document.getElementById("q2-label-sperm").innerHTML = renderLabelContent(id, q.labels[0]);
+  document.getElementById("q2-label-egg").innerHTML = renderLabelContent(id, q.labels[1]);
   bindCurrentInput(id);
 }
 
 function bindCurrentInput(id) {
-  if (state[id].completed || state[id].failed) return;
+  if (state[id].completed || state[id].showingAnswer || state[id].awaitingAdvance) return;
   const input = document.getElementById(`${id}-inline-input`);
   if (input) {
+    input.addEventListener("input", function() {
+      this.value = this.value.replace(/\s+/g, "");
+    });
     input.addEventListener("keydown", function(event) {
       if (event.key === "Enter") checkGuess(id);
     });
@@ -780,31 +914,51 @@ function bindCurrentInput(id) {
   }
 }
 
+function stageIndexFor(id) {
+  const st = state[id];
+  const limit = currentLimit(id);
+  if (st.showingAnswer) return labTheme.faces.length - 1;
+  if (st.completed) return 0;
+  if (st.wrongAttempts <= 0) return 0;
+  return Math.min(
+    labTheme.faces.length - 2,
+    Math.ceil((st.wrongAttempts / limit) * (labTheme.faces.length - 2))
+  );
+}
+
 function updateStatus(id) {
   const st = state[id];
-  const limit = questions[id].limit;
-  const stage = Math.min(st.wrongAttempts, limit);
+  const faceIndex = stageIndexFor(id);
+  const limit = st.completed ? 0 : currentLimit(id);
 
-  document.getElementById(`${id}-face`).textContent = labTheme.faces[stage];
-  document.getElementById(`${id}-message`).textContent = labTheme.messages[stage];
-  document.getElementById(`${id}-stage-label`).textContent = `Wrong tries: ${st.wrongAttempts} / ${limit}`;
+  document.getElementById(`${id}-face`).textContent = labTheme.faces[faceIndex];
+  document.getElementById(`${id}-message`).textContent = st.completed
+    ? "This question is complete."
+    : st.showingAnswer
+      ? "This word is flashing now. It will reset after 10 seconds."
+      : st.awaitingAdvance
+        ? "Good. Click Next word when you are ready."
+        : labTheme.messages[faceIndex];
 
-  const charBox = document.getElementById(`${id}-character`);
-  const restartBtn = document.getElementById(`${id}-restart`);
+  document.getElementById(`${id}-stage-label`).textContent = st.completed
+    ? "All words solved."
+    : st.awaitingAdvance
+      ? "Current word solved."
+      : `Current word tries: ${st.wrongAttempts} / ${limit}`;
+
   const nextBtn = document.getElementById(`${id}-next`);
+  if (nextBtn) nextBtn.disabled = !st.completed;
 
-  if (st.failed) {
-    charBox.classList.add("fail");
-    restartBtn.style.display = "inline-flex";
-  } else {
-    charBox.classList.remove("fail");
-    restartBtn.style.display = "none";
+  const continueBtn = document.getElementById(`${id}-continue-word`);
+  if (continueBtn) {
+    continueBtn.style.display = st.awaitingAdvance && !st.completed && !st.showingAnswer ? "inline-flex" : "none";
   }
 
-  document.getElementById(`${id}-progress`).textContent =
-    `Words completed: ${Object.keys(st.solved).length} of ${questions[id].words.length} | Wrong tries used: ${st.wrongAttempts} of ${limit}`;
-
-  nextBtn.disabled = !st.completed;
+  document.getElementById(`${id}-progress`).textContent = st.completed
+    ? `Words completed: ${questions[id].wordSequence.length} of ${questions[id].wordSequence.length}`
+    : st.awaitingAdvance
+      ? `Words completed: ${Object.keys(st.solved).length} of ${questions[id].wordSequence.length}`
+      : `Words completed: ${Object.keys(st.solved).length} of ${questions[id].wordSequence.length} | Current word tries: ${st.wrongAttempts} of ${limit}`;
 }
 
 function setFeedback(id, text, type="") {
@@ -820,15 +974,13 @@ function rerenderQuestion(id) {
 }
 
 function checkGuess(id) {
-  const q = questions[id];
   const st = state[id];
-  const limit = q.limit;
-
-  if (st.completed || st.failed) return;
+  if (st.completed || st.showingAnswer) return;
 
   const target = currentWord(id);
   const input = document.getElementById(`${id}-inline-input`);
   const guess = input ? normalize(input.value) : "";
+  const limit = currentLimit(id);
 
   if (!guess) {
     setFeedback(id, "Type the full word first. Blank tries do not count.", "bad");
@@ -837,13 +989,17 @@ function checkGuess(id) {
   }
 
   if (guess === normalize(target)) {
-    st.solved[target] = true;
-    st.currentIndex += 1;
-    setFeedback(id, "Yes. That word fits.", "good");
+    st.solved[st.currentIndex] = true;
+    st.wrongAttempts = 0;
 
-    if (st.currentIndex >= q.words.length) {
+    const isLastWord = st.currentIndex >= questions[id].wordSequence.length - 1;
+    if (isLastWord) {
       st.completed = true;
+      st.awaitingAdvance = false;
       setFeedback(id, "Great job. You completed this question.", "good");
+    } else {
+      st.awaitingAdvance = true;
+      setFeedback(id, "Yes. That word fits. Click Next word.", "good");
     }
 
     rerenderQuestion(id);
@@ -851,29 +1007,56 @@ function checkGuess(id) {
   }
 
   st.wrongAttempts += 1;
-  st.revealedCounts[target] = Math.min(
-    revealedCount(id, target) + 1,
+  st.revealedCounts[st.currentIndex] = Math.min(
+    (st.revealedCounts[st.currentIndex] || 0) + 1,
     Math.max(target.length - 1, 0)
   );
 
   if (st.wrongAttempts >= limit) {
-    st.failed = true;
-    setFeedback(id, "The lab view has gone dark. Restart this question.", "bad");
+    triggerFailState(id);
   } else {
     setFeedback(id, "Not quite. One more letter has been revealed.", "bad");
+    rerenderQuestion(id);
   }
+}
 
+function triggerFailState(id) {
+  const st = state[id];
+  st.showingAnswer = true;
+  setFeedback(id, "This word will flash for 10 seconds. Then only this word will reset.", "bad");
+  rerenderQuestion(id);
+
+  if (st.answerTimer) clearTimeout(st.answerTimer);
+  st.answerTimer = setTimeout(() => {
+    resetCurrentWord(id);
+  }, FLASH_DURATION);
+}
+
+function resetCurrentWord(id) {
+  const st = state[id];
+  st.showingAnswer = false;
+  st.awaitingAdvance = false;
+  st.wrongAttempts = 0;
+  st.revealedCounts[st.currentIndex] = 0;
+  st.answerTimer = null;
+  setFeedback(id, "This word has reset. Try again.", "bad");
   rerenderQuestion(id);
 }
 
-function restartQuestion(id) {
-  state[id] = makeState();
-  rerenderQuestion(id);
-  setFeedback(id, "");
-}
 
+function continueWord(id) {
+  const st = state[id];
+  if (st.completed || st.showingAnswer || !st.awaitingAdvance) return;
+  st.currentIndex += 1;
+  st.awaitingAdvance = false;
+  st.wrongAttempts = 0;
+  setFeedback(id, "Now try the next word.", "good");
+  rerenderQuestion(id);
+}
 function restartAll() {
   ["q1","q2","q3"].forEach(id => {
+    const st = state[id];
+    if (st.answerTimer) clearTimeout(st.answerTimer);
     state[id] = makeState();
     rerenderQuestion(id);
     setFeedback(id, "");
@@ -885,20 +1068,22 @@ function readQuestion(id) {
   const q = questions[id];
   const st = state[id];
   let extra = "";
-  if (st.failed) {
-    extra = "This question needs a restart.";
-  } else if (st.completed) {
+  if (st.completed) {
     extra = "This question is complete.";
+  } else if (st.showingAnswer) {
+    extra = `The answer is flashing now. It will reset after 10 seconds.`;
+  } else if (st.awaitingAdvance) {
+    extra = "You solved this word. Tap Next word to continue.";
   } else {
-    const word = currentWord(id);
-    const prefix = revealedPrefix(word, revealedCount(id, word));
-    extra = `The revealed letters are ${prefix}. Type the full word.`;
+    const prefix = currentPrefix(id);
+    const triesLeft = Math.max(currentLimit(id) - st.wrongAttempts, 0);
+    extra = `The revealed letters are ${prefix}. You have ${triesLeft} chances left for this word.`;
   }
   speak(q.prompt + " " + extra);
 }
 
 function speakIntro() {
-  speak("There are 3 guess the word questions. Type the full word each time. The first letter is shown first. After each wrong non blank answer, one more letter will be revealed. Blank tries do not count. Each question has its own restart.");
+  speak("Complete Questions A, B, and C. Open the How to play panel if you need the rules.");
 }
 
 function speak(text) {
@@ -937,7 +1122,19 @@ function escapeHtml(str) {
     .replaceAll("'","&#39;");
 }
 
+function validateQuestions() {
+  Object.entries(questions).forEach(([id, q]) => {
+    q.wordSequence.forEach(word => {
+      if (word.length < 3) {
+        throw new Error(`${id} has a target word shorter than 3 letters: ${word}`);
+      }
+    });
+  });
+}
+
+validateQuestions();
 ["q1","q2","q3"].forEach(id => rerenderQuestion(id));
 </script>
+
 </body>
 </html>
