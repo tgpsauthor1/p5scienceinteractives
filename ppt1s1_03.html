@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppt1s1_3</title>
+  <style>
+    :root{
+      --bg:#f5f8ff;
+      --panel:#ffffff;
+      --ink:#1b2a41;
+      --muted:#5b6b7d;
+      --accent:#2f6fed;
+      --accent-2:#eef4ff;
+      --good:#117a45;
+      --good-bg:#e9f8ef;
+      --bad:#b42318;
+      --bad-bg:#fff1f0;
+      --soft:#d9e5ff;
+      --line:#d8dfeb;
+      --shadow:0 12px 28px rgba(27,42,65,.08);
+      --radius:20px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#edf3ff 0%,#f7fbff 100%);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+    body{min-height:100vh;padding:16px}
+    .shell{
+      max-width:980px;
+      margin:0 auto;
+      background:rgba(255,255,255,.68);
+      border:1px solid rgba(216,223,235,.9);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter: blur(8px);
+    }
+    .topbar{
+      padding:14px 18px 12px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff 0%,#f8fbff 100%);
+    }
+    .topbar-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px 16px;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .title-wrap h1{
+      margin:0;
+      font-size:1.35rem;
+      line-height:1.2;
+    }
+    .subtitle{
+      font-size:.95rem;
+      color:var(--muted);
+      margin-top:4px;
+    }
+    .control-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px 12px;
+      align-items:center;
+    }
+    .demerit-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+    }
+    .demerit-label{
+      font-weight:700;
+      font-size:.95rem;
+    }
+    .demerit-line{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .flower{
+      width:28px;height:28px;border-radius:50%;
+      display:grid;place-items:center;
+      font-size:18px;
+      background:#fff7d6;
+      border:1px solid #f1db7a;
+      transition:.2s ease;
+    }
+    .flower.lost{
+      filter:grayscale(1);
+      opacity:.35;
+      background:#f2f4f7;
+      border-color:#d0d5dd;
+    }
+    .toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:#fff;
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+    .switch{
+      width:54px;height:30px;border-radius:999px;
+      background:#d0d5dd;
+      position:relative;
+      border:none;
+      cursor:pointer;
+    }
+    .switch::after{
+      content:"";
+      position:absolute;
+      top:3px;left:3px;
+      width:24px;height:24px;border-radius:50%;
+      background:#fff;
+      transition:.2s ease;
+      box-shadow:0 2px 8px rgba(0,0,0,.14);
+    }
+    .switch.on{background:var(--accent)}
+    .switch.on::after{left:27px}
+    .ghost-btn,.primary-btn,.card-btn,.chip-btn,.small-btn,.check-btn{
+      border:none;
+      cursor:pointer;
+      font:inherit;
+      border-radius:16px;
+      transition:transform .04s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .ghost-btn,.small-btn{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--ink);
+      font-weight:700;
+    }
+    .ghost-btn:hover,.small-btn:hover,.card-btn:hover,.chip-btn:hover,.check-btn:hover,.primary-btn:hover{box-shadow:0 6px 18px rgba(47,111,237,.15)}
+    .ghost-btn:active,.small-btn:active,.card-btn:active,.chip-btn:active,.check-btn:active,.primary-btn:active{transform:translateY(1px)}
+    .ghost-btn,.small-btn{padding:10px 14px}
+    .content{padding:18px}
+    .question-toggle{
+      margin-bottom:14px;
+      display:flex;
+      justify-content:flex-start;
+    }
+    .question-panel{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      margin-bottom:16px;
+      box-shadow:var(--shadow);
+    }
+    .screen-card{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .screen-kicker{
+      display:inline-block;
+      font-size:.88rem;
+      font-weight:700;
+      color:var(--accent);
+      background:var(--accent-2);
+      border-radius:999px;
+      padding:7px 10px;
+      margin-bottom:10px;
+    }
+    .instruction{
+      font-size:1.5rem;
+      line-height:1.2;
+      font-weight:800;
+      margin:0 0 14px 0;
+    }
+    .hint{
+      margin:-4px 0 14px;
+      color:var(--muted);
+      font-size:.98rem;
+    }
+    .two-col{
+      display:grid;
+      grid-template-columns: minmax(270px, 1.1fr) minmax(250px, .9fr);
+      gap:18px;
+      align-items:start;
+    }
+    .question-text{
+      font-size:1.08rem;
+      line-height:1.5;
+    }
+    .question-text p{margin:0 0 12px}
+    .question-list{
+      margin:0;
+      padding-left:1.2rem;
+      line-height:1.6;
+      font-size:1.03rem;
+    }
+    mark{
+      background:#fff0a8;
+      color:inherit;
+      padding:.08em .22em;
+      border-radius:6px;
+    }
+    .options-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:12px;
+    }
+    .card-btn{
+      text-align:left;
+      padding:16px;
+      font-size:1.05rem;
+      line-height:1.35;
+      background:#fff;
+      border:2px solid var(--line);
+      min-height:74px;
+      width:100%;
+    }
+    .card-btn.selected{border-color:var(--accent); background:#f6f9ff}
+    .card-btn.correct{border-color:var(--good); background:var(--good-bg)}
+    .card-btn.wrong{border-color:var(--bad); background:var(--bad-bg)}
+    .card-btn:disabled{cursor:default; opacity:.98}
+    .feedback{
+      margin-top:14px;
+      padding:14px 16px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:#f8fafc;
+      min-height:58px;
+      font-size:1rem;
+      line-height:1.45;
+      display:flex;
+      align-items:center;
+    }
+    .feedback.good{background:var(--good-bg);border-color:#b7ebc6;color:#0b5d33}
+    .feedback.bad{background:var(--bad-bg);border-color:#f2c0ba;color:#912018}
+    .nav{
+      margin-top:16px;
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      align-items:center;
+    }
+    .primary-btn,.check-btn{
+      padding:13px 18px;
+      background:var(--accent);
+      color:#fff;
+      font-weight:800;
+      min-width:116px;
+    }
+    .primary-btn[disabled], .check-btn[disabled]{
+      opacity:.45;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+    .primary-btn.secondary{
+      background:#fff;
+      color:var(--ink);
+      border:1px solid var(--line);
+    }
+    .diagram-card{
+      background:linear-gradient(180deg,#ffffff 0%,#f9fbff 100%);
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:10px;
+      position:relative;
+      min-height:320px;
+      overflow:hidden;
+    }
+    .diagram-wrap{
+      position:relative;
+      width:100%;
+      max-width:420px;
+      margin:0 auto;
+      aspect-ratio: 420 / 300;
+    }
+    .label-btn{
+      position:absolute;
+      width:56px;
+      height:42px;
+      border-radius:14px;
+      border:2px solid var(--line);
+      background:#fff;
+      font-weight:800;
+      font-size:1.05rem;
+      cursor:pointer;
+      display:grid;
+      place-items:center;
+      line-height:1;
+      box-shadow:0 2px 8px rgba(27,42,65,.08);
+      z-index:3;
+    }
+    .label-btn[data-label="S"]{left:79%;top:11.5%}
+    .label-btn[data-label="T"]{left:79%;top:19.5%}
+    .label-btn[data-label="U"]{left:79%;top:42%}
+    .label-btn[data-label="V"]{left:79%;top:64.5%}
+    .label-btn.selected{border-color:var(--accent); background:#f3f7ff}
+    .label-btn.correct{border-color:var(--good); background:var(--good-bg)}
+    .label-btn.wrong{border-color:var(--bad); background:var(--bad-bg)}
+    .legend-note{
+      margin-top:10px;
+      text-align:center;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .blank-stage{
+      display:grid;
+      gap:12px;
+    }
+    .blank-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      background:#f8fbff;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 14px;
+    }
+    .blank-tag{
+      min-width:34px;
+      font-weight:800;
+      font-size:1.05rem;
+    }
+    .blank-box{
+      min-width:180px;
+      min-height:48px;
+      padding:10px 14px;
+      border-radius:14px;
+      border:2px dashed #9fb7ef;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:700;
+    }
+    .blank-box.active{border-style:solid;border-color:var(--accent);box-shadow:0 0 0 4px rgba(47,111,237,.08)}
+    .blank-box.correct{border-style:solid;border-color:var(--good);background:var(--good-bg)}
+    .blank-box.wrong{border-style:solid;border-color:var(--bad);background:var(--bad-bg)}
+    .blank-remove{
+      background:#eef2ff;
+      border:1px solid #c9d7ff;
+      border-radius:10px;
+      padding:6px 10px;
+      font-weight:700;
+      cursor:pointer;
+    }
+    .chip-bank{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:6px;
+    }
+    .chip-btn{
+      padding:12px 16px;
+      background:#fff;
+      border:2px solid var(--line);
+      font-weight:800;
+      min-height:48px;
+    }
+    .chip-btn.used{opacity:.45;cursor:not-allowed}
+    .mini-note{
+      color:var(--muted);
+      font-size:.95rem;
+      margin-top:3px;
+    }
+    .summary-grid{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+      margin:12px 0 16px;
+    }
+    .summary-card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px;
+      background:#fbfdff;
+    }
+    .summary-card h3{
+      margin:0 0 8px;
+      font-size:1rem;
+    }
+    .summary-card p{
+      margin:0;
+      line-height:1.45;
+      color:var(--ink);
+    }
+    .done-box{
+      margin-top:14px;
+      border:1px solid #b7ebc6;
+      background:var(--good-bg);
+      color:#0b5d33;
+      border-radius:18px;
+      padding:14px 16px;
+      font-weight:700;
+    }
+    .center-row{
+      display:flex;
+      justify-content:center;
+      margin-top:14px;
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(17,24,39,.45);
+      display:grid;
+      place-items:center;
+      z-index:99;
+      padding:20px;
+    }
+    .overlay-card{
+      width:min(92vw,430px);
+      background:#fff;
+      border-radius:24px;
+      padding:24px;
+      border:1px solid var(--line);
+      text-align:center;
+      box-shadow:var(--shadow);
+    }
+    .overlay-card h2{
+      margin:0 0 10px;
+      font-size:1.45rem;
+    }
+    .overlay-card p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.45;
+      font-size:1.02rem;
+    }
+    .sr{position:absolute;left:-10000px}
+    @media (max-width: 820px){
+      body{padding:10px}
+      .content{padding:12px}
+      .screen-card{padding:14px}
+      .two-col{grid-template-columns:1fr}
+      .instruction{font-size:1.35rem}
+      .diagram-card{min-height:auto}
+      .label-btn{right:2px;width:58px}
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <script>
+    const QUESTION_STEM = "Jane removed two parts of a flower. She then rubbed pollen grains on the remaining parts. After a few days, she observed that a fruit was formed.";
+    const QUESTION_CHOICES = ["S and T", "S and V", "T and U", "U and V"];
+    const TRANSFER_STEM = "A flower still has its stigma and ovary. Its anther and petals were removed. Pollen is then placed on the stigma. What can still form?";
+    const MAX_DEMERITS = 3;
+    const PENALTY_SCREENS = new Set([1,2,3,4,5,6]); // screens 2 to 7 in human numbering
+
+    const screenStates = {};
+    let state = {};
+
+    function shuffle(arr){
+      const copy = [...arr];
+      for(let i=copy.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function initState(){
+      state = {
+        screenIndex: 0,
+        readAloud: false,
+        questionPanelOpen: false,
+        demeritsLeft: MAX_DEMERITS,
+        completed: Array(9).fill(false),
+        finished: false,
+        restartOverlay: false,
+        optionOrder: {
+          1: shuffle([
+            "Pollen grains were rubbed on the remaining parts.",
+            "A fruit was formed.",
+            "She removed two parts.",
+            "After a few days."
+          ]),
+          4: shuffle([
+            "The anther must still be there because pollen comes from anther.",
+            "The anther does not need to still be there because pollen was already rubbed on."
+          ]),
+          5: shuffle(QUESTION_CHOICES),
+          6: shuffle(QUESTION_CHOICES),
+          7: shuffle(["fruit", "new petals", "more pollen grains", "sepals only"]),
+          3: shuffle(["anther","petal","stigma","ovary"])
+        }
+      };
+
+      for(let i=0;i<9;i++){
+        screenStates[i] = {
+          feedback:"",
+          feedbackTone:"",
+          attempts:0,
+          selected:null,
+          selectedSet:[],
+          blanks:{T:"",U:""},
+          activeBlank:"T",
+          showExactBlankMarks:false
+        };
+      }
+    }
+
+    function loseDemerit(){
+      state.demeritsLeft -= 1;
+      if(state.demeritsLeft <= 0){
+        state.restartOverlay = true;
+        render();
+        setTimeout(() => {
+          initState();
+          render();
+        }, 1500);
+        return true;
+      }
+      return false;
+    }
+
+    function setFeedback(index, text, tone){
+      screenStates[index].feedback = text;
+      screenStates[index].feedbackTone = tone;
+    }
+
+    function questionHtml(highlight=false){
+      return `
+        <div class="question-text">
+          <p>Jane removed two parts of a flower. She then <mark>rubbed pollen grains</mark> on the remaining parts. After a few days, she observed that <mark>a fruit was formed</mark>.</p>
+          <p><strong>Which two parts were removed?</strong></p>
+          <ol class="question-list">
+            <li>S and T</li>
+            <li>S and V</li>
+            <li>T and U</li>
+            <li>U and V</li>
+          </ol>
+        </div>
+      `;
+    }
+
+    function cleanFlowerSVG(){
+      return `
+        <svg viewBox="0 0 420 300" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <style>
+              .wash{fill:#eef5ff;stroke:#c8d8f1;stroke-width:1.5}
+              .stem{fill:none;stroke:#2a7a44;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+              .petal{fill:#ffd9e8;stroke:#c24877;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+              .sepal{fill:#dff6df;stroke:#2a7a44;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+              .pistil{fill:#e8f8e8;stroke:#2a7a44;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+              .stamen{fill:none;stroke:#7b5b2f;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+              .anther{fill:#f6b54c;stroke:#a85a00;stroke-width:2.5}
+              .ovule{fill:#fff3a8;stroke:#c49c18;stroke-width:1.5}
+              .guide{fill:none;stroke:#607d8b;stroke-width:2.5;stroke-linecap:round}
+            </style>
+          </defs>
+          <rect x="0" y="0" width="420" height="300" rx="22" class="wash"></rect>
+
+          <!-- stem -->
+          <path d="M210 242 L210 286" class="stem"/>
+
+          <!-- sepals -->
+          <path d="M188 226 C172 220, 152 222, 133 236 C151 236, 165 240, 180 249 C187 243, 191 236, 188 226 Z" class="sepal"/>
+          <path d="M232 226 C248 220, 268 222, 287 236 C269 236, 255 240, 240 249 C233 243, 229 236, 232 226 Z" class="sepal"/>
+
+          <!-- petals -->
+          <path d="M188 222 C150 212, 118 178, 110 126 C104 90, 118 63, 149 53 C172 47, 187 64, 192 92 C194 113, 190 138, 185 164 C181 186, 182 206, 188 222 Z" class="petal"/>
+          <path d="M232 222 C270 212, 302 178, 310 126 C316 90, 302 63, 271 53 C248 47, 233 64, 228 92 C226 113, 230 138, 235 164 C239 186, 238 206, 232 222 Z" class="petal"/>
+
+          <!-- ovary -->
+          <path d="M184 222 C184 194, 194 171, 210 160 C226 171, 236 194, 236 222 C228 236, 221 242, 210 244 C199 242, 192 236, 184 222 Z" class="pistil"/>
+
+          <!-- ovules -->
+          <ellipse cx="202" cy="212" rx="5.5" ry="7" class="ovule"/>
+          <ellipse cx="218" cy="212" rx="5.5" ry="7" class="ovule"/>
+
+          <!-- style -->
+          <path d="M210 160 L210 86" class="pistil"/>
+          <path d="M210 86 C199 80, 192 73, 191 66 C198 67, 204 70, 210 76 C216 70, 222 67, 229 66 C228 73, 221 80, 210 86 Z" class="pistil"/>
+
+          <!-- stamens -->
+          <path d="M189 206 C179 180, 175 151, 177 122 C179 103, 183 90, 189 81" class="stamen"/>
+          <path d="M231 206 C241 180, 245 151, 243 122 C241 103, 237 90, 231 81" class="stamen"/>
+
+          <!-- anthers -->
+          <ellipse cx="183" cy="77" rx="8" ry="15" class="anther" transform="rotate(-26 183 77)"/>
+          <ellipse cx="237" cy="77" rx="8" ry="15" class="anther" transform="rotate(26 237 77)"/>
+
+          <!-- guide lines -->
+          <line x1="224" y1="71" x2="332" y2="71" class="guide"/>
+          <line x1="245" y1="81" x2="332" y2="81" class="guide"/>
+          <line x1="286" y1="154" x2="332" y2="154" class="guide"/>
+          <line x1="236" y1="220" x2="332" y2="220" class="guide"/>
+        </svg>
+      `;
+    }
+
+    function diagramHtml(interactive=false){
+      return `
+        <div class="diagram-card">
+          <div class="diagram-wrap">
+            ${cleanFlowerSVG()}
+            ${["S","T","U","V"].map(label => {
+              const s = screenStates[state.screenIndex];
+              let cls = "label-btn";
+              if(s.selectedSet.includes(label)) cls += " selected";
+              if(s.showResult){
+                const correctSet = ["S","V"];
+                if(correctSet.includes(label) && s.selectedSet.includes(label)) cls += " correct";
+                if(!correctSet.includes(label) && s.selectedSet.includes(label)) cls += " wrong";
+              }
+              return interactive
+                ? `<button class="${cls}" data-role="label-choice" data-label="${label}" aria-label="Label ${label}">${label}</button>`
+                : `<div class="label-btn" data-label="${label}" style="pointer-events:none">${label}</div>`;
+            }).join("")}
+          </div>
+          <div class="legend-note">${interactive ? "Tap the labels on the diagram." : "Clean flower diagram with labels S, T, U and V."}</div>
+        </div>
+      `;
+    }
+
+    function renderQuestionPanel(){
+      if(state.screenIndex === 0) return "";
+      return `
+        <div class="question-toggle">
+          <button class="ghost-btn" id="toggle-question">${state.questionPanelOpen ? "Hide question" : "Show question"}</button>
+        </div>
+        ${state.questionPanelOpen ? `
+          <div class="question-panel">
+            <div class="two-col">
+              ${questionHtml(true)}
+              ${diagramHtml(false)}
+            </div>
+          </div>
+        ` : ""}
+      `;
+    }
+
+    function screen1(){
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 1 of 9</div>
+          <h2 class="instruction">Read the question. Tap when you are ready.</h2>
+          <div class="two-col">
+            ${questionHtml(true)}
+            ${diagramHtml(false)}
+          </div>
+          <div class="feedback ${screenStates[0].feedbackTone}">
+            ${screenStates[0].feedback || "Start by noticing the three highlighted parts of the question."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="ready-btn">I have read it</button>
+            <button class="primary-btn" id="next-btn" ${state.completed[0] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen2(){
+      const s = screenStates[1];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 2 of 9</div>
+          <h2 class="instruction">Choose the clue that tells you which parts had to stay.</h2>
+          <p class="hint">Tap one clue.</p>
+          <div class="options-grid">
+            ${state.optionOrder[1].map(opt => {
+              let cls = "card-btn";
+              if(s.selected === opt) cls += " selected";
+              if(state.completed[1] && s.selected === opt) cls += " correct";
+              if(!state.completed[1] && s.selected === opt && s.feedbackTone === "bad") cls += " wrong";
+              return `<button class="${cls}" data-role="single-choice" data-answer="${escapeHtml(opt)}">${opt}</button>`;
+            }).join("")}
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Find the clue about what finally happened to the flower."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="next-btn" ${state.completed[1] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen3(){
+      const s = screenStates[2];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 3 of 9</div>
+          <h2 class="instruction">Tap the two labelled parts that must still be there for a fruit to form.</h2>
+          <p class="hint">Choose 2 parts, then tap Check.</p>
+          ${diagramHtml(true)}
+          <div class="nav" style="justify-content:space-between">
+            <button class="small-btn" id="clear-labels">Clear</button>
+            <div style="display:flex; gap:12px;">
+              <button class="check-btn" id="check-labels" ${s.selectedSet.length === 2 ? "" : "disabled"}>Check</button>
+              <button class="primary-btn" id="next-btn" ${state.completed[2] ? "" : "disabled"}>Next</button>
+            </div>
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Think about the female parts that must remain for fruit to form."}
+          </div>
+        </div>
+      `;
+    }
+
+    function screen4(){
+      const s = screenStates[3];
+      const activeT = s.activeBlank === "T";
+      const activeU = s.activeBlank === "U";
+      const blankClass = (key) => {
+        let cls = "blank-box";
+        if((key === "T" && activeT) || (key === "U" && activeU)) cls += " active";
+        if(s.showExactBlankMarks){
+          if((key === "T" && s.blanks.T === "anther") || (key === "U" && s.blanks.U === "petal")) cls += " correct";
+          else if(s.blanks[key]) cls += " wrong";
+        }
+        return cls;
+      };
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 4 of 9</div>
+          <h2 class="instruction">Fill in the names for T and U.</h2>
+          <p class="hint">Tap one word at a time. The blue blank is the one you are filling.</p>
+          <div class="two-col">
+            <div>
+              <div class="blank-stage">
+                <div class="blank-row">
+                  <div class="blank-tag">T =</div>
+                  <div class="${blankClass("T")}" data-role="blank-box" data-blank="T">
+                    <span>${s.blanks.T || "Tap a word below"}</span>
+                    ${s.blanks.T ? `<button class="blank-remove" data-role="blank-remove" data-blank="T">Clear</button>` : ""}
+                  </div>
+                </div>
+                <div class="blank-row">
+                  <div class="blank-tag">U =</div>
+                  <div class="${blankClass("U")}" data-role="blank-box" data-blank="U">
+                    <span>${s.blanks.U || "Tap a word below"}</span>
+                    ${s.blanks.U ? `<button class="blank-remove" data-role="blank-remove" data-blank="U">Clear</button>` : ""}
+                  </div>
+                </div>
+              </div>
+              <div class="chip-bank">
+                ${state.optionOrder[3].map(word => {
+                  const used = s.blanks.T === word || s.blanks.U === word;
+                  return `<button class="chip-btn ${used ? "used" : ""}" data-role="blank-word" data-word="${word}" ${used ? "disabled" : ""}>${word}</button>`;
+                }).join("")}
+              </div>
+              <div class="mini-note">You can tap a filled blank to make it the active blank.</div>
+            </div>
+            ${diagramHtml(false)}
+          </div>
+          <div class="nav" style="justify-content:flex-end">
+            <button class="check-btn" id="check-blanks" ${(s.blanks.T && s.blanks.U) ? "" : "disabled"}>Check</button>
+            <button class="primary-btn" id="next-btn" ${state.completed[3] ? "" : "disabled"}>Next</button>
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Find the pollen-making part first. Then name the large coloured part."}
+          </div>
+        </div>
+      `;
+    }
+
+    function screen5(){
+      const s = screenStates[4];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 5 of 9</div>
+          <h2 class="instruction">Choose the better statement.</h2>
+          <p class="hint">Use the clue about what Jane did.</p>
+          <div class="options-grid">
+            ${state.optionOrder[4].map(opt => {
+              let cls = "card-btn";
+              if(s.selected === opt) cls += " selected";
+              if(state.completed[4] && s.selected === opt) cls += " correct";
+              if(!state.completed[4] && s.selected === opt && s.feedbackTone === "bad") cls += " wrong";
+              return `<button class="${cls}" data-role="single-choice" data-answer="${escapeHtml(opt)}">${opt}</button>`;
+            }).join("")}
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Think about whether the flower still needed to make pollen by itself."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="next-btn" ${state.completed[4] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen6(){
+      const s = screenStates[5];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 6 of 9</div>
+          <h2 class="instruction">Choose the two parts that were removed.</h2>
+          <div class="two-col">
+            <div>
+              <div class="options-grid">
+                ${state.optionOrder[5].map(opt => {
+                  let cls = "card-btn";
+                  if(s.selected === opt) cls += " selected";
+                  if(state.completed[5] && s.selected === opt) cls += " correct";
+                  if(!state.completed[5] && s.selected === opt && s.feedbackTone === "bad") cls += " wrong";
+                  return `<button class="${cls}" data-role="single-choice" data-answer="${escapeHtml(opt)}">${opt}</button>`;
+                }).join("")}
+              </div>
+            </div>
+            ${diagramHtml(false)}
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Keep the parts needed for fruit. Remove the others."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="next-btn" ${state.completed[5] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen7(){
+      const s = screenStates[6];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 7 of 9</div>
+          <h2 class="instruction">Answer the original question by yourself.</h2>
+          <div class="two-col">
+            ${questionHtml(false)}
+            ${diagramHtml(false)}
+          </div>
+          <div style="margin-top:16px" class="options-grid">
+            ${state.optionOrder[6].map(opt => {
+              let cls = "card-btn";
+              if(s.selected === opt) cls += " selected";
+              if(state.completed[6] && s.selected === opt) cls += " correct";
+              if(!state.completed[6] && s.selected === opt && s.feedbackTone === "bad") cls += " wrong";
+              return `<button class="${cls}" data-role="single-choice" data-answer="${escapeHtml(opt)}">${opt}</button>`;
+            }).join("")}
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "This time, solve it without the earlier prompts."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="next-btn" ${state.completed[6] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen8(){
+      const s = screenStates[7];
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 8 of 9</div>
+          <h2 class="instruction">Choose what can still form.</h2>
+          <div class="question-panel" style="margin:0 0 14px 0">
+            <div class="question-text">
+              <p>${TRANSFER_STEM}</p>
+            </div>
+          </div>
+          <div class="options-grid">
+            ${state.optionOrder[7].map(opt => {
+              let cls = "card-btn";
+              if(s.selected === opt) cls += " selected";
+              if(state.completed[7] && s.selected === opt) cls += " correct";
+              if(!state.completed[7] && s.selected === opt && s.feedbackTone === "bad") cls += " wrong";
+              return `<button class="${cls}" data-role="single-choice" data-answer="${escapeHtml(opt)}">${opt}</button>`;
+            }).join("")}
+          </div>
+          <div class="feedback ${s.feedbackTone}">
+            ${s.feedback || "Use the same idea in a new question."}
+          </div>
+          <div class="nav">
+            <button class="primary-btn" id="next-btn" ${state.completed[7] ? "" : "disabled"}>Next</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function screen9(){
+      return `
+        <div class="screen-card">
+          <div class="screen-kicker">Screen 9 of 9</div>
+          <h2 class="instruction">Tap Finish when you are done.</h2>
+          <div class="summary-grid">
+            <div class="summary-card">
+              <h3>Clue 1</h3>
+              <p>If a fruit formed, the female parts had to remain.</p>
+            </div>
+            <div class="summary-card">
+              <h3>Clue 2</h3>
+              <p>Pollen was already rubbed on, so the anther was not needed anymore.</p>
+            </div>
+            <div class="summary-card">
+              <h3>Answer</h3>
+              <p>S and V stayed. T and U were removed.</p>
+            </div>
+          </div>
+          <div class="center-row">
+            <button class="primary-btn" id="finish-btn">${state.finished ? "Completed" : "Finish"}</button>
+          </div>
+          ${state.finished ? `
+            <div class="done-box">Done. You completed the interactive. You can restart to practise again.</div>
+            <div class="center-row">
+              <button class="ghost-btn" id="restart-btn">Restart</button>
+            </div>
+          ` : ""}
+        </div>
+      `;
+    }
+
+    function getScreenHtml(){
+      switch(state.screenIndex){
+        case 0: return screen1();
+        case 1: return screen2();
+        case 2: return screen3();
+        case 3: return screen4();
+        case 4: return screen5();
+        case 5: return screen6();
+        case 6: return screen7();
+        case 7: return screen8();
+        case 8: return screen9();
+        default: return screen1();
+      }
+    }
+
+    function render(){
+      const app = document.getElementById("app");
+      app.innerHTML = `
+        <div class="shell">
+          <div class="topbar">
+            <div class="topbar-row">
+              <div class="title-wrap">
+                <h1>Flower parts reasoning interactive</h1>
+                <div class="subtitle">Question-first flow, large tap targets, and a clean diagram for tablet or laptop use.</div>
+              </div>
+              <div class="control-row">
+                <div class="demerit-wrap" aria-label="Demerit tracker">
+                  <div class="demerit-label">Chances</div>
+                  <div class="demerit-line">
+                    ${Array.from({length: MAX_DEMERITS}, (_,i) => `<div class="flower ${i < state.demeritsLeft ? "" : "lost"}" aria-hidden="true">✿</div>`).join("")}
+                  </div>
+                </div>
+                <div class="toggle">
+                  <span>Read-aloud ${state.readAloud ? "On" : "Off"}</span>
+                  <button class="switch ${state.readAloud ? "on" : ""}" id="toggle-read" aria-pressed="${state.readAloud}"><span class="sr">Toggle read aloud</span></button>
+                </div>
+                <button class="ghost-btn" id="read-screen">Read this screen</button>
+              </div>
+            </div>
+          </div>
+          <div class="content">
+            ${renderQuestionPanel()}
+            ${getScreenHtml()}
+          </div>
+        </div>
+        ${state.restartOverlay ? `
+          <div class="overlay" aria-live="assertive">
+            <div class="overlay-card">
+              <h2>All chances used</h2>
+              <p>The interactive is restarting now. Try again and slow down your choices.</p>
+            </div>
+          </div>
+        ` : ""}
+      `;
+
+      bindGlobalControls();
+      bindScreenControls();
+
+      if(state.readAloud){
+        setTimeout(readCurrentScreen, 180);
+      }
+    }
+
+    function bindGlobalControls(){
+      document.getElementById("toggle-read").addEventListener("click", () => {
+        state.readAloud = !state.readAloud;
+        window.speechSynthesis && window.speechSynthesis.cancel();
+        render();
+      });
+      document.getElementById("read-screen").addEventListener("click", readCurrentScreen);
+
+      const toggleQuestion = document.getElementById("toggle-question");
+      if(toggleQuestion){
+        toggleQuestion.addEventListener("click", () => {
+          state.questionPanelOpen = !state.questionPanelOpen;
+          render();
+        });
+      }
+
+      const restartBtn = document.getElementById("restart-btn");
+      if(restartBtn){
+        restartBtn.addEventListener("click", () => {
+          initState();
+          render();
+        });
+      }
+    }
+
+    function bindScreenControls(){
+      const nextBtn = document.getElementById("next-btn");
+      if(nextBtn){
+        nextBtn.addEventListener("click", () => {
+          if(state.completed[state.screenIndex]){
+            state.screenIndex += 1;
+            render();
+          }
+        });
+      }
+
+      if(state.screenIndex === 0){
+        document.getElementById("ready-btn").addEventListener("click", () => {
+          state.completed[0] = true;
+          setFeedback(0, "Good. Now let’s find the clue that matters most.", "good");
+          render();
+        });
+      }
+
+      document.querySelectorAll('[data-role="single-choice"]').forEach(btn => {
+        btn.addEventListener("click", (e) => handleSingleChoice(e.currentTarget.dataset.answer));
+      });
+
+      document.querySelectorAll('[data-role="label-choice"]').forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const label = e.currentTarget.dataset.label;
+          const s = screenStates[2];
+          if(state.completed[2]) return;
+          if(s.selectedSet.includes(label)){
+            s.selectedSet = s.selectedSet.filter(x => x !== label);
+          } else if(s.selectedSet.length < 2){
+            s.selectedSet.push(label);
+          }
+          s.feedback = "";
+          s.feedbackTone = "";
+          render();
+        });
+      });
+
+      const clearLabels = document.getElementById("clear-labels");
+      if(clearLabels){
+        clearLabels.addEventListener("click", () => {
+          const s = screenStates[2];
+          s.selectedSet = [];
+          s.feedback = "";
+          s.feedbackTone = "";
+          render();
+        });
+      }
+
+      const checkLabels = document.getElementById("check-labels");
+      if(checkLabels){
+        checkLabels.addEventListener("click", () => {
+          const s = screenStates[2];
+          const picked = [...s.selectedSet].sort().join(",");
+          const target = ["S","V"].sort().join(",");
+          s.showResult = true;
+          if(picked === target){
+            state.completed[2] = true;
+            setFeedback(2, "Yes. S and V must still be there for a fruit to form.", "good");
+          } else {
+            s.attempts += 1;
+            setFeedback(2, "Look for the parts involved in receiving pollen and forming fruit.", "bad");
+            if(PENALTY_SCREENS.has(2) && loseDemerit()) return;
+          }
+          render();
+        });
+      }
+
+      document.querySelectorAll('[data-role="blank-word"]').forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          const word = e.currentTarget.dataset.word;
+          const s = screenStates[3];
+          if(state.completed[3]) return;
+          const active = s.activeBlank;
+          s.blanks[active] = word;
+          s.showExactBlankMarks = false;
+          s.feedback = "";
+          s.feedbackTone = "";
+          if(active === "T" && !s.blanks.U) s.activeBlank = "U";
+          render();
+        });
+      });
+
+      document.querySelectorAll('[data-role="blank-box"]').forEach(box => {
+        box.addEventListener("click", (e) => {
+          const blank = e.currentTarget.dataset.blank;
+          screenStates[3].activeBlank = blank;
+          render();
+        });
+      });
+
+      document.querySelectorAll('[data-role="blank-remove"]').forEach(btn => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const blank = e.currentTarget.dataset.blank;
+          const s = screenStates[3];
+          s.blanks[blank] = "";
+          s.activeBlank = blank;
+          s.showExactBlankMarks = false;
+          s.feedback = "";
+          s.feedbackTone = "";
+          render();
+        });
+      });
+
+      const checkBlanks = document.getElementById("check-blanks");
+      if(checkBlanks){
+        checkBlanks.addEventListener("click", () => {
+          const s = screenStates[3];
+          const correct = s.blanks.T === "anther" && s.blanks.U === "petal";
+          if(correct){
+            state.completed[3] = true;
+            setFeedback(3, "Good. T is anther and U is petal.", "good");
+          } else {
+            s.attempts += 1;
+            s.showExactBlankMarks = s.attempts >= 2;
+            if(s.attempts === 1){
+              setFeedback(3, "Find the pollen-making part first. Then name the large coloured part.", "bad");
+            } else {
+              setFeedback(3, "Check each blank carefully. T should be the pollen-making part. U is the large coloured part.", "bad");
+            }
+            if(PENALTY_SCREENS.has(3) && loseDemerit()) return;
+          }
+          render();
+        });
+      }
+
+      const finishBtn = document.getElementById("finish-btn");
+      if(finishBtn){
+        finishBtn.addEventListener("click", () => {
+          state.finished = true;
+          render();
+        });
+      }
+    }
+
+    function handleSingleChoice(answer){
+      const idx = state.screenIndex;
+      const s = screenStates[idx];
+      if(state.completed[idx]) return;
+      s.selected = answer;
+
+      let correct = false;
+      let goodText = "";
+      let badText = "";
+
+      if(idx === 1){
+        correct = answer === "A fruit was formed.";
+        goodText = "Yes. Fruit formation tells you which important parts were still there.";
+        badText = "Look for the clue about what finally happened to the flower.";
+      } else if(idx === 4){
+        correct = answer === "The anther does not need to still be there because pollen was already rubbed on.";
+        goodText = "Yes. The pollen was already supplied, so the anther was not needed anymore.";
+        badText = "Look again at what Jane did before the fruit formed.";
+      } else if(idx === 5){
+        correct = answer === "T and U";
+        goodText = "Yes. S and V had to remain, so T and U were removed.";
+        badText = "Keep the parts needed for fruit. Remove the others.";
+      } else if(idx === 6){
+        correct = answer === "T and U";
+        goodText = "You solved the original question.";
+        badText = "Think again: which two parts had to stay for fruit to form?";
+      } else if(idx === 7){
+        correct = answer === "fruit";
+        goodText = "Yes. The key female parts are still there, and pollen was supplied.";
+        badText = "Think about which parts are needed for fruit formation.";
+      }
+
+      if(correct){
+        state.completed[idx] = true;
+        setFeedback(idx, goodText, "good");
+      } else {
+        s.attempts += 1;
+        setFeedback(idx, badText, "bad");
+        if(PENALTY_SCREENS.has(idx) && loseDemerit()) return;
+      }
+      render();
+    }
+
+    function readCurrentScreen(){
+      if(!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(getNarrationText());
+      utter.rate = 0.95;
+      utter.pitch = 1;
+      utter.volume = 1;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function getNarrationText(){
+      const parts = [];
+      const screenTitle = document.querySelector(".instruction");
+      if(screenTitle) parts.push(screenTitle.textContent.trim());
+
+      if(state.screenIndex === 0){
+        parts.push("Question.");
+        parts.push(QUESTION_STEM);
+        parts.push("Which two parts were removed?");
+        parts.push("Choices: S and T. S and V. T and U. U and V.");
+      }
+
+      const panelBtn = document.getElementById("toggle-question");
+      if(panelBtn && state.questionPanelOpen){
+        parts.push("Question panel is open.");
+        parts.push(QUESTION_STEM);
+      }
+
+      document.querySelectorAll(".card-btn, .chip-btn, .label-btn:not(div), .check-btn, .primary-btn, .ghost-btn#ready-btn").forEach(el => {
+        if(el.offsetParent !== null){
+          const text = el.textContent.replace(/\s+/g, " ").trim();
+          if(text && !parts.includes(text)) parts.push(text);
+        }
+      });
+
+      const feedback = document.querySelector(".feedback");
+      if(feedback && feedback.textContent.trim()){
+        parts.push(feedback.textContent.trim());
+      }
+      return parts.join(". ");
+    }
+
+    function escapeHtml(value){
+      return value
+        .replaceAll("&","&amp;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;");
+    }
+
+    initState();
+    render();
+  </script>
+</body>
+</html>

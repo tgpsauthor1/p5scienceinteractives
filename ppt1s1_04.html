@@ -1,0 +1,1352 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seeds Germination Interactive</title>
+  <style>
+    :root{
+      --bg:#f4fbf2;
+      --panel:#ffffff;
+      --ink:#173125;
+      --muted:#5d6f63;
+      --line:#d7e6d8;
+      --green:#3c8c4f;
+      --green-dark:#2f6c3d;
+      --green-soft:#e7f5e7;
+      --yellow:#f4c84f;
+      --yellow-soft:#fff6d8;
+      --red:#cf4b5b;
+      --red-soft:#fdecef;
+      --blue:#3d78c6;
+      --blue-soft:#eaf2ff;
+      --shadow:0 14px 36px rgba(25,55,36,.10);
+      --radius:22px;
+      --tap:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:linear-gradient(180deg,#eef8ea 0%, #f9fcf7 100%);color:var(--ink);font-family:Arial, Helvetica, sans-serif}
+    body{min-height:100vh;padding:18px}
+    button{
+      font:inherit;
+      border:0;
+      border-radius:16px;
+      padding:14px 18px;
+      cursor:pointer;
+      transition:transform .08s ease, box-shadow .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+      min-height:52px;
+    }
+    button:active{transform:translateY(1px)}
+    .app{
+      max-width:1120px;
+      margin:0 auto;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .app-header{
+      padding:18px 20px 14px;
+      background:linear-gradient(180deg,#f4fbf1 0%, #ffffff 100%);
+      border-bottom:1px solid var(--line);
+    }
+    .header-row{
+      display:flex;
+      gap:14px;
+      justify-content:space-between;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .title-wrap h1{
+      margin:0;
+      font-size:1.5rem;
+      line-height:1.2;
+    }
+    .subtitle{
+      margin-top:6px;
+      color:var(--muted);
+      font-size:.98rem;
+    }
+    .top-controls{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .control-btn{
+      background:#fff;
+      border:2px solid var(--line);
+      color:var(--ink);
+      font-weight:700;
+      box-shadow:0 2px 0 rgba(0,0,0,.02);
+    }
+    .control-btn:hover{border-color:#bfd8c0}
+    .control-btn.active{
+      background:var(--blue-soft);
+      border-color:#b9cdf4;
+      color:#214e8a;
+    }
+    .ghost-btn{
+      background:#fff;
+      border:2px dashed #c6d9c7;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .demerit-strip{
+      margin-top:14px;
+      background:#f8fbf8;
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .demerit-left{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .demerit-label{
+      font-weight:800;
+      color:var(--green-dark);
+    }
+    .demerit-help{
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .seed-row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .seedlife{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      border:2px solid var(--line);
+      flex:0 0 auto;
+    }
+    .seedlife svg{width:28px;height:28px}
+    .seedlife.lost{
+      background:#fff7e3;
+      border-color:#f1d287;
+    }
+    .progress-row{
+      padding:14px 20px 0;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .screen-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:var(--green-soft);
+      color:var(--green-dark);
+      padding:8px 12px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:.95rem;
+    }
+    .screen-tag .dot{
+      width:10px;height:10px;border-radius:999px;background:var(--green);
+    }
+    .main{
+      padding:18px 20px 22px;
+    }
+    .screen-card{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:linear-gradient(180deg,#ffffff 0%, #fcfefd 100%);
+      padding:20px;
+      min-height:560px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+    .screen-title{
+      margin:0;
+      font-size:1.38rem;
+      line-height:1.2;
+    }
+    .instruction{
+      margin:0;
+      background:var(--blue-soft);
+      color:#183e70;
+      border:1px solid #cdddf8;
+      padding:14px 16px;
+      border-radius:18px;
+      font-size:1.2rem;
+      font-weight:800;
+      line-height:1.35;
+    }
+    .instruction small{
+      display:block;
+      font-size:.84rem;
+      font-weight:700;
+      color:#415f87;
+      margin-top:6px;
+    }
+    .question-stem{
+      font-size:1.06rem;
+      line-height:1.5;
+    }
+    .question-stem .hl{
+      background:#fff1b8;
+      padding:0 .18em;
+      border-radius:6px;
+      box-decoration-break:clone;
+      -webkit-box-decoration-break:clone;
+    }
+    .compact-text{
+      color:var(--muted);
+      margin:0;
+      line-height:1.45;
+    }
+    .tray-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+    }
+    .tray-grid.three{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+    .tray-card{
+      background:#fff;
+      border:2px solid var(--line);
+      border-radius:22px;
+      padding:14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      min-height:250px;
+      box-shadow:0 4px 16px rgba(30,62,40,.04);
+    }
+    .tray-card.clickable{cursor:pointer;transition:transform .08s ease,border-color .15s ease,box-shadow .15s ease, background .15s ease}
+    .tray-card.clickable:hover{border-color:#bfd8c0}
+    .tray-card.clickable:active{transform:translateY(1px)}
+    .tray-card.selected{
+      border-color:#74b786;
+      background:#f4fbf4;
+      box-shadow:0 0 0 4px rgba(87,153,106,.10);
+    }
+    .tray-card.correct{
+      border-color:#62ae72;
+      background:#eef9f0;
+    }
+    .tray-card.wrong{
+      border-color:#de7280;
+      background:#fff4f6;
+    }
+    .tray-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .tray-title{
+      font-weight:800;
+      font-size:1.06rem;
+    }
+    .badge-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      font-size:.86rem;
+      font-weight:800;
+      border:1px solid var(--line);
+      background:#f8fbf8;
+      color:var(--ink);
+      white-space:nowrap;
+    }
+    .badge.dark{background:#19251c;color:#fff;border-color:#19251c}
+    .badge.wet{background:#e8f4ff;color:#19456b;border-color:#c9dff5}
+    .badge.dry{background:#fff5e7;color:#875a11;border-color:#f1ddbb}
+    .tray-svg{
+      width:100%;
+      max-width:270px;
+      margin:0 auto;
+      display:block;
+    }
+    .option-grid{
+      display:grid;
+      gap:12px;
+    }
+    .option-grid.two-col{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .option-btn{
+      width:100%;
+      text-align:left;
+      background:#fff;
+      border:2px solid var(--line);
+      color:var(--ink);
+      font-weight:800;
+      line-height:1.35;
+      padding:16px 18px;
+      border-radius:18px;
+      min-height:64px;
+    }
+    .option-btn.selected{
+      border-color:#78b789;
+      background:#f3fbf4;
+      box-shadow:0 0 0 4px rgba(111,171,126,.10);
+    }
+    .option-btn.correct{
+      border-color:#5ca76e;
+      background:#eef9f0;
+      color:#245632;
+    }
+    .option-btn.wrong{
+      border-color:#d86a78;
+      background:#fff2f5;
+      color:#7c2c37;
+    }
+    .check-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .primary-btn{
+      background:var(--green);
+      color:#fff;
+      font-weight:800;
+      box-shadow:0 8px 18px rgba(57,135,77,.18);
+    }
+    .primary-btn:hover{background:var(--green-dark)}
+    .primary-btn:disabled{
+      background:#b4d3bc;
+      box-shadow:none;
+      cursor:not-allowed;
+    }
+    .secondary-btn{
+      background:#fff;
+      border:2px solid var(--line);
+      color:var(--ink);
+      font-weight:800;
+    }
+    .feedback{
+      min-height:64px;
+      border-radius:18px;
+      padding:14px 16px;
+      border:2px dashed #d3e4d5;
+      background:#fafdfa;
+      display:flex;
+      align-items:center;
+      line-height:1.45;
+      font-weight:700;
+      color:var(--muted);
+    }
+    .feedback.good{
+      border-style:solid;
+      border-color:#b7dec0;
+      background:#eef9f0;
+      color:#245632;
+    }
+    .feedback.bad{
+      border-style:solid;
+      border-color:#f0b8c0;
+      background:#fff2f5;
+      color:#7c2c37;
+    }
+    .question-panel{
+      margin-top:4px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:#fbfdfb;
+      overflow:hidden;
+    }
+    .panel-toggle{
+      width:100%;
+      background:#fbfdfb;
+      border:0;
+      border-bottom:1px solid transparent;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      font-weight:800;
+      padding:16px 18px;
+      color:var(--ink);
+      min-height:60px;
+    }
+    .panel-toggle .toggle-note{
+      color:var(--muted);
+      font-size:.94rem;
+      font-weight:700;
+    }
+    .panel-content{
+      border-top:1px solid var(--line);
+      padding:18px;
+      display:grid;
+      gap:16px;
+    }
+    .pill-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .pill{
+      background:#f6faf6;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-weight:800;
+      font-size:.94rem;
+      color:var(--muted);
+    }
+    .pill.important{
+      background:#fff6d8;
+      color:#7a5a04;
+      border-color:#efd27b;
+    }
+    .nav-row{
+      display:flex;
+      justify-content:flex-end;
+      gap:12px;
+      margin-top:auto;
+      padding-top:2px;
+      flex-wrap:wrap;
+    }
+    .completion-box{
+      background:linear-gradient(180deg,#eef9f0 0%, #ffffff 100%);
+      border:2px solid #bfe0c7;
+      border-radius:22px;
+      padding:20px;
+      display:grid;
+      gap:12px;
+      text-align:center;
+    }
+    .completion-box h3{
+      margin:0;
+      font-size:1.4rem;
+      color:#245632;
+    }
+    .completion-box p{
+      margin:0;
+      line-height:1.5;
+      color:#325641;
+      font-weight:700;
+    }
+    .center-wrap{
+      display:grid;
+      gap:16px;
+      align-content:start;
+    }
+    .split{
+      display:grid;
+      gap:16px;
+      grid-template-columns:1.05fr .95fr;
+      align-items:start;
+    }
+    .summary-card{
+      background:#fbfdfb;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:16px;
+      display:grid;
+      gap:12px;
+    }
+    .summary-card h4{
+      margin:0;
+      font-size:1.02rem;
+    }
+    .summary-list{
+      margin:0;
+      padding-left:20px;
+      color:var(--muted);
+      line-height:1.5;
+      font-weight:700;
+    }
+    .mini-note{
+      color:var(--muted);
+      font-size:.94rem;
+      font-weight:700;
+      margin:0;
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(9,26,16,.42);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:30;
+      padding:20px;
+    }
+    .overlay.show{display:flex}
+    .overlay-card{
+      width:min(460px,100%);
+      background:#fff;
+      border-radius:24px;
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      padding:24px;
+      text-align:center;
+      display:grid;
+      gap:14px;
+    }
+    .overlay-card h3{margin:0;font-size:1.4rem}
+    .overlay-card p{margin:0;line-height:1.45;color:var(--muted);font-weight:700}
+    @media (max-width: 900px){
+      .split{grid-template-columns:1fr}
+      .tray-grid.three{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      body{padding:10px}
+      .main{padding:14px}
+      .screen-card{padding:16px;min-height:0}
+      .tray-grid,.tray-grid.three,.option-grid.two-col{grid-template-columns:1fr}
+      .instruction{font-size:1.08rem}
+      .screen-title{font-size:1.28rem}
+      .demerit-strip,.header-row,.progress-row{align-items:flex-start}
+      .top-controls{width:100%}
+      .top-controls button{flex:1 1 160px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app"></div>
+  <div class="overlay" id="overlay">
+    <div class="overlay-card">
+      <h3>Out of chances</h3>
+      <p>The activity is restarting so you can try again carefully.</p>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const MAX_DEMERITS = 3;
+      const app = document.getElementById('app');
+      const overlay = document.getElementById('overlay');
+
+      const originalTrays = [
+        { id:'S', box:'black box', cotton:'dry cotton wool', sprouts:0 },
+        { id:'T', box:'black box', cotton:'wet cotton wool', sprouts:1 },
+        { id:'U', box:'clear box', cotton:'dry cotton wool', sprouts:0 },
+        { id:'V', box:'clear box', cotton:'wet cotton wool', sprouts:3 }
+      ];
+
+      const transferTrays = [
+        { id:'A', box:'black box', cotton:'wet cotton wool', sprouts:1 },
+        { id:'B', box:'clear box', cotton:'dry cotton wool', sprouts:0 },
+        { id:'C', box:'clear box', cotton:'wet cotton wool', sprouts:2 }
+      ];
+
+      const state = {
+        current: 0,
+        demeritsLeft: MAX_DEMERITS,
+        readAloudOn: false,
+        questionOpen: false,
+        completed: false,
+        screens: {}
+      };
+
+      const screenMeta = [
+        { key:'read', title:'Read the question', demerit:false },
+        { key:'changed', title:'Find the changed conditions', demerit:true },
+        { key:'germination', title:'Find the germinated trays', demerit:true },
+        { key:'common', title:'Compare the germinated trays', demerit:true },
+        { key:'light', title:'Decide what the results say about light', demerit:true },
+        { key:'nottested', title:'Spot the unchanged conditions', demerit:true },
+        { key:'conclusion', title:'Choose the best conclusion', demerit:true },
+        { key:'transfer', title:'Try one more question', demerit:false }
+      ];
+
+      function shuffle(array){
+        const copy = array.slice();
+        for (let i = copy.length - 1; i > 0; i--){
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function ensureScreenState(index){
+        if (state.screens[index]) return state.screens[index];
+        const base = { done:false, feedback:'', feedbackType:'', selected:null, selectedSet:[], statuses:{}, order:[] };
+        if (index === 1){
+          base.order = shuffle([
+            { id:'light', text:'light' },
+            { id:'water', text:'water' },
+            { id:'room', text:'room' },
+            { id:'temperature', text:'temperature' }
+          ]);
+        }
+        if (index === 3){
+          base.order = shuffle([
+            { id:'wet', text:'wet cotton wool' },
+            { id:'dry', text:'dry cotton wool' },
+            { id:'black', text:'black box' },
+            { id:'clear', text:'clear box' }
+          ]);
+        }
+        if (index === 4){
+          base.order = shuffle([
+            { id:'needed', text:'Light is needed for germination.' },
+            { id:'notneeded', text:'Light is not needed for germination.' },
+            { id:'canttell', text:'We cannot tell anything about light.' }
+          ]);
+        }
+        if (index === 5){
+          base.order = shuffle([
+            { id:'air', text:'air' },
+            { id:'warmth', text:'warmth' },
+            { id:'water', text:'water' },
+            { id:'light', text:'light' }
+          ]);
+        }
+        if (index === 6){
+          base.order = shuffle([
+            { id:'opt1', text:'Light is needed for seeds to germinate.' },
+            { id:'opt2', text:'Water is needed for seeds to germinate.' },
+            { id:'opt3', text:'Light and water are needed for seeds to germinate.' },
+            { id:'opt4', text:'Air, water and warmth are needed for seeds to germinate.' }
+          ]);
+        }
+        if (index === 7){
+          base.order = shuffle([
+            { id:'t1', text:'Water is needed for seeds to germinate.' },
+            { id:'t2', text:'Light is needed for seeds to germinate.' },
+            { id:'t3', text:'Air was tested and shown to be needed.' }
+          ]);
+        }
+        state.screens[index] = base;
+        return base;
+      }
+
+      function resetActivity(){
+        state.current = 0;
+        state.demeritsLeft = MAX_DEMERITS;
+        state.completed = false;
+        state.screens = {};
+        render();
+      }
+
+      function spendDemerit(){
+        state.demeritsLeft -= 1;
+        if (state.demeritsLeft <= 0){
+          state.demeritsLeft = 0;
+          render();
+          overlay.classList.add('show');
+          speakText('Out of chances. The activity is restarting.');
+          setTimeout(() => {
+            overlay.classList.remove('show');
+            const readAloudOn = state.readAloudOn;
+            const questionOpen = state.questionOpen;
+            resetActivity();
+            state.readAloudOn = readAloudOn;
+            state.questionOpen = questionOpen;
+            render();
+          }, 1400);
+        } else {
+          render();
+        }
+      }
+
+      function seedIcon(lost){
+        if (lost){
+          return `
+            <div class="seedlife lost" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M32 44c-6-2-11-7-13-13-3-8 2-16 11-19-1 6 0 12 4 17 2 3 3 7-2 15z" fill="#D1A43A"></path>
+                <path d="M33 17c5 3 9 8 9 15 0 5-2 10-6 13" stroke="#8B5B1E" stroke-width="4" stroke-linecap="round"></path>
+                <path d="M31 43c0-6-2-11-8-15" stroke="#8A6B36" stroke-width="4" stroke-linecap="round"></path>
+              </svg>
+            </div>
+          `;
+        }
+        return `
+          <div class="seedlife" aria-hidden="true">
+            <svg viewBox="0 0 64 64" fill="none">
+              <path d="M28 45c-6-2-11-7-13-13-3-8 2-16 11-19-1 6 0 12 4 17 2 3 3 7-2 15z" fill="#D1A43A"></path>
+              <path d="M34 42c-1-11 1-20 9-28" stroke="#2F8F46" stroke-width="4" stroke-linecap="round"></path>
+              <path d="M42 15c7 1 11 6 12 13-7 1-12-2-15-8" fill="#5CBF70"></path>
+              <path d="M41 23c-6-1-10 2-13 8-5-4-6-9-4-15 8 0 13 2 17 7z" fill="#7AD18D"></path>
+            </svg>
+          </div>
+        `;
+      }
+
+      function renderDemerits(){
+        const spent = MAX_DEMERITS - state.demeritsLeft;
+        let html = '';
+        for (let i = 0; i < MAX_DEMERITS; i++){
+          html += seedIcon(i < spent);
+        }
+        return html;
+      }
+
+      function traySvg(tray){
+        const isDark = tray.box === 'black box';
+        const bg = isDark ? '#202b22' : '#f7fbff';
+        const stroke = isDark ? '#0f150f' : '#9db6ca';
+        const seedFill = '#efe3c8';
+        const seedStroke = '#9e8c67';
+        const cottonFill = tray.cotton.includes('wet') ? '#d7efff' : '#f3eee6';
+        const cottonStroke = tray.cotton.includes('wet') ? '#96bdd6' : '#d7cbbb';
+        const sprouts = tray.sprouts || 0;
+
+        function sprout(x, y, tall){
+          return `
+            <path d="M${x} ${y} C ${x+1} ${y-12}, ${x+8} ${y-18}, ${x+8} ${y-28}" stroke="#2F8F46" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+            <path d="M${x+8} ${y-28} C ${x+1} ${y-33}, ${x-2} ${y-38}, ${x+3} ${y-43} C ${x+9} ${y-42}, ${x+14} ${y-39}, ${x+16} ${y-32} Z" fill="#66bf77"/>
+            <path d="M${x+8} ${y-26} C ${x+14} ${y-29}, ${x+18} ${y-33}, ${x+19} ${y-39} C ${x+13} ${y-40}, ${x+8} ${y-38}, ${x+5} ${y-31} Z" fill="#7cd48e"/>
+          `;
+        }
+
+        let sproutHtml = '';
+        if (sprouts >= 1) sproutHtml += sprout(78, 124);
+        if (sprouts >= 2) sproutHtml += sprout(118, 124);
+        if (sprouts >= 3) sproutHtml += sprout(158, 124);
+
+        return `
+          <svg class="tray-svg" viewBox="0 0 240 150" aria-hidden="true">
+            <rect x="22" y="12" width="196" height="122" rx="12" fill="${bg}" stroke="${stroke}" stroke-width="3"/>
+            <ellipse cx="120" cy="56" rx="84" ry="15" fill="${isDark ? '#f5f5f5' : '#ffffff'}" stroke="${isDark ? '#f0f0f0' : '#4c5661'}" stroke-width="2.4"/>
+            <path d="M36 57v42c0 16 37 29 84 29s84-13 84-29V57" fill="none" stroke="${isDark ? '#f0f0f0' : '#4c5661'}" stroke-width="2.4"/>
+            <path d="M56 117c12-12 31 3 43-7 7-5 17 3 31-2 11-4 20 6 34 0 12-5 22 4 24 9H56z" fill="${cottonFill}" stroke="${cottonStroke}" stroke-width="2"/>
+            <ellipse cx="86" cy="109" rx="16" ry="10" fill="${seedFill}" stroke="${seedStroke}" stroke-width="2"/>
+            <ellipse cx="124" cy="108" rx="16" ry="10" fill="${seedFill}" stroke="${seedStroke}" stroke-width="2"/>
+            <ellipse cx="162" cy="108" rx="16" ry="10" fill="${seedFill}" stroke="${seedStroke}" stroke-width="2"/>
+            ${sproutHtml}
+          </svg>
+        `;
+      }
+
+      function trayCard(tray, options = {}){
+        const selectable = options.selectable ? ' clickable' : '';
+        const selected = options.selected ? ' selected' : '';
+        const status = options.status ? ` ${options.status}` : '';
+        const tag = options.tag ? `<div class="mini-note">${options.tag}</div>` : '';
+        return `
+          <div class="tray-card${selectable}${selected}${status}" data-tray="${tray.id}">
+            <div class="tray-head">
+              <div class="tray-title">Tray ${tray.id}</div>
+              <div class="badge-row">
+                <span class="badge ${tray.box === 'black box' ? 'dark' : ''}">${tray.box}</span>
+                <span class="badge ${tray.cotton.includes('wet') ? 'wet' : 'dry'}">${tray.cotton}</span>
+              </div>
+            </div>
+            ${traySvg(tray)}
+            ${tag}
+          </div>
+        `;
+      }
+
+      function questionStemHtml(highlight){
+        let stem = `Helen placed some seeds on four trays, S, T, U and V, in the same room at the same temperature. She placed the trays of seeds in different conditions and recorded her observations. Based only on Helen’s results, what could she conclude from her experiment?`;
+        if (highlight){
+          stem = stem
+            .replace('same room', '<span class="hl">same room</span>')
+            .replace('same temperature', '<span class="hl">same temperature</span>')
+            .replace('Based only on Helen’s results', '<span class="hl">Based only on Helen’s results</span>');
+        }
+        return stem;
+      }
+
+      function originalQuestionPanel(){
+        const panelLabel = state.questionOpen ? 'Hide original question' : 'Show original question';
+        return `
+          <div class="question-panel">
+            <button class="panel-toggle" id="toggleQuestion">
+              <span>${panelLabel}</span>
+              <span class="toggle-note">${state.questionOpen ? 'Tap to hide' : 'Tap to open'}</span>
+            </button>
+            ${state.questionOpen ? `
+              <div class="panel-content">
+                <div class="question-stem">${questionStemHtml(false)}</div>
+                <div class="tray-grid">
+                  ${originalTrays.map(tray => trayCard(tray)).join('')}
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        `;
+      }
+
+      function feedbackBox(screenState){
+        const cls = screenState.feedbackType === 'good' ? 'feedback good' :
+                    screenState.feedbackType === 'bad' ? 'feedback bad' : 'feedback';
+        const text = screenState.feedback || 'Complete the step to unlock the next button.';
+        return `<div class="${cls}" id="feedbackBox" aria-live="polite">${text}</div>`;
+      }
+
+      function renderScreenContent(index){
+        const s = ensureScreenState(index);
+
+        if (state.completed && index === 7){
+          return `
+            <div class="completion-box">
+              <h3>Done!</h3>
+              <p>Use the results to decide what was really tested.</p>
+              <p>Wet trays germinated. Dry trays did not. Light was changed, but germination still happened in the dark.</p>
+              <div class="check-row" style="justify-content:center">
+                <button class="primary-btn" id="restartFromEnd">Restart interactive</button>
+              </div>
+            </div>
+          `;
+        }
+
+        switch(index){
+          case 0:
+            return `
+              <div class="center-wrap">
+                <div class="question-stem">${questionStemHtml(true)}</div>
+                <div class="tray-grid">
+                  ${originalTrays.map(tray => trayCard(tray)).join('')}
+                </div>
+                <div class="summary-card">
+                  <h4>Answer choices in the original question</h4>
+                  <ul class="summary-list">
+                    <li>Light is needed for seeds to germinate.</li>
+                    <li>Water is needed for seeds to germinate.</li>
+                    <li>Light and water are needed for seeds to germinate.</li>
+                    <li>Air, water and warmth are needed for seeds to germinate.</li>
+                  </ul>
+                </div>
+                <div class="check-row">
+                  <button class="primary-btn" id="readDone">I have read the question</button>
+                </div>
+              </div>
+            `;
+          case 1:
+            return `
+              <div class="split">
+                <div>
+                  <div class="tray-grid">
+                    ${originalTrays.map(tray => trayCard(tray)).join('')}
+                  </div>
+                </div>
+                <div class="center-wrap">
+                  <div class="option-grid">
+                    ${s.order.map(opt => `
+                      <button class="option-btn ${s.selectedSet.includes(opt.id) ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-option="${opt.id}">
+                        ${opt.text}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="check-row">
+                    <button class="primary-btn" id="checkMulti" ${s.selectedSet.length ? '' : 'disabled'}>Check</button>
+                    <p class="mini-note">Pick exactly 2 conditions.</p>
+                  </div>
+                  ${feedbackBox(s)}
+                </div>
+              </div>
+            `;
+          case 2:
+            return `
+              <div class="center-wrap">
+                <div class="tray-grid">
+                  ${originalTrays.map(tray => trayCard(tray, {
+                    selectable:true,
+                    selected:s.selectedSet.includes(tray.id),
+                    status:s.statuses[tray.id] || ''
+                  })).join('')}
+                </div>
+                <div class="check-row">
+                  <button class="primary-btn" id="checkTrays" ${s.selectedSet.length ? '' : 'disabled'}>Check</button>
+                  <p class="mini-note">Tap all trays where any seed started to grow.</p>
+                </div>
+                ${feedbackBox(s)}
+              </div>
+            `;
+          case 3:
+            return `
+              <div class="split">
+                <div class="tray-grid">
+                  ${['T','V'].map(id => originalTrays.find(t => t.id === id)).map(tray => trayCard(tray)).join('')}
+                </div>
+                <div class="center-wrap">
+                  <div class="option-grid">
+                    ${s.order.map(opt => `
+                      <button class="option-btn ${s.selected === opt.id ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-single="${opt.id}">
+                        ${opt.text}
+                      </button>
+                    `).join('')}
+                  </div>
+                  ${feedbackBox(s)}
+                </div>
+              </div>
+            `;
+          case 4:
+            return `
+              <div class="split">
+                <div class="tray-grid">
+                  ${['T','V'].map(id => originalTrays.find(t => t.id === id)).map(tray => trayCard(tray)).join('')}
+                </div>
+                <div class="center-wrap">
+                  <div class="option-grid">
+                    ${s.order.map(opt => `
+                      <button class="option-btn ${s.selected === opt.id ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-single="${opt.id}">
+                        ${opt.text}
+                      </button>
+                    `).join('')}
+                  </div>
+                  ${feedbackBox(s)}
+                </div>
+              </div>
+            `;
+          case 5:
+            return `
+              <div class="split">
+                <div class="summary-card">
+                  <h4>What stayed the same?</h4>
+                  <div class="pill-row">
+                    <span class="pill important">same room</span>
+                    <span class="pill important">same temperature</span>
+                  </div>
+                  <p class="compact-text">Helen changed light and water. Some conditions were not changed at all.</p>
+                </div>
+                <div class="center-wrap">
+                  <div class="option-grid two-col">
+                    ${s.order.map(opt => `
+                      <button class="option-btn ${s.selectedSet.includes(opt.id) ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-option="${opt.id}">
+                        ${opt.text}
+                      </button>
+                    `).join('')}
+                  </div>
+                  <div class="check-row">
+                    <button class="primary-btn" id="checkMulti" ${s.selectedSet.length ? '' : 'disabled'}>Check</button>
+                    <p class="mini-note">Pick exactly 2 conditions.</p>
+                  </div>
+                  ${feedbackBox(s)}
+                </div>
+              </div>
+            `;
+          case 6:
+            return `
+              <div class="center-wrap">
+                <div class="summary-card">
+                  <h4>Think like a scientist</h4>
+                  <ul class="summary-list">
+                    <li>Wet trays germinated.</li>
+                    <li>Dry trays did not germinate.</li>
+                    <li>Seeds also germinated in a black box.</li>
+                  </ul>
+                </div>
+                <div class="option-grid">
+                  ${s.order.map(opt => `
+                    <button class="option-btn ${s.selected === opt.id ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-single="${opt.id}">
+                      ${opt.text}
+                    </button>
+                  `).join('')}
+                </div>
+                ${feedbackBox(s)}
+              </div>
+            `;
+          case 7:
+            return `
+              <div class="center-wrap">
+                <div class="tray-grid three">
+                  ${transferTrays.map(tray => trayCard(tray)).join('')}
+                </div>
+                <div class="option-grid">
+                  ${s.order.map(opt => `
+                    <button class="option-btn ${s.selected === opt.id ? 'selected' : ''} ${s.statuses[opt.id] || ''}" data-single="${opt.id}">
+                      ${opt.text}
+                    </button>
+                  `).join('')}
+                </div>
+                ${feedbackBox(s)}
+                ${s.done ? `
+                  <div class="check-row">
+                    <button class="primary-btn" id="finishBtn">Finish</button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          default:
+            return '';
+        }
+      }
+
+      function getInstruction(index){
+        switch(index){
+          case 0:
+            return `Read the question. Then tap the button when you are ready.`;
+          case 1:
+            return `Tap the 2 conditions Helen changed.`;
+          case 2:
+            return `Tap all trays where germination happened.`;
+          case 3:
+            return `Choose the condition both germinated trays share.`;
+          case 4:
+            return `Both trays germinated. What does that tell us about light?`;
+          case 5:
+            return `Tap all conditions Helen did NOT test by changing them.`;
+          case 6:
+            return `Choose the best conclusion from Helen’s results.`;
+          case 7:
+            return `Use the new results. Which conclusion is best supported?`;
+          default:
+            return '';
+        }
+      }
+
+      function getReadText(index){
+        const s = ensureScreenState(index);
+        let text = `${screenMeta[index].title}. ${getInstruction(index)} `;
+        if (index === 0){
+          text += questionStemHtml(false).replace(/<[^>]+>/g,' ');
+        }
+        if (index === 1){
+          text += 'Options: ' + s.order.map(o => o.text).join('. ') + '.';
+        }
+        if (index === 2){
+          text += 'Trays S, T, U and V are shown. Tap all trays where any seed started to grow.';
+        }
+        if (index === 3 || index === 4 || index === 6 || index === 7){
+          text += 'Options: ' + s.order.map(o => o.text).join('. ') + '.';
+        }
+        if (index === 5){
+          text += 'Options: ' + s.order.map(o => o.text).join('. ') + '. Pick exactly 2.';
+        }
+        if (s.feedback){
+          text += ' Feedback: ' + s.feedback;
+        }
+        return text.replace(/\s+/g,' ').trim();
+      }
+
+      function speakText(text){
+        if (!state.readAloudOn || !('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.rate = 0.96;
+        utterance.pitch = 1;
+        utterance.lang = 'en-SG';
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function manualSpeak(){
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(getReadText(state.current));
+        utterance.rate = 0.96;
+        utterance.pitch = 1;
+        utterance.lang = 'en-SG';
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function setFeedback(index, type, text){
+        const s = ensureScreenState(index);
+        s.feedbackType = type;
+        s.feedback = text;
+        render();
+        if (state.readAloudOn && text){
+          setTimeout(() => speakText(text), 80);
+        }
+      }
+
+      function render(){
+        const meta = screenMeta[state.current];
+        const currentState = ensureScreenState(state.current);
+        const showQuestionPanel = state.current > 0 && !state.completed;
+
+        app.innerHTML = `
+          <div class="app-header">
+            <div class="header-row">
+              <div class="title-wrap">
+                <h1>Seeds: what can Helen conclude?</h1>
+                <div class="subtitle">Interactive file: ppt1s1_4.html</div>
+              </div>
+              <div class="top-controls">
+                <button class="control-btn ${state.readAloudOn ? 'active' : ''}" id="toggleRead">
+                  Read-aloud: ${state.readAloudOn ? 'On' : 'Off'}
+                </button>
+                <button class="control-btn" id="speakBtn">🔊 Read this screen</button>
+                <button class="ghost-btn" id="restartBtn">Restart</button>
+              </div>
+            </div>
+            <div class="demerit-strip" aria-label="demerit tracker">
+              <div class="demerit-left">
+                <span class="demerit-label">Careful clicks</span>
+                <div class="seed-row">${renderDemerits()}</div>
+              </div>
+              <div class="demerit-help">3 chances across the teaching screens. The transfer check does not use demerits.</div>
+            </div>
+          </div>
+          <div class="progress-row">
+            <div class="screen-tag"><span class="dot"></span> Screen ${state.completed ? '8' : (state.current + 1)} of 8</div>
+            <div class="compact-text">${state.current < 7 ? 'Finish each step correctly to unlock the next button.' : 'One short transfer check, then finish.'}</div>
+          </div>
+          <div class="main">
+            <div class="screen-card">
+              <h2 class="screen-title">${state.completed ? 'Completion' : meta.title}</h2>
+              ${!state.completed ? `<p class="instruction">${getInstruction(state.current)}</p>` : ''}
+              ${renderScreenContent(state.current)}
+              ${showQuestionPanel ? originalQuestionPanel() : ''}
+              ${(!state.completed && state.current < 7) ? `
+                <div class="nav-row">
+                  <button class="secondary-btn" id="nextBtn" ${currentState.done ? '' : 'disabled'}>Next</button>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+
+        bindCommon();
+        bindScreen();
+      }
+
+      function bindCommon(){
+        const toggleRead = document.getElementById('toggleRead');
+        const speakBtn = document.getElementById('speakBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        if (toggleRead){
+          toggleRead.addEventListener('click', () => {
+            state.readAloudOn = !state.readAloudOn;
+            render();
+            if (state.readAloudOn) manualSpeak();
+            else if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+          });
+        }
+        if (speakBtn){
+          speakBtn.addEventListener('click', manualSpeak);
+        }
+        if (restartBtn){
+          restartBtn.addEventListener('click', resetActivity);
+        }
+        const toggleQuestion = document.getElementById('toggleQuestion');
+        if (toggleQuestion){
+          toggleQuestion.addEventListener('click', () => {
+            state.questionOpen = !state.questionOpen;
+            render();
+          });
+        }
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn){
+          nextBtn.addEventListener('click', () => {
+            state.current += 1;
+            render();
+            if (state.readAloudOn) setTimeout(manualSpeak, 80);
+          });
+        }
+      }
+
+      function bindMultiSelect(index, correctIds, checkButtonId, wrongMessage, rightMessage){
+        const s = ensureScreenState(index);
+        document.querySelectorAll('[data-option]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.option;
+            if (s.done) return;
+            if (s.selectedSet.includes(id)){
+              s.selectedSet = s.selectedSet.filter(x => x !== id);
+            } else {
+              s.selectedSet = s.selectedSet.concat(id);
+            }
+            s.statuses = {};
+            render();
+          });
+        });
+        const checkBtn = document.getElementById(checkButtonId);
+        if (checkBtn){
+          checkBtn.addEventListener('click', () => {
+            if (s.done) return;
+            const picked = s.selectedSet.slice().sort();
+            const answer = correctIds.slice().sort();
+            const correct = picked.length === answer.length && picked.every((v,i) => v === answer[i]);
+
+            s.statuses = {};
+            correctIds.forEach(id => { if (s.selectedSet.includes(id)) s.statuses[id] = 'correct'; });
+            s.selectedSet.forEach(id => {
+              if (!correctIds.includes(id)) s.statuses[id] = 'wrong';
+            });
+
+            if (correct){
+              s.done = true;
+              setFeedback(index, 'good', rightMessage);
+            } else {
+              spendDemerit();
+              setFeedback(index, 'bad', wrongMessage);
+            }
+          });
+        }
+      }
+
+      function bindSingle(index, correctId, wrongMessage, rightMessage, useDemerit=true){
+        const s = ensureScreenState(index);
+        document.querySelectorAll('[data-single]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (s.done) return;
+            const id = btn.dataset.single;
+            s.selected = id;
+            s.statuses = {};
+            if (id === correctId){
+              s.statuses[id] = 'correct';
+              s.done = true;
+              setFeedback(index, 'good', rightMessage);
+            } else {
+              s.statuses[id] = 'wrong';
+              if (useDemerit) spendDemerit();
+              setFeedback(index, 'bad', wrongMessage);
+            }
+          });
+        });
+      }
+
+      function bindTraySelect(index, correctIds){
+        const s = ensureScreenState(index);
+        document.querySelectorAll('[data-tray]').forEach(card => {
+          card.addEventListener('click', () => {
+            const id = card.dataset.tray;
+            if (s.done) return;
+            if (s.selectedSet.includes(id)){
+              s.selectedSet = s.selectedSet.filter(x => x !== id);
+            } else {
+              s.selectedSet = s.selectedSet.concat(id);
+            }
+            s.statuses = {};
+            render();
+          });
+        });
+        const checkBtn = document.getElementById('checkTrays');
+        if (checkBtn){
+          checkBtn.addEventListener('click', () => {
+            if (s.done) return;
+            const picked = s.selectedSet.slice().sort();
+            const answer = correctIds.slice().sort();
+            const correct = picked.length === answer.length && picked.every((v,i) => v === answer[i]);
+            s.statuses = {};
+            correctIds.forEach(id => { if (s.selectedSet.includes(id)) s.statuses[id] = 'correct'; });
+            s.selectedSet.forEach(id => {
+              if (!correctIds.includes(id)) s.statuses[id] = 'wrong';
+            });
+            if (correct){
+              s.done = true;
+              setFeedback(index, 'good', 'Yes. Germination happened in T and V.');
+            } else {
+              spendDemerit();
+              setFeedback(index, 'bad', 'Check which trays show seeds starting to grow.');
+            }
+          });
+        }
+      }
+
+      function bindScreen(){
+        const index = state.current;
+        const s = ensureScreenState(index);
+
+        if (index === 0){
+          const btn = document.getElementById('readDone');
+          if (btn){
+            btn.addEventListener('click', () => {
+              s.done = true;
+              state.current = 1;
+              render();
+              if (state.readAloudOn) setTimeout(manualSpeak, 80);
+            });
+          }
+          return;
+        }
+
+        if (index === 1){
+          bindMultiSelect(
+            1,
+            ['light','water'],
+            'checkMulti',
+            'Look again at the boxes and the cotton wool.',
+            'Yes. Helen changed light and water.'
+          );
+          return;
+        }
+
+        if (index === 2){
+          bindTraySelect(2, ['T','V']);
+          return;
+        }
+
+        if (index === 3){
+          bindSingle(
+            3,
+            'wet',
+            'Compare T and V again. What is the same in both?',
+            'Yes. Both germinated trays had wet cotton wool.'
+          );
+          return;
+        }
+
+        if (index === 4){
+          bindSingle(
+            4,
+            'notneeded',
+            'Both trays germinated, even though one had no light.',
+            'Yes. A seed germinated even in the black box.'
+          );
+          return;
+        }
+
+        if (index === 5){
+          bindMultiSelect(
+            5,
+            ['air','warmth'],
+            'checkMulti',
+            'Choose the conditions that stayed the same in this experiment.',
+            'Yes. Air and warmth were not the changed variables here.'
+          );
+          return;
+        }
+
+        if (index === 6){
+          bindSingle(
+            6,
+            'opt2',
+            'Pick the conclusion that matches the changed factor linked to germination.',
+            'Yes. Germination happened in wet cotton wool and did not happen in dry cotton wool.'
+          );
+          return;
+        }
+
+        if (index === 7 && !state.completed){
+          bindSingle(
+            7,
+            't1',
+            'Look for the condition that matches every tray where germination happened.',
+            'Well done. You used the same evidence pattern again.',
+            false
+          );
+          const finishBtn = document.getElementById('finishBtn');
+          if (finishBtn){
+            finishBtn.addEventListener('click', () => {
+              state.completed = true;
+              render();
+              if (state.readAloudOn) speakText('Done. Use the results to decide what was really tested.');
+            });
+          }
+          return;
+        }
+
+        if (state.completed){
+          const restartFromEnd = document.getElementById('restartFromEnd');
+          if (restartFromEnd){
+            restartFromEnd.addEventListener('click', resetActivity);
+          }
+        }
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

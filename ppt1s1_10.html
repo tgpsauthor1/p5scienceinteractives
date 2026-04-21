@@ -1,0 +1,1339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppt1s1_10</title>
+  <style>
+    :root{
+      --bg1:#f5f8fb;
+      --bg2:#eef7f3;
+      --ink:#1f2937;
+      --muted:#5b6472;
+      --panel:#ffffff;
+      --line:#d7dee8;
+      --accent:#7c3aed;
+      --accent-2:#0f766e;
+      --accent-3:#be185d;
+      --good:#18794e;
+      --bad:#b42318;
+      --good-bg:#ecfdf3;
+      --bad-bg:#fef3f2;
+      --shadow:0 14px 34px rgba(18, 38, 63, 0.10);
+      --radius:22px;
+      --maxw:1080px;
+      --tap:56px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--ink);
+      background:
+        radial-gradient(circle at top left, #fff9ef 0 16%, transparent 17% 100%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
+      min-height:100vh;
+    }
+    .app{
+      max-width:var(--maxw);
+      margin:0 auto;
+      padding:18px 16px 32px;
+    }
+    .shell{
+      background:rgba(255,255,255,0.8);
+      backdrop-filter: blur(4px);
+      border:1px solid rgba(255,255,255,0.7);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .topbar{
+      padding:14px 18px 12px;
+      background:linear-gradient(90deg, rgba(124,58,237,0.1), rgba(15,118,110,0.1));
+      border-bottom:1px solid var(--line);
+    }
+    .toprow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+    .chiprow{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      font-size:14px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .audio-controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    button{
+      font:inherit;
+      cursor:pointer;
+      border:none;
+      border-radius:16px;
+      min-height:var(--tap);
+      padding:14px 18px;
+      transition:transform .1s ease, box-shadow .2s ease, background .2s ease;
+    }
+    button:active{ transform:translateY(1px); }
+    .btn-primary{
+      background:var(--accent);
+      color:white;
+      box-shadow:0 8px 18px rgba(124,58,237,0.25);
+      font-weight:700;
+    }
+    .btn-secondary{
+      background:white;
+      color:var(--ink);
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+    .btn-soft{
+      background:#f8fafc;
+      color:var(--ink);
+      border:1px solid var(--line);
+      font-weight:700;
+    }
+    .audio-toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      background:white;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      min-height:var(--tap);
+      font-weight:700;
+    }
+    .switch{
+      width:52px;
+      height:30px;
+      border-radius:999px;
+      background:#cbd5e1;
+      position:relative;
+      flex:0 0 auto;
+      transition:background .2s ease;
+    }
+    .switch::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:white;
+      box-shadow:0 2px 6px rgba(0,0,0,0.16);
+      transition:left .2s ease;
+    }
+    .switch.on{
+      background:var(--accent-2);
+    }
+    .switch.on::after{
+      left:25px;
+    }
+    .demerit-strip{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      padding:10px 16px;
+      border-top:1px solid rgba(255,255,255,0.6);
+      background:rgba(255,255,255,0.65);
+      margin-top:10px;
+      border-radius:18px;
+    }
+    .demerit-left{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      flex-wrap:wrap;
+      font-weight:700;
+    }
+    .lives{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-left:4px;
+    }
+    .life{
+      width:34px;
+      height:34px;
+      border-radius:999px;
+      display:grid;
+      place-items:center;
+      background:white;
+      border:1px solid var(--line);
+      font-size:20px;
+    }
+    .life.lost{
+      opacity:0.35;
+      filter:grayscale(1);
+      text-decoration:line-through;
+    }
+    .demerit-note{
+      font-size:13px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .stage{
+      padding:22px 18px 24px;
+    }
+    .instruction{
+      font-size:clamp(24px, 3.2vw, 36px);
+      line-height:1.15;
+      font-weight:800;
+      letter-spacing:-0.01em;
+      margin:0 0 10px;
+    }
+    .subtle{
+      color:var(--muted);
+      font-size:16px;
+      margin:0 0 14px;
+    }
+    .feedback{
+      min-height:56px;
+      border-radius:18px;
+      padding:14px 16px;
+      margin:6px 0 18px;
+      border:1px solid transparent;
+      display:none;
+      font-weight:700;
+      line-height:1.4;
+    }
+    .feedback.show{ display:block; }
+    .feedback.good{
+      background:var(--good-bg);
+      border-color:#abefc6;
+      color:var(--good);
+    }
+    .feedback.bad{
+      background:var(--bad-bg);
+      border-color:#fecdca;
+      color:var(--bad);
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:18px;
+      box-shadow:0 8px 18px rgba(15,23,42,0.05);
+    }
+    .question-text{
+      font-size:22px;
+      line-height:1.45;
+      font-weight:700;
+    }
+    .highlight{
+      background:linear-gradient(transparent 55%, #fff3a3 55%);
+      padding:0 2px;
+    }
+    .diagram-row{
+      display:grid;
+      gap:18px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      margin-top:18px;
+      align-items:start;
+    }
+    .diagram-card{
+      background:#fcfcfe;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:14px;
+      min-height:280px;
+    }
+    .diagram-title{
+      margin:0 0 8px;
+      font-weight:800;
+      color:var(--muted);
+      font-size:15px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    .options{
+      display:grid;
+      gap:14px;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      margin-top:12px;
+    }
+    .option{
+      min-height:78px;
+      width:100%;
+      text-align:left;
+      background:white;
+      color:var(--ink);
+      border:2px solid var(--line);
+      border-radius:20px;
+      padding:16px 18px;
+      font-weight:800;
+      font-size:19px;
+      line-height:1.25;
+      box-shadow:0 4px 10px rgba(15,23,42,0.04);
+    }
+    .option:hover{ box-shadow:0 8px 20px rgba(15,23,42,0.08); }
+    .option.selected{
+      border-color:var(--accent);
+      background:#f6f0ff;
+    }
+    .option.correct{
+      border-color:var(--good);
+      background:var(--good-bg);
+      color:var(--good);
+    }
+    .option.wrong{
+      border-color:var(--bad);
+      background:var(--bad-bg);
+      color:var(--bad);
+    }
+    .option small{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:4px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+    .center-stack{
+      display:grid;
+      gap:18px;
+    }
+    .action-row{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:12px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    .helper{
+      font-size:15px;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .question-toggle{
+      width:100%;
+      margin-top:20px;
+      display:flex;
+      justify-content:center;
+    }
+    .question-panel{
+      margin-top:14px;
+      display:none;
+    }
+    .question-panel.show{ display:block; }
+    .question-panel .question-text{
+      font-size:19px;
+    }
+    .source-list{
+      margin:18px 0 0;
+      padding-left:18px;
+      font-size:22px;
+      font-weight:700;
+      line-height:1.55;
+    }
+    .choice-grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:12px;
+      margin-top:16px;
+    }
+    .choice-grid-4 .option{
+      min-height:88px;
+      text-align:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+    }
+    .summary-box{
+      background:#fff8e8;
+      border:1px solid #f5d98d;
+      border-radius:20px;
+      padding:18px;
+      font-size:21px;
+      line-height:1.4;
+      font-weight:800;
+    }
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,0.4);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:100;
+    }
+    .overlay.show{ display:flex; }
+    .overlay-card{
+      background:white;
+      border-radius:26px;
+      padding:28px 24px;
+      max-width:520px;
+      width:min(100%, 520px);
+      text-align:center;
+      box-shadow:0 24px 48px rgba(15,23,42,0.22);
+      border:1px solid var(--line);
+    }
+    .overlay-card h2{
+      margin:0 0 10px;
+      font-size:32px;
+    }
+    .overlay-card p{
+      margin:0;
+      font-size:20px;
+      line-height:1.45;
+      color:var(--muted);
+      font-weight:700;
+    }
+    .sr-only{
+      position:absolute !important;
+      width:1px;height:1px;
+      padding:0;margin:-1px;
+      overflow:hidden;clip:rect(0,0,0,0);
+      white-space:nowrap;border:0;
+    }
+    svg{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .legend{
+      font-size:14px;
+      color:var(--muted);
+      margin-top:8px;
+      font-weight:700;
+    }
+    .option-grid-tight{
+      display:grid;
+      gap:12px;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .pill{
+      display:inline-block;
+      background:#eff6ff;
+      color:#1d4ed8;
+      border:1px solid #bfdbfe;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:800;
+      padding:6px 10px;
+      margin-right:8px;
+    }
+    @media (max-width: 900px){
+      .diagram-row, .options, .choice-grid-4, .option-grid-tight{
+        grid-template-columns:1fr;
+      }
+      .instruction{
+        font-size:30px;
+      }
+      .question-text{
+        font-size:20px;
+      }
+      .source-list{
+        font-size:20px;
+      }
+    }
+    @media (max-width: 540px){
+      .app{ padding:10px 8px 22px; }
+      .stage{ padding:18px 14px 20px; }
+      .topbar{ padding:12px 12px 10px; }
+      .instruction{ font-size:28px; }
+      .option{ font-size:18px; min-height:72px; }
+      .life{ width:30px; height:30px; font-size:18px; }
+      .question-text{ font-size:18px; }
+      .source-list{ font-size:18px; }
+      .summary-box{ font-size:19px; }
+      .diagram-card{ min-height:auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="shell" id="appShell">
+      <div class="topbar">
+        <div class="toprow">
+          <div class="chiprow">
+            <div class="chip" id="progressChip">Screen 1 of 9</div>
+            <div class="chip">Topic: Human and plant reproduction</div>
+          </div>
+          <div class="audio-controls">
+            <button class="btn-soft" id="readNowBtn" type="button">🔊 Read this screen</button>
+            <button class="audio-toggle" id="autoReadBtn" type="button" aria-pressed="false">
+              <span>Auto read</span>
+              <span class="switch" id="switchKnob" aria-hidden="true"></span>
+              <span id="autoReadText">Off</span>
+            </button>
+          </div>
+        </div>
+        <div class="demerit-strip" id="demeritStrip" aria-live="polite">
+          <div class="demerit-left">
+            <span>🔎 Careful scientist checks left:</span>
+            <div class="lives" id="livesRow"></div>
+          </div>
+          <div class="demerit-note" id="demeritNote">3 auto-calculated chances. No demerits on this screen.</div>
+        </div>
+      </div>
+      <div class="stage" id="stage"></div>
+    </div>
+  </div>
+
+  <div class="overlay" id="restartOverlay" aria-hidden="true">
+    <div class="overlay-card">
+      <h2>Time to reset</h2>
+      <p>The careful scientist checks ran out. Starting the whole interactive again…</p>
+    </div>
+  </div>
+
+  <script>
+    (function(){
+      const totalScreens = 10;
+      const DEBIT_LIFE_COUNT = 3;
+      const teachingScreens = new Set([1,2,3,4,5,6]); // 0-indexed internal screens 2-7 in teacher blueprint
+      let voiceEnabled = false;
+      let utterance = null;
+
+      const sourceQuestionText = 'The diagrams below show the reproductive systems of a human being and a plant. Based on the diagrams above, which part of the flower has a similar function to part X?';
+      const sourceOptions = [
+        {id:'q1', label:'(1)', text:'A'},
+        {id:'q2', label:'(2)', text:'B'},
+        {id:'q3', label:'(3)', text:'C'},
+        {id:'q4', label:'(4)', text:'D'}
+      ];
+
+      const state = {
+        screenIndex: 0,
+        livesLeft: DEBIT_LIFE_COUNT,
+        questionPanelOpen: false,
+        overlayTimer: null,
+        randomizedOrders: {},
+        singleChoice: {},
+        multiChoice: {},
+        solved: {}
+      };
+
+      const stage = document.getElementById('stage');
+      const progressChip = document.getElementById('progressChip');
+      const livesRow = document.getElementById('livesRow');
+      const demeritNote = document.getElementById('demeritNote');
+      const autoReadBtn = document.getElementById('autoReadBtn');
+      const switchKnob = document.getElementById('switchKnob');
+      const autoReadText = document.getElementById('autoReadText');
+      const readNowBtn = document.getElementById('readNowBtn');
+      const overlay = document.getElementById('restartOverlay');
+
+      const screenData = [
+        {
+          key:'s1',
+          instruction:'Read the question. Then tap “I’m ready.”',
+          feedback:'',
+          type:'start',
+          penalized:false
+        },
+        {
+          key:'s2',
+          instruction:'Tap what you must match.',
+          type:'single',
+          penalized:true,
+          feedbackCorrect:'Yes. Match by job.',
+          feedbackWrong:'Look at the words “similar function”.',
+          options:[
+            {id:'shape', text:'same shape'},
+            {id:'position', text:'same position'},
+            {id:'function', text:'same function', correct:true},
+            {id:'size', text:'same size'}
+          ]
+        },
+        {
+          key:'s3',
+          instruction:'Tap the name of part X.',
+          type:'single',
+          penalized:true,
+          feedbackCorrect:'Yes. X is the ovary.',
+          feedbackWrong:'Find the small oval part at the side.',
+          options:[
+            {id:'ovary', text:'ovary', correct:true},
+            {id:'womb', text:'womb'},
+            {id:'vagina', text:'vagina'}
+          ]
+        },
+        {
+          key:'s4',
+          instruction:'Tap the best job of the ovary for this question.',
+          type:'single',
+          penalized:true,
+          feedbackCorrect:'Yes. Keep that job in mind.',
+          feedbackWrong:'Choose the job linked to eggs, not pollen.',
+          options:[
+            {id:'receives-pollen', text:'receives pollen'},
+            {id:'makes-pollen', text:'makes pollen'},
+            {id:'female-cell', text:'contains or produces the female reproductive cell', correct:true},
+            {id:'baby-food', text:'carries food to the baby'}
+          ]
+        },
+        {
+          key:'s5',
+          instruction:'Select all the correct flower labels. Then tap Check.',
+          type:'multi',
+          penalized:true,
+          feedbackCorrect:'Good. Now the flower parts are clear.',
+          feedbackWrong:'Check the labels again. One or more parts are mixed up.',
+          options:[
+            {id:'a-stigma', text:'A = stigma', correct:true},
+            {id:'b-anther', text:'B = anther', correct:true},
+            {id:'c-style', text:'C = style', correct:true},
+            {id:'d-ovule', text:'D = ovule', correct:true},
+            {id:'a-ovule', text:'A = ovule'},
+            {id:'b-style', text:'B = style'},
+            {id:'c-anther', text:'C = anther'},
+            {id:'d-stigma', text:'D = stigma'}
+          ]
+        },
+        {
+          key:'s6',
+          instruction:'Select all the correct flower functions. Then tap Check.',
+          type:'multi',
+          penalized:true,
+          feedbackCorrect:'Good. These jobs match the lesson wording.',
+          feedbackWrong:'Check which part receives pollen grains, which part contains pollen grains, which part connects parts, and which part contains female reproductive cells.',
+          options:[
+            {id:'stigma-fn', text:'stigma — receives pollen grains', correct:true},
+            {id:'anther-fn', text:'anther — contains pollen grains', correct:true},
+            {id:'style-fn', text:'style — connects the stigma to the ovary', correct:true},
+            {id:'ovule-fn', text:'ovule — contains female reproductive cells, also known as egg cells', correct:true},
+            {id:'stigma-wrong', text:'stigma — contains pollen grains'},
+            {id:'anther-wrong', text:'anther — contains female reproductive cells, also known as egg cells'},
+            {id:'style-wrong', text:'style — receives pollen grains'},
+            {id:'ovule-wrong', text:'ovule — connects the stigma to the ovary'}
+          ]
+        },
+        {
+          key:'s7',
+          instruction:'Tap the flower part that does the closest job to the ovary.',
+          type:'single',
+          penalized:true,
+          feedbackCorrect:'Yes. The ovule is the closest match.',
+          feedbackWrong:'Think about the female reproductive cell, not the pollen.',
+          options:[
+            {id:'stigma', text:'stigma'},
+            {id:'anther', text:'anther'},
+            {id:'style', text:'style'},
+            {id:'ovule', text:'ovule', correct:true}
+          ]
+        },
+        {
+          key:'s8',
+          instruction:'Now answer the original question.',
+          type:'single-exact',
+          penalized:true,
+          feedbackCorrect:'Yes. D is option 4.',
+          feedbackWrong:'You found the part. Now match it to the correct option number.',
+          options: sourceOptions.map(o => ({...o, correct:o.id==='q4'}))
+        },
+        {
+          key:'s9',
+          instruction:'Tap the flower part most like the human ovary.',
+          type:'single',
+          penalized:false,
+          feedbackCorrect:'Yes. Match by function.',
+          feedbackWrong:'Choose the part linked to the female reproductive cell.',
+          options:[
+            {id:'stigma', text:'stigma'},
+            {id:'ovule', text:'ovule', correct:true},
+            {id:'anther', text:'anther'},
+            {id:'style', text:'style'}
+          ]
+        },
+        {
+          key:'s10',
+          instruction:'Finished.',
+          type:'end',
+          penalized:false
+        }
+      ];
+
+      function resetState(){
+        if (utterance && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        state.screenIndex = 0;
+        state.livesLeft = DEBIT_LIFE_COUNT;
+        state.questionPanelOpen = false;
+        state.randomizedOrders = {};
+        state.singleChoice = {};
+        state.multiChoice = {};
+        state.solved = {};
+        render();
+      }
+
+      function livesHtml(){
+        livesRow.innerHTML = '';
+        for(let i=0;i<DEBIT_LIFE_COUNT;i++){
+          const span = document.createElement('div');
+          span.className = 'life' + (i >= state.livesLeft ? ' lost' : '');
+          span.textContent = '🔎';
+          span.setAttribute('aria-hidden','true');
+          livesRow.appendChild(span);
+        }
+      }
+
+      function screenNumberLabel(){
+        return `Screen ${state.screenIndex + 1} of ${totalScreens}`;
+      }
+
+      function setAudioUI(){
+        autoReadBtn.setAttribute('aria-pressed', String(voiceEnabled));
+        switchKnob.classList.toggle('on', voiceEnabled);
+        autoReadText.textContent = voiceEnabled ? 'On' : 'Off';
+      }
+
+      function speak(text){
+        if (!('speechSynthesis' in window)) return;
+        window.speechSynthesis.cancel();
+        if (!text) return;
+        utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'en-SG';
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+      }
+
+      function currentReadAloudText(){
+        const cfg = screenData[state.screenIndex];
+        const parts = [];
+        parts.push(screenNumberLabel());
+        parts.push(cfg.instruction);
+        if(state.screenIndex === 0){
+          parts.push(sourceQuestionText);
+          parts.push('Two diagrams are shown: a human female reproductive system and a flower.');
+          parts.push('Important words highlighted: part X and similar function.');
+          parts.push('Button: I am ready.');
+        } else if(state.screenIndex === 1){
+          parts.push('Options: same shape, same position, same function, same size.');
+        } else if(state.screenIndex === 2){
+          parts.push('Human diagram with part X marked.');
+          parts.push('Options: ovary, womb, vagina.');
+        } else if(state.screenIndex === 3){
+          parts.push('Options: receives pollen, makes pollen, contains or produces the female reproductive cell, carries food to the baby.');
+        } else if(state.screenIndex === 4){
+          parts.push('Flower diagram with labels A, B, C, and D.');
+          parts.push('Select all the correct flower labels, then tap Check.');
+        } else if(state.screenIndex === 5){
+          parts.push('Flower diagram shown again.');
+          parts.push('Select all the correct flower functions, then tap Check.');
+        } else if(state.screenIndex === 6){
+          parts.push('Flower diagram shown again.');
+          parts.push('Options: stigma, anther, style, ovule.');
+        } else if(state.screenIndex === 7){
+          parts.push(sourceQuestionText);
+          parts.push('Options: option 1 A, option 2 B, option 3 C, option 4 D.');
+        } else if(state.screenIndex === 8){
+          parts.push('Simplified flower diagram.');
+          parts.push('Options: stigma, ovule, anther, style.');
+        } else if(state.screenIndex === 9){
+          parts.push('You solved it by matching function, not position.');
+          parts.push('Buttons: Replay, Read summary.');
+        }
+        const feedbackEl = document.getElementById('feedbackBox');
+        if(feedbackEl && feedbackEl.textContent.trim()){
+          parts.push('Feedback: ' + feedbackEl.textContent.trim());
+        }
+        return parts.join(' ');
+      }
+
+      function safeShuffle(arr){
+        const copy = arr.slice();
+        for(let i=copy.length-1; i>0; i--){
+          const j = Math.floor(Math.random() * (i+1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function differentOrder(original, shuffled){
+        if (original.length !== shuffled.length) return true;
+        for(let i=0;i<original.length;i++){
+          if(original[i].id !== shuffled[i].id) return true;
+        }
+        return false;
+      }
+
+      function getScreenOrder(key, options, exact=false){
+        if(exact){
+          return options.slice();
+        }
+        if(!state.randomizedOrders[key]){
+          let shuffled = safeShuffle(options);
+          let guard = 0;
+          while((!differentOrder(options, shuffled)) && guard < 8){
+            shuffled = safeShuffle(options);
+            guard++;
+          }
+          state.randomizedOrders[key] = shuffled.map(item => item.id);
+        }
+        const idOrder = state.randomizedOrders[key];
+        return idOrder.map(id => options.find(item => item.id === id)).filter(Boolean);
+      }
+
+      function decrementLife(){
+        state.livesLeft -= 1;
+        if (state.livesLeft <= 0){
+          state.livesLeft = 0;
+          render();
+          overlay.classList.add('show');
+          overlay.setAttribute('aria-hidden', 'false');
+          clearTimeout(state.overlayTimer);
+          state.overlayTimer = setTimeout(() => {
+            overlay.classList.remove('show');
+            overlay.setAttribute('aria-hidden', 'true');
+            resetState();
+          }, 1700);
+        } else {
+          renderTopOnly();
+        }
+      }
+
+      function renderTopOnly(){
+        progressChip.textContent = screenNumberLabel();
+        livesHtml();
+        const penalized = screenData[state.screenIndex].penalized;
+        if (!penalized){
+          demeritNote.textContent = `${DEBIT_LIFE_COUNT} auto-calculated chances. No demerits on this screen.`;
+        } else {
+          demeritNote.textContent = `${DEBIT_LIFE_COUNT} auto-calculated chances. Wrong checked attempt = 1 demerit.`;
+        }
+      }
+
+      function humanDiagram(opts={}){
+        const highlight = opts.highlight === 'ovary';
+        return `
+        <svg viewBox="0 0 440 300" role="img" aria-label="Simplified human female reproductive system with part X labelled">
+          <defs>
+            <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+              <feDropShadow dx="0" dy="1" stdDeviation="1.2" flood-color="#64748b" flood-opacity="0.16"/>
+            </filter>
+          </defs>
+          <rect x="0" y="0" width="440" height="300" fill="transparent"></rect>
+          <path d="M220 88
+                   C186 88, 164 120, 171 155
+                   C176 180, 188 196, 198 211
+                   L198 255
+                   C198 263, 204 269, 212 269
+                   L228 269
+                   C236 269, 242 263, 242 255
+                   L242 211
+                   C252 196, 264 180, 269 155
+                   C276 120, 254 88, 220 88 Z"
+                fill="#f7e0e7" stroke="#7c4a57" stroke-width="4" filter="url(#softShadow)"/>
+          <path d="M198 97 C185 92, 160 90, 140 104
+                   C122 117, 111 127, 103 141
+                   C97 151, 87 156, 72 158"
+                fill="none" stroke="#7c4a57" stroke-width="8" stroke-linecap="round"/>
+          <path d="M242 97 C255 92, 280 90, 300 104
+                   C318 117, 329 127, 337 141
+                   C343 151, 353 156, 368 158"
+                fill="none" stroke="#7c4a57" stroke-width="8" stroke-linecap="round"/>
+          <path d="M73 158 C62 166, 60 178, 68 188
+                   C78 202, 98 203, 110 191
+                   C121 180, 121 162, 109 153
+                   C98 145, 82 147, 73 158 Z"
+                fill="${highlight ? '#fde68a' : '#e5c7d1'}" stroke="#7c4a57" stroke-width="4"/>
+          <path d="M367 158 C378 166, 380 178, 372 188
+                   C362 202, 342 203, 330 191
+                   C319 180, 319 162, 331 153
+                   C342 145, 358 147, 367 158 Z"
+                fill="${highlight ? '#fde68a' : '#e5c7d1'}" stroke="#7c4a57" stroke-width="4"/>
+          <path d="M65 176 C51 176, 45 183, 39 196" fill="none" stroke="#7c4a57" stroke-width="4" stroke-linecap="round"/>
+          <path d="M375 176 C389 176, 395 183, 401 196" fill="none" stroke="#7c4a57" stroke-width="4" stroke-linecap="round"/>
+          <path d="M205 120 C215 142, 225 142, 235 120" fill="none" stroke="#a56d7c" stroke-width="2"/>
+          <line x1="373" y1="178" x2="398" y2="196" stroke="#111827" stroke-width="3" stroke-linecap="round"></line>
+          <text x="406" y="203" font-size="26" font-weight="800" fill="#111827">X</text>
+        </svg>`;
+      }
+
+      function flowerDiagram(opts={}){
+        const focus = opts.focus || '';
+        const ovuleFill = focus === 'ovule' ? '#fde68a' : '#f8d8df';
+        const antherFill = focus === 'anther' ? '#fde68a' : '#f4a6b6';
+        const stigmaFill = focus === 'stigma' ? '#fde68a' : '#f4b4c2';
+        const styleStroke = focus === 'style' ? '#f59e0b' : '#7c4a57';
+        return `
+        <svg viewBox="0 0 320 340" role="img" aria-label="Simplified flower cross-section with labels A, B, C and D">
+          <rect x="0" y="0" width="320" height="340" fill="transparent"></rect>
+
+          <ellipse cx="110" cy="118" rx="72" ry="88" fill="#f9d8e5" stroke="#7c4a57" stroke-width="4"/>
+          <ellipse cx="210" cy="118" rx="72" ry="88" fill="#f9d8e5" stroke="#7c4a57" stroke-width="4"/>
+          <ellipse cx="126" cy="118" rx="50" ry="66" fill="#fde7f0" stroke="#7c4a57" stroke-width="3"/>
+          <ellipse cx="194" cy="118" rx="50" ry="66" fill="#fde7f0" stroke="#7c4a57" stroke-width="3"/>
+
+          <line x1="120" y1="153" x2="120" y2="220" stroke="#7c4a57" stroke-width="4"/>
+          <ellipse cx="120" cy="136" rx="12" ry="17" fill="${antherFill}" stroke="#7c4a57" stroke-width="3"/>
+
+          <line x1="200" y1="153" x2="200" y2="220" stroke="#7c4a57" stroke-width="4"/>
+          <ellipse cx="200" cy="136" rx="12" ry="17" fill="${antherFill}" stroke="#7c4a57" stroke-width="3"/>
+
+          <line x1="160" y1="92" x2="160" y2="218" stroke="${styleStroke}" stroke-width="8" stroke-linecap="round"/>
+          <ellipse cx="160" cy="78" rx="22" ry="14" fill="${stigmaFill}" stroke="#7c4a57" stroke-width="4"/>
+
+          <path d="M130 220
+                   C124 244, 126 288, 160 290
+                   C194 288, 196 244, 190 220 Z"
+                fill="#f4cad4" stroke="#7c4a57" stroke-width="4"/>
+
+          <ellipse cx="145" cy="257" rx="11" ry="15" fill="${ovuleFill}" stroke="#7c4a57" stroke-width="3"/>
+          <ellipse cx="160" cy="245" rx="11" ry="15" fill="${ovuleFill}" stroke="#7c4a57" stroke-width="3"/>
+          <ellipse cx="175" cy="257" rx="11" ry="15" fill="${ovuleFill}" stroke="#7c4a57" stroke-width="3"/>
+
+          <line x1="246" y1="112" x2="182" y2="78" stroke="#4b5563" stroke-width="3" stroke-linecap="round"/>
+          <text x="254" y="119" font-size="24" font-weight="800" fill="#111827">A</text>
+
+          <line x1="46" y1="136" x2="108" y2="136" stroke="#4b5563" stroke-width="3" stroke-linecap="round"/>
+          <text x="14" y="144" font-size="24" font-weight="800" fill="#111827">B</text>
+
+          <line x1="55" y1="186" x2="160" y2="170" stroke="#4b5563" stroke-width="3" stroke-linecap="round"/>
+          <text x="22" y="194" font-size="24" font-weight="800" fill="#111827">C</text>
+
+          <line x1="52" y1="257" x2="134" y2="257" stroke="#4b5563" stroke-width="3" stroke-linecap="round"/>
+          <text x="20" y="264" font-size="24" font-weight="800" fill="#111827">D</text>
+
+          <path d="M144 292 L144 332" stroke="#52796f" stroke-width="6" stroke-linecap="round"/>
+          <path d="M176 292 L176 332" stroke="#52796f" stroke-width="6" stroke-linecap="round"/>
+        </svg>`;
+      }
+
+      function renderQuestionBlock(showHighlights=false){
+        const question = showHighlights
+          ? `The diagrams below show the reproductive systems of a human being and a plant. Based on the diagrams above, which part of the flower has a <span class="highlight">similar function</span> to <span class="highlight">part X</span>?`
+          : sourceQuestionText;
+        return `
+          <div class="panel">
+            <div class="question-text">${question}</div>
+            <div class="diagram-row">
+              <div class="diagram-card">
+                <div class="diagram-title">Human female reproductive system</div>
+                ${humanDiagram({highlight:'ovary'})}
+              </div>
+              <div class="diagram-card">
+                <div class="diagram-title">Flower cross-section</div>
+                ${flowerDiagram({})}
+              </div>
+            </div>
+            <ol class="source-list">
+              <li>A</li>
+              <li>B</li>
+              <li>C</li>
+              <li>D</li>
+            </ol>
+          </div>`;
+      }
+
+      function renderQuestionPanel(){
+        if (state.screenIndex === 0) return '';
+        return `
+          <div class="question-toggle">
+            <button class="btn-secondary" id="toggleQuestionBtn" type="button">
+              ${state.questionPanelOpen ? 'Hide full question' : 'Show full question'}
+            </button>
+          </div>
+          <div class="question-panel ${state.questionPanelOpen ? 'show' : ''}" id="questionPanel">
+            ${renderQuestionBlock(false)}
+          </div>`;
+      }
+
+      function setFeedback(kind, text){
+        const box = document.getElementById('feedbackBox');
+        if(!box) return;
+        box.className = 'feedback show ' + kind;
+        box.textContent = text;
+      }
+
+      function clearFeedback(){
+        const box = document.getElementById('feedbackBox');
+        if(!box) return;
+        box.className = 'feedback';
+        box.textContent = '';
+      }
+
+      function renderSingleOptions(cfg, exactMode=false){
+        const order = getScreenOrder(cfg.key, cfg.options, exactMode);
+        const selected = state.singleChoice[cfg.key]?.selectedId || null;
+        const locked = !!state.solved[cfg.key];
+        const cards = order.map((opt, index) => {
+          const sel = selected === opt.id ? ' selected' : '';
+          let statusClass = '';
+          if (state.singleChoice[cfg.key]?.lastChecked === opt.id){
+            statusClass = state.singleChoice[cfg.key]?.wasCorrect ? ' correct' : ' wrong';
+          }
+          const labelSmall = exactMode ? `<small>${opt.label}</small>` : '';
+          return `<button type="button" class="option${sel}${statusClass}" data-role="single-option" data-optid="${opt.id}" ${locked ? 'disabled' : ''}>
+                    ${labelSmall}${opt.text}
+                  </button>`;
+        }).join('');
+        const extra = exactMode ? `<p class="subtle">This screen keeps the original option order and labels.</p>` : '';
+        return `${extra}<div class="${exactMode ? 'choice-grid-4' : 'options'}">${cards}</div>`;
+      }
+
+      function getMultiState(key){
+        if(!state.multiChoice[key]){
+          state.multiChoice[key] = { selected: [], checked: false };
+        }
+        return state.multiChoice[key];
+      }
+
+      function renderMultiOptions(cfg){
+        const order = getScreenOrder(cfg.key, cfg.options, false);
+        const multi = getMultiState(cfg.key);
+        const selected = new Set(multi.selected);
+        const checked = multi.checked;
+        const solved = !!state.solved[cfg.key];
+        const cards = order.map(opt => {
+          const isSel = selected.has(opt.id);
+          let status = '';
+          if (checked){
+            if (isSel && opt.correct) status = ' correct';
+            else if (isSel && !opt.correct) status = ' wrong';
+            else if (!isSel && opt.correct) status = ' selected';
+          } else if (isSel) {
+            status = ' selected';
+          }
+          return `<button type="button" class="option${status}" data-role="multi-option" data-optid="${opt.id}" ${solved ? 'disabled' : ''}>${opt.text}</button>`;
+        }).join('');
+        const legend = cfg.key === 's6'
+          ? 'Use the lesson wording about what each flower part does.'
+          : 'Use the labels shown on the flower diagram.';
+        return `
+          <div class="center-stack">
+            <div class="diagram-card">
+              <div class="diagram-title">Flower cross-section</div>
+              ${flowerDiagram({})}
+              <div class="legend">${legend}</div>
+            </div>
+            <div class="option-grid-tight">${cards}</div>
+            <div class="action-row">
+              <button type="button" class="btn-secondary" id="checkMultiBtn" ${solved ? 'disabled' : ''}>Check</button>
+            </div>
+          </div>`;
+      }
+
+      function renderScreen(){
+        const cfg = screenData[state.screenIndex];
+        const nextAllowed = !!state.solved[cfg.key] || cfg.type === 'start' || cfg.type === 'end';
+        let html = `
+          <h1 class="instruction">${cfg.instruction}</h1>
+          <div id="feedbackBox" class="feedback"></div>
+        `;
+
+        if(cfg.type === 'start'){
+          html += `
+            <div class="center-stack">
+              ${renderQuestionBlock(true)}
+              <div class="summary-box">
+                <span class="pill">Look closely</span>
+                This question asks you to match by function.
+              </div>
+              <div class="action-row">
+                <button class="btn-primary" id="readyBtn" type="button">I’m ready</button>
+              </div>
+            </div>`;
+        }
+
+        if(cfg.type === 'single' && cfg.key === 's2'){
+          html += `
+            <div class="center-stack">
+              <div class="panel">
+                <div class="question-text">
+                  The question says <span class="highlight">similar function</span>.
+                  What does that mean you should match?
+                </div>
+              </div>
+              ${renderSingleOptions(cfg, false)}
+            </div>`;
+        }
+
+        if(cfg.type === 'single' && cfg.key === 's3'){
+          html += `
+            <div class="center-stack">
+              <div class="diagram-card">
+                <div class="diagram-title">Human female reproductive system</div>
+                ${humanDiagram({highlight:'ovary'})}
+                <div class="legend">Part X points to the highlighted oval structure.</div>
+              </div>
+              ${renderSingleOptions(cfg, false)}
+            </div>`;
+        }
+
+        if(cfg.type === 'single' && cfg.key === 's4'){
+          html += `
+            <div class="center-stack">
+              <div class="panel">
+                <div class="question-text">
+                  Keep the job of the ovary in mind before you look back at the flower.
+                </div>
+              </div>
+              ${renderSingleOptions(cfg, false)}
+            </div>`;
+        }
+
+        if(cfg.type === 'multi'){
+          html += renderMultiOptions(cfg);
+        }
+
+        if(cfg.type === 'single' && cfg.key === 's7'){
+          html += `
+            <div class="center-stack">
+              <div class="diagram-card">
+                <div class="diagram-title">Flower cross-section</div>
+                ${flowerDiagram({})}
+                <div class="legend">Choose the flower part with the closest job to the ovary.</div>
+              </div>
+              ${renderSingleOptions(cfg, false)}
+            </div>`;
+        }
+
+        if(cfg.type === 'single-exact'){
+          html += `
+            <div class="center-stack">
+              ${renderQuestionBlock(false)}
+              ${renderSingleOptions(cfg, true)}
+            </div>`;
+        }
+
+        if(cfg.type === 'single' && cfg.key === 's9'){
+          html += `
+            <div class="center-stack">
+              <div class="diagram-card">
+                <div class="diagram-title">Quick transfer check</div>
+                ${flowerDiagram({})}
+                <div class="legend">This is a simpler check. No demerits here.</div>
+              </div>
+              ${renderSingleOptions(cfg, false)}
+            </div>`;
+        }
+
+        if(cfg.type === 'end'){
+          html += `
+            <div class="center-stack">
+              <div class="summary-box">You solved it by matching function, not position.</div>
+              <div class="panel">
+                <div class="question-text">
+                  Part X is the ovary. The ovary contains or produces the female reproductive cell.
+                  In the flower, the closest labelled part is D, the ovule.
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="btn-primary" id="replayBtn" type="button">Replay</button>
+                <button class="btn-secondary" id="readSummaryBtn" type="button">Read summary</button>
+              </div>
+            </div>`;
+        }
+
+        if(cfg.type !== 'start' && cfg.type !== 'end'){
+          html += `
+            <div class="action-row">
+              <span class="helper">${nextAllowed ? 'Good. You can move on.' : 'Answer this screen correctly to continue.'}</span>
+              <button class="btn-primary" id="nextBtn" type="button" ${nextAllowed ? '' : 'disabled'}>Next</button>
+            </div>
+            ${renderQuestionPanel()}
+          `;
+        }
+        if(cfg.type === 'end'){
+          html += renderQuestionPanel();
+        }
+
+        stage.innerHTML = html;
+        renderTopOnly();
+        attachEvents();
+        if (voiceEnabled) {
+          speak(currentReadAloudText());
+        }
+      }
+
+      function advanceScreen(){
+        if (state.screenIndex < totalScreens - 1){
+          state.screenIndex += 1;
+          render();
+        }
+      }
+
+      function markSolved(key){
+        state.solved[key] = true;
+        render();
+      }
+
+      function handleSingleTap(optId){
+        const cfg = screenData[state.screenIndex];
+        const opt = cfg.options.find(o => o.id === optId);
+        if(!opt) return;
+        state.singleChoice[cfg.key] = {
+          selectedId: optId,
+          lastChecked: optId,
+          wasCorrect: !!opt.correct
+        };
+        render();
+        if (opt.correct){
+          setFeedback('good', cfg.feedbackCorrect);
+          state.solved[cfg.key] = true;
+          document.getElementById('nextBtn')?.removeAttribute('disabled');
+        } else {
+          setFeedback('bad', cfg.feedbackWrong);
+          if(cfg.penalized) decrementLife();
+        }
+      }
+
+      function handleMultiToggle(optId){
+        const cfg = screenData[state.screenIndex];
+        if (state.solved[cfg.key]) return;
+        const multi = getMultiState(cfg.key);
+        const list = new Set(multi.selected);
+        if(list.has(optId)) list.delete(optId);
+        else list.add(optId);
+        multi.selected = Array.from(list);
+        multi.checked = false;
+        render();
+      }
+
+      function setsEqual(a, b){
+        if(a.length !== b.length) return false;
+        const s = new Set(a);
+        for(const item of b){
+          if(!s.has(item)) return false;
+        }
+        return true;
+      }
+
+      function checkMulti(){
+        const cfg = screenData[state.screenIndex];
+        const multi = getMultiState(cfg.key);
+        const correctIds = cfg.options.filter(o => o.correct).map(o => o.id);
+        multi.checked = true;
+        render();
+        if(setsEqual(multi.selected, correctIds)){
+          setFeedback('good', cfg.feedbackCorrect);
+          state.solved[cfg.key] = true;
+          document.getElementById('nextBtn')?.removeAttribute('disabled');
+        } else {
+          setFeedback('bad', cfg.feedbackWrong);
+          if(cfg.penalized) decrementLife();
+        }
+      }
+
+      function attachEvents(){
+        const cfg = screenData[state.screenIndex];
+
+        const readyBtn = document.getElementById('readyBtn');
+        if(readyBtn){
+          readyBtn.addEventListener('click', () => {
+            advanceScreen();
+          });
+        }
+
+        const replayBtn = document.getElementById('replayBtn');
+        if(replayBtn){
+          replayBtn.addEventListener('click', resetState);
+        }
+
+        const readSummaryBtn = document.getElementById('readSummaryBtn');
+        if(readSummaryBtn){
+          readSummaryBtn.addEventListener('click', () => {
+            speak('Finished. You solved it by matching function, not position. Part X is the ovary. The ovary contains or produces the female reproductive cell. In the flower, the closest labelled part is D, the ovule.');
+          });
+        }
+
+        stage.querySelectorAll('[data-role="single-option"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (state.solved[cfg.key]) return;
+            handleSingleTap(btn.dataset.optid);
+          });
+        });
+
+        stage.querySelectorAll('[data-role="multi-option"]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            handleMultiToggle(btn.dataset.optid);
+          });
+        });
+
+        const checkMultiBtn = document.getElementById('checkMultiBtn');
+        if(checkMultiBtn){
+          checkMultiBtn.addEventListener('click', checkMulti);
+        }
+
+        const nextBtn = document.getElementById('nextBtn');
+        if(nextBtn){
+          nextBtn.addEventListener('click', () => {
+            if (nextBtn.disabled) return;
+            advanceScreen();
+          });
+        }
+
+        const toggleQuestionBtn = document.getElementById('toggleQuestionBtn');
+        if(toggleQuestionBtn){
+          toggleQuestionBtn.addEventListener('click', () => {
+            state.questionPanelOpen = !state.questionPanelOpen;
+            render();
+          });
+        }
+
+        const feedbackState = state.singleChoice[cfg.key];
+        if(feedbackState && feedbackState.lastChecked){
+          setFeedback(feedbackState.wasCorrect ? 'good' : 'bad', feedbackState.wasCorrect ? cfg.feedbackCorrect : cfg.feedbackWrong);
+        }
+        if(cfg.type === 'multi'){
+          const multi = getMultiState(cfg.key);
+          if(multi.checked){
+            const correctIds = cfg.options.filter(o => o.correct).map(o => o.id);
+            const ok = setsEqual(multi.selected, correctIds);
+            setFeedback(ok ? 'good' : 'bad', ok ? cfg.feedbackCorrect : cfg.feedbackWrong);
+          }
+        }
+      }
+
+      function render(){
+        clearTimeout(state.overlayTimer);
+        renderScreen();
+      }
+
+      autoReadBtn.addEventListener('click', () => {
+        voiceEnabled = !voiceEnabled;
+        setAudioUI();
+        if (voiceEnabled) {
+          speak(currentReadAloudText());
+        } else if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+        }
+      });
+
+      readNowBtn.addEventListener('click', () => {
+        speak(currentReadAloudText());
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter'){
+          const next = document.getElementById('nextBtn');
+          if(next && !next.disabled){
+            next.click();
+          }
+        }
+      });
+
+      setAudioUI();
+      render();
+
+    })();
+  </script>
+</body>
+</html>

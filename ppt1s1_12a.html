@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt1s1_12a</title>
+<style>
+  :root {
+    --bg: #eef8ff;
+    --panel: #ffffff;
+    --ink: #17324d;
+    --muted: #5b7086;
+    --line: #c8ddee;
+    --accent: #0b78d1;
+    --accent-2: #27a77a;
+    --warn: #d94b4b;
+    --soft-warn: #ffe8e8;
+    --soft-good: #e7fbf2;
+    --shadow: 0 12px 28px rgba(18, 58, 95, 0.12);
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg, #f5fbff 0%, #ebf7ff 100%);
+    color: var(--ink);
+  }
+  body {
+    padding: 16px;
+  }
+  .app {
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+  .top-shell {
+    background: var(--panel);
+    border: 2px solid var(--line);
+    border-radius: 22px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 14px 18px;
+    background: linear-gradient(90deg, #0c6fca, #2ca1ff);
+    color: white;
+  }
+  .topbar h1 {
+    margin: 0;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.1;
+  }
+  .progress {
+    font-weight: 700;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .audio-tools {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .audio-tools button {
+    border: 0;
+    background: rgba(255,255,255,0.18);
+    color: white;
+    font-weight: 700;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .audio-tools button:hover {
+    background: rgba(255,255,255,0.28);
+  }
+  .demerit-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: #f7fcff;
+    border-bottom: 2px solid var(--line);
+  }
+  .demerit-label {
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .breeze-track {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .breeze-pill {
+    min-width: 82px;
+    text-align: center;
+    padding: 10px 12px;
+    border-radius: 999px;
+    background: #ddf3ff;
+    border: 2px solid #9ed4ff;
+    font-weight: 800;
+    color: #0f5f9f;
+  }
+  .breeze-pill.lost {
+    background: #f1f4f6;
+    border-color: #d3dbe2;
+    color: #8d99a4;
+    text-decoration: line-through;
+  }
+  .demerit-note {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .main-card {
+    background: var(--panel);
+    margin-top: 16px;
+    border: 2px solid var(--line);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 18px;
+  }
+  .instruction {
+    margin: 0 0 12px;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.1;
+    font-weight: 900;
+    color: #0e3a62;
+  }
+  .support-line {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .screen-grid {
+    display: grid;
+    gap: 18px;
+  }
+  .two-col {
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: start;
+  }
+  .panel {
+    background: #fafdff;
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
+  }
+  .panel h2, .panel h3 {
+    margin-top: 0;
+  }
+  .question-text {
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  mark {
+    background: #fff1a8;
+    padding: 0 0.18em;
+    border-radius: 6px;
+  }
+  .source-image {
+    width: 100%;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    background: white;
+    display: block;
+  }
+  .option-grid {
+    display: grid;
+    gap: 12px;
+    margin-top: 10px;
+  }
+  .option-grid.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .option-btn, .choice-card, .chip-btn, .control-btn, .blank-btn {
+    width: 100%;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    background: white;
+    padding: 16px;
+    text-align: left;
+    font-size: 20px;
+    line-height: 1.35;
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 700;
+  }
+  .option-btn:hover, .choice-card:hover, .chip-btn:hover, .control-btn:hover, .blank-btn:hover {
+    border-color: #87c0ef;
+    transform: translateY(-1px);
+  }
+  .option-btn.selected, .choice-card.selected, .blank-btn.active {
+    border-color: var(--accent);
+    background: #eef8ff;
+    box-shadow: 0 0 0 4px rgba(11, 120, 209, 0.08);
+  }
+  .option-btn.correct, .choice-card.correct {
+    border-color: var(--accent-2);
+    background: var(--soft-good);
+  }
+  .option-btn.wrong, .choice-card.wrong {
+    border-color: var(--warn);
+    background: var(--soft-warn);
+  }
+  .feedback {
+    min-height: 70px;
+    margin-top: 16px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    font-size: 18px;
+    line-height: 1.4;
+    font-weight: 800;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.good {
+    background: var(--soft-good);
+    border: 2px solid #9cd9be;
+    color: #115e44;
+  }
+  .feedback.bad {
+    background: var(--soft-warn);
+    border: 2px solid #efb4b4;
+    color: #8b1f1f;
+  }
+  .nav-row {
+    margin-top: 18px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .nav-row .control-btn {
+    width: auto;
+    min-width: 140px;
+    text-align: center;
+    padding: 14px 18px;
+    font-size: 18px;
+  }
+  .primary {
+    background: linear-gradient(90deg, #0c78d1, #2a9df4);
+    color: white;
+    border-color: #0c78d1;
+  }
+  .primary:disabled, .ghost:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  .ghost {
+    background: white;
+    color: var(--ink);
+  }
+  .question-toggle {
+    margin-top: 18px;
+  }
+  .question-toggle button {
+    width: auto;
+  }
+  .question-panel {
+    margin-top: 12px;
+    display: none;
+  }
+  .question-panel.open {
+    display: block;
+  }
+  .small {
+    font-size: 15px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .badge {
+    display: inline-block;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #ebf7ff;
+    border: 2px solid #b7def9;
+    font-weight: 800;
+    margin: 0 8px 8px 0;
+  }
+  .mini-note {
+    font-size: 17px;
+    line-height: 1.45;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .diagram-card {
+    background: #fbfeff;
+    border: 2px solid var(--line);
+    border-radius: 20px;
+    padding: 10px;
+  }
+  .diagram-card svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .compare-box {
+    display: grid;
+    gap: 14px;
+  }
+  .compare-box.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .statement-grid {
+    display: grid;
+    gap: 12px;
+  }
+  .statement-item {
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    padding: 14px 16px;
+    font-size: 19px;
+    font-weight: 700;
+    background: white;
+    cursor: pointer;
+  }
+  .statement-item.selected {
+    border-color: var(--accent);
+    background: #eef8ff;
+  }
+  .statement-item.correct {
+    border-color: var(--accent-2);
+    background: var(--soft-good);
+  }
+  .statement-item.wrong {
+    border-color: var(--warn);
+    background: var(--soft-warn);
+  }
+  .builder-wrap {
+    display: grid;
+    gap: 12px;
+  }
+  .target-slots {
+    display: grid;
+    gap: 10px;
+  }
+  .slot {
+    border: 2px dashed #a8cde7;
+    min-height: 64px;
+    border-radius: 18px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    font-size: 19px;
+    font-weight: 800;
+    background: #f8fcff;
+  }
+  .slot.filled {
+    border-style: solid;
+    border-color: var(--accent);
+    background: #eef8ff;
+  }
+  .bank-grid {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+  .chip-btn {
+    text-align: center;
+  }
+  .sentence-frame {
+    font-size: 24px;
+    line-height: 1.7;
+    font-weight: 800;
+    background: #fafdff;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    padding: 18px;
+  }
+  .blank-btn {
+    display: inline-flex;
+    width: auto;
+    min-width: 140px;
+    justify-content: center;
+    text-align: center;
+    margin: 4px 6px;
+    vertical-align: middle;
+  }
+  .blank-btn.filled {
+    background: #eef8ff;
+    border-color: var(--accent);
+  }
+  .blank-btn.empty {
+    color: #487296;
+  }
+  .current-blank {
+    margin: 10px 0 0;
+    font-size: 18px;
+    color: var(--muted);
+    font-weight: 800;
+  }
+  .guess-box {
+    display: grid;
+    gap: 14px;
+  }
+  .guess-frame {
+    font-size: 24px;
+    line-height: 1.8;
+    font-weight: 800;
+    background: #fafdff;
+    border: 2px solid var(--line);
+    border-radius: 18px;
+    padding: 18px;
+  }
+  .guess-word {
+    display: inline-block;
+    min-width: 88px;
+    padding: 6px 10px;
+    margin: 0 4px;
+    border-radius: 12px;
+    background: #eef8ff;
+    border: 2px solid #b7d8f1;
+    text-align: center;
+  }
+  .guess-word.current {
+    background: #fff8dd;
+    border-color: #f0d56c;
+  }
+  .guess-word.done {
+    background: var(--soft-good);
+    border-color: #9cd9be;
+  }
+  .guess-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .guess-row input {
+    flex: 1 1 240px;
+    font-size: 22px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    border: 2px solid var(--line);
+  }
+  .guess-help {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .summary-chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+  .summary-chips span {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: #eef8ff;
+    border: 2px solid #b9dbf4;
+    font-weight: 800;
+    font-size: 18px;
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(14, 40, 63, 0.62);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 30;
+  }
+  .overlay.show {
+    display: flex;
+  }
+  .overlay-card {
+    max-width: 520px;
+    width: 100%;
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    border: 3px solid #d6e8f7;
+    box-shadow: 0 18px 32px rgba(0,0,0,0.18);
+    text-align: center;
+  }
+  .overlay-card h2 {
+    font-size: 36px;
+    margin: 0 0 12px;
+  }
+  .overlay-card p {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+  .legend {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .legend .badge {
+    margin: 0;
+  }
+  .vis-note {
+    margin-top: 10px;
+    font-size: 17px;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .petal-card-title {
+    font-size: 20px;
+    font-weight: 900;
+    margin: 0 0 8px;
+  }
+  @media (max-width: 860px) {
+    .two-col, .compare-box.two {
+      grid-template-columns: 1fr;
+    }
+    .topbar {
+      grid-template-columns: 1fr;
+    }
+    .audio-tools {
+      justify-content: flex-start;
+    }
+    body {
+      padding: 10px;
+    }
+    .instruction {
+      font-size: 30px;
+    }
+    .option-grid.cols-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-shell">
+    <div class="topbar">
+      <h1>Wind or animal pollination?</h1>
+      <div class="progress" id="progressText">Screen 1 of 12</div>
+      <div class="audio-tools">
+        <button id="toggleAudioBtn" type="button">Read-aloud: Off</button>
+        <button id="readNowBtn" type="button">Read this screen</button>
+      </div>
+    </div>
+    <div class="demerit-row">
+      <div class="demerit-label">Breezes left:</div>
+      <div class="breeze-track" id="breezeTrack"></div>
+      <div class="demerit-note" id="demeritNote"></div>
+    </div>
+  </div>
+
+  <div class="main-card" id="appCard"></div>
+</div>
+
+<div class="overlay" id="restartOverlay">
+  <div class="overlay-card">
+    <h2>Out of breezes!</h2>
+    <p>You used all the breezes in the teaching part. The whole interactive is restarting so you can try again carefully.</p>
+  </div>
+</div>
+
+<script>
+const ORIGINAL_IMAGE = "data:image/png;base64,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";
+
+const screenDefinitions = [
+  {
+    id: "intro",
+    type: "intro",
+    title: "Question (a)",
+    instruction: "Read the question. Then tap “I’ve read it.”",
+    support: "Start by noticing what the question is asking and one clue it already gives.",
+    applyDemerit: false
+  },
+  {
+    id: "text-clue",
+    type: "single",
+    title: "Find the clue in the words",
+    instruction: "Tap the clue that makes animal pollination less likely.",
+    support: "Use the words first before jumping to the flower parts.",
+    applyDemerit: true,
+    correctId: "few_animals",
+    options: [
+      { id: "cold_climate", text: "cold climate" },
+      { id: "few_animals", text: "very few insects and small animals" },
+      { id: "many_fruits", text: "numerous fruits are formed" },
+      { id: "flower_a", text: "flower A" }
+    ],
+    correctFeedback: "Yes. If there are very few animals around, animal pollination is less likely.",
+    wrongFeedback: "That part is in the question, but it does not directly tell you what moves the pollen."
+  },
+  {
+    id: "pollination-vs-dispersal",
+    type: "multi",
+    title: "Pollination or seed dispersal?",
+    instruction: "Select the statements that help with pollination, not seed dispersal.",
+    support: "This question is about pollen reaching the stigma.",
+    applyDemerit: true,
+    correctIds: ["feathery_stigma", "anther_hang"],
+    options: [
+      { id: "feathery_stigma", text: "A feathery stigma can catch pollen in the air." },
+      { id: "seed_wings", text: "Wings help seeds move away from the parent plant." },
+      { id: "anther_hang", text: "Anthers hanging out can let pollen be shaken free." },
+      { id: "fruit_wind", text: "Fruits can be carried far away by wind." }
+    ],
+    correctFeedback: "Yes. This question is about how pollen reaches the stigma, not how seeds or fruits move away later.",
+    wrongFeedback: "Check whether each statement is about pollen reaching the stigma or about seeds and fruits moving away."
+  },
+  {
+    id: "anther-feature",
+    type: "single",
+    title: "Which feature helps pollen get into the wind?",
+    instruction: "Tap the flower feature that lets pollen shake free into moving air.",
+    support: "Watch the pollen shake off the exposed anther first.",
+    applyDemerit: true,
+    visual: "anther",
+    correctId: "hanging_anther",
+    options: [
+      { id: "hanging_anther", text: "anther hanging out of the flower" },
+      { id: "smooth_petal", text: "smooth petal edge" },
+      { id: "thick_stalk", text: "thick flower stalk" },
+      { id: "pointed_bud", text: "pointed bud tip" }
+    ],
+    correctFeedback: "Yes. When the anther hangs outside the flower, pollen can be shaken free by the wind more easily.",
+    wrongFeedback: "Look for the part outside the flower where pollen can be shaken free into the air."
+  },
+  {
+    id: "stigma-feature",
+    type: "single",
+    title: "Which feature helps catch pollen?",
+    instruction: "Tap the flower feature that helps catch pollen floating in the air.",
+    support: "Now watch the feathery stigma catch and hold pollen grains.",
+    applyDemerit: true,
+    visual: "stigma",
+    correctId: "feathery",
+    options: [
+      { id: "smooth_petal", text: "smooth petal edge" },
+      { id: "feathery", text: "feathery stigma" },
+      { id: "thick_stalk", text: "thick flower stalk" },
+      { id: "pointed_bud", text: "pointed bud tip" }
+    ],
+    correctFeedback: "Yes. A feathery stigma can catch and hold pollen grains carried by the wind.",
+    wrongFeedback: "Look for the part with many fine branches that can trap tiny pollen grains from the air."
+  },
+  {
+    id: "chain",
+    type: "order",
+    title: "Watch the pollen move, then build the chain",
+    instruction: "Tap Play. Then build the best order.",
+    support: "Start with the anther. End with the stigma.",
+    applyDemerit: true,
+    correctOrder: ["free", "carried", "caught"],
+    pieces: [
+      { id: "free", text: "Exposed anthers let pollen shake free." },
+      { id: "carried", text: "The wind carries the pollen." },
+      { id: "caught", text: "The feathery stigma catches the pollen." }
+    ],
+    correctFeedback: "Yes. That is the wind-pollination pathway.",
+    wrongFeedback: "Start with the anther. What happens first before pollen can reach the stigma?"
+  },
+  {
+    id: "claim",
+    type: "single",
+    title: "Build the claim",
+    instruction: "Choose the best claim.",
+    support: "Choose the answer about pollination, not seed dispersal.",
+    applyDemerit: true,
+    correctId: "wind",
+    options: [
+      { id: "wind", text: "Flower A is pollinated by wind." },
+      { id: "animals", text: "Flower A is pollinated by animals." },
+      { id: "seed_wind", text: "Flower A disperses its seeds by wind." },
+      { id: "cannot", text: "Flower A cannot be pollinated." }
+    ],
+    correctFeedback: "Yes. That is the claim. Next, build the reasons that support it.",
+    wrongFeedback: "Pick the answer about pollination, not about seeds moving away."
+  },
+  {
+    id: "anther-reason",
+    type: "blanks",
+    title: "Build the anther reason",
+    instruction: "Tap the words to complete the reason about the anthers.",
+    support: "One blank tells what happens to the pollen. One blank names what carries it.",
+    applyDemerit: true,
+    sentenceParts: [
+      "The anthers hang out of the flower, so pollen grains are easily ",
+      null,
+      " and carried by the ",
+      null,
+      "."
+    ],
+    blanks: [
+      { id: "b1", answerId: "shaken", placeholder: "Blank 1" },
+      { id: "b2", answerId: "wind", placeholder: "Blank 2" }
+    ],
+    options: [
+      { id: "shaken", text: "shaken free" },
+      { id: "wind", text: "wind" },
+      { id: "eaten", text: "eaten" },
+      { id: "petals", text: "petals" },
+      { id: "hidden", text: "hidden" },
+      { id: "roots", text: "roots" }
+    ],
+    firstWrongFeedback: "Check what happens to exposed pollen first, and then name what carries it.",
+    wrongFeedback: "Think about what moving air does to pollen on anthers that hang outside the flower.",
+    correctFeedback: "Yes. Exposed anthers help pollen get into moving air."
+  },
+  {
+    id: "stigma-reason",
+    type: "blanks",
+    title: "Build the stigma reason",
+    instruction: "Tap the words to complete the reason about the stigma.",
+    support: "One blank names the stigma’s shape. One blank tells its job.",
+    applyDemerit: true,
+    sentenceParts: [
+      "The stigma is ",
+      null,
+      ", so it can ",
+      null,
+      " pollen grains floating in the air."
+    ],
+    blanks: [
+      { id: "b1", answerId: "feathery", placeholder: "Blank 1" },
+      { id: "b2", answerId: "catch", placeholder: "Blank 2" }
+    ],
+    options: [
+      { id: "feathery", text: "feathery" },
+      { id: "catch", text: "catch" },
+      { id: "smooth", text: "smooth" },
+      { id: "drop", text: "drop" },
+      { id: "grow", text: "grow" },
+      { id: "push", text: "push away" }
+    ],
+    firstWrongFeedback: "Check the stigma’s shape first. Then choose the word for what that shape helps it do.",
+    wrongFeedback: "Look for the word that matches the stigma’s shape and the job of trapping pollen.",
+    correctFeedback: "Yes. A feathery stigma helps trap pollen carried by the wind."
+  },
+  {
+    id: "guess",
+    type: "guess",
+    title: "Complete the answer from memory",
+    instruction: "Type one missing word at a time.",
+    support: "This part is penalty-free. Use the letters shown to help you retrieve the words.",
+    applyDemerit: false,
+    words: [
+      { key: "wind", answer: "wind" },
+      { key: "feathery", answer: "feathery" },
+      { key: "pollen", answer: "pollen" }
+    ],
+    correctFeedback: "Well done. You rebuilt the full answer."
+  },
+  {
+    id: "transfer",
+    type: "single",
+    title: "Try one transfer check",
+    instruction: "Choose the flower that is more likely to be pollinated by wind.",
+    support: "Look for the flower with parts that help wind move pollen and help the stigma catch it.",
+    applyDemerit: false,
+    visual: "transfer",
+    correctId: "flower_x",
+    options: [
+      { id: "flower_x", text: "Flower X" },
+      { id: "flower_y", text: "Flower Y" }
+    ],
+    correctFeedback: "Yes. Flower X has features that help wind move pollen and help the stigma catch it.",
+    wrongFeedback: "Check which flower has exposed anthers and a feathery stigma."
+  },
+  {
+    id: "finish",
+    type: "finish",
+    title: "You did it",
+    instruction: "Tap Finish to end, or restart to practise again.",
+    support: "You can now spot wind-pollination clues and explain why they matter.",
+    applyDemerit: false
+  }
+];
+
+const questionPanelHTML = `
+  <div class="panel">
+    <div class="question-text">
+      <p><strong>Question:</strong> Based on the diagram above, is flower A likely to be pollinated by animals or wind? Give a reason to support your answer.</p>
+      <p><strong>Context from the source:</strong> Flower A grows in a cold climate. Very few insects and small animals are found to live there. Yet, every year, flower A blooms and numerous fruits are formed.</p>
+    </div>
+    <img class="source-image" src="${ORIGINAL_IMAGE}" alt="Original question diagram of flower A" />
+  </div>
+`;
+
+const state = {
+  screenIndex: 0,
+  demeritsMax: 0,
+  demeritsLeft: 0,
+  questionPanelOpen: false,
+  readAloudOn: false,
+  audioEnabledOnce: false,
+  screenState: {},
+  restartTimer: null
+};
+
+function countTeachingChecks() {
+  return screenDefinitions.filter(s => s.applyDemerit).length;
+}
+
+function makeScreenState(screen) {
+  const base = {
+    completed: false,
+    feedback: "",
+    feedbackType: "",
+    optionOrder: null,
+    selectedId: null,
+    multiSelected: [],
+    lastChecked: false,
+    builtOrder: [],
+    orderBank: null,
+    blankOrder: null,
+    blanks: {},
+    activeBlank: 0,
+    blankWrongCount: 0,
+    playedAnimation: false,
+    guessIndex: 0,
+    guessReveals: [1,1,1],
+    guessSolved: ["", "", ""],
+    guessInput: ""
+  };
+  if (screen.options) {
+    base.optionOrder = shuffleCopy(screen.options);
+  }
+  if (screen.type === "order") {
+    base.orderBank = shuffleUntil(screen.pieces, items => items.map(i => i.id).join("|") !== screen.correctOrder.join("|"));
+  }
+  if (screen.type === "blanks") {
+    base.blankOrder = shuffleCopy(screen.options);
+    screen.blanks.forEach((b, idx) => base.blanks[b.id] = null);
+    base.activeBlank = 0;
+  }
+  return base;
+}
+
+function resetApp() {
+  clearTimeout(state.restartTimer);
+  state.screenIndex = 0;
+  state.demeritsMax = Math.floor(countTeachingChecks() / 2);
+  state.demeritsLeft = state.demeritsMax;
+  state.questionPanelOpen = false;
+  state.screenState = {};
+  screenDefinitions.forEach(screen => {
+    state.screenState[screen.id] = makeScreenState(screen);
+  });
+  document.getElementById("restartOverlay").classList.remove("show");
+  render();
+}
+
+function shuffleCopy(arr) {
+  const copy = arr.map(item => ({ ...item }));
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+function shuffleUntil(arr, conditionFn) {
+  let tries = 0;
+  let copy = shuffleCopy(arr);
+  while (!conditionFn(copy) && tries < 20) {
+    copy = shuffleCopy(arr);
+    tries++;
+  }
+  return copy;
+}
+
+function currentScreen() {
+  return screenDefinitions[state.screenIndex];
+}
+
+function currentLocal() {
+  return state.screenState[currentScreen().id];
+}
+
+function applyDemeritIfNeeded(screen) {
+  if (!screen.applyDemerit) return;
+  state.demeritsLeft = Math.max(0, state.demeritsLeft - 1);
+  if (state.demeritsLeft === 0) {
+    triggerRestart();
+  }
+}
+
+function triggerRestart() {
+  speechSynthesis.cancel();
+  const overlay = document.getElementById("restartOverlay");
+  overlay.classList.add("show");
+  state.restartTimer = setTimeout(() => {
+    resetApp();
+  }, 1800);
+}
+
+function setFeedback(local, text, type) {
+  local.feedback = text;
+  local.feedbackType = type;
+}
+
+function updateDemeritRow() {
+  const track = document.getElementById("breezeTrack");
+  const note = document.getElementById("demeritNote");
+  track.innerHTML = "";
+  for (let i = 0; i < state.demeritsMax; i++) {
+    const pill = document.createElement("div");
+    pill.className = "breeze-pill" + (i < state.demeritsLeft ? "" : " lost");
+    pill.textContent = i < state.demeritsLeft ? "🍃 Breeze" : "🍃 Used";
+    track.appendChild(pill);
+  }
+  note.textContent = `${state.demeritsLeft} of ${state.demeritsMax} breezes left. Guess-the-word and the transfer check do not use breezes.`;
+}
+
+function render() {
+  updateDemeritRow();
+  document.getElementById("progressText").textContent = `Screen ${state.screenIndex + 1} of ${screenDefinitions.length}`;
+  document.getElementById("toggleAudioBtn").textContent = `Read-aloud: ${state.readAloudOn ? "On" : "Off"}`;
+  const app = document.getElementById("appCard");
+  const screen = currentScreen();
+  const local = currentLocal();
+  const prevDisabled = state.screenIndex === 0;
+  const nextDisabled = !local.completed || state.screenIndex === screenDefinitions.length - 1;
+  let html = `
+    <h2 class="instruction">${escapeHTML(screen.instruction)}</h2>
+    <div class="support-line">${escapeHTML(screen.support)}</div>
+    ${renderScreenBody(screen, local)}
+    ${renderFeedback(local)}
+    ${screen.id !== "finish" ? `
+      <div class="nav-row">
+        <button class="control-btn ghost" id="prevBtn" ${prevDisabled ? "disabled" : ""}>Back</button>
+        <button class="control-btn primary" id="nextBtn" ${nextDisabled ? "disabled" : ""}>Next</button>
+      </div>` : ""}
+    ${state.screenIndex > 0 ? renderQuestionToggle() : ""}
+  `;
+  app.innerHTML = html;
+  bindScreenEvents(screen, local);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (state.readAloudOn && state.audioEnabledOnce) {
+    speakCurrentScreen();
+  }
+}
+
+function renderFeedback(local) {
+  if (!local.feedback) return "";
+  return `<div class="feedback show ${local.feedbackType}">${escapeHTML(local.feedback)}</div>`;
+}
+
+function renderQuestionToggle() {
+  return `
+    <div class="question-toggle">
+      <button class="control-btn ghost" id="toggleQuestionBtn">${state.questionPanelOpen ? "Hide question and source" : "Show question and source"}</button>
+      <div class="question-panel ${state.questionPanelOpen ? "open" : ""}" id="questionPanel">${questionPanelHTML}</div>
+    </div>
+  `;
+}
+
+function renderScreenBody(screen, local) {
+  switch (screen.type) {
+    case "intro":
+      return renderIntro(local);
+    case "single":
+      return renderSingle(screen, local);
+    case "multi":
+      return renderMulti(screen, local);
+    case "order":
+      return renderOrder(screen, local);
+    case "blanks":
+      return renderBlanks(screen, local);
+    case "guess":
+      return renderGuess(screen, local);
+    case "finish":
+      return renderFinish();
+    default:
+      return "<p>Screen type not found.</p>";
+  }
+}
+
+function renderIntro(local) {
+  const readDone = local.completed;
+  return `
+    <div class="screen-grid two-col">
+      <div class="panel">
+        <div class="question-text">
+          <p><strong>Look at the task:</strong> Based on the diagram above, is flower A likely to be pollinated by <mark>animals or wind</mark>? Give a reason to support your answer.</p>
+          <p><strong>One clue already given:</strong> Flower A grows in a cold climate. <mark>Very few insects and small animals</mark> are found to live there.</p>
+          <p>Yet, every year, flower A blooms and numerous fruits are formed.</p>
+        </div>
+        <div class="legend">
+          <span class="badge">Read the words first</span>
+          <span class="badge">Then use the flower parts</span>
+        </div>
+      </div>
+      <div class="panel">
+        <img class="source-image" src="${ORIGINAL_IMAGE}" alt="Original question diagram of flower A" />
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:16px;">
+      <button class="control-btn primary" id="readDoneBtn">${readDone ? "Ready" : "I've read it"}</button>
+    </div>
+  `;
+}
+
+function renderSingle(screen, local) {
+  let visualHTML = "";
+  if (screen.visual === "stigma") {
+    visualHTML = `
+      <div class="diagram-card">${flowerDiagram("stigma")}</div>
+      <div class="vis-note">The feathery stigma has many fine branches that can trap pollen grains floating in the air.</div>
+    `;
+  }
+  if (screen.visual === "anther") {
+    visualHTML = `
+      <div class="diagram-card">${flowerDiagram("anther")}</div>
+      <div class="vis-note">The hanging anthers sit outside the flower, where moving air can shake pollen off more easily.</div>
+    `;
+  }
+  if (screen.visual === "transfer") {
+    visualHTML = `
+      <div class="compare-box two">
+        <button class="choice-card ${local.selectedId === "flower_x" ? "selected" : ""}" data-choice-id="flower_x">
+          <div class="petal-card-title">Flower X</div>
+          <div class="diagram-card">${transferFlower("wind")}</div>
+          <div class="small" style="margin-top:8px;">Exposed anthers • feathery stigma</div>
+        </button>
+        <button class="${yClass.join(" ")}" data-choice-id="flower_y">
+          <div class="petal-card-title">Flower Y</div>
+          <div class="diagram-card">${transferFlower("animal")}</div>
+          <div class="small" style="margin-top:8px;">Large petals • enclosed anthers • sticky-looking stigma</div>
+        </button>
+      </div>
+    `;
+  }
+  const options = local.optionOrder.map(opt => {
+    const classes = ["option-btn"];
+    if (local.selectedId === opt.id) classes.push("selected");
+    if (local.completed && opt.id === screen.correctId) classes.push("correct");
+    if (local.feedbackType === "bad" && local.selectedId === opt.id && opt.id !== screen.correctId) classes.push("wrong");
+    return `<button class="${classes.join(" ")}" data-option-id="${opt.id}">${escapeHTML(opt.text)}</button>`;
+  }).join("");
+  return `
+    <div class="screen-grid">
+      ${visualHTML}
+      ${screen.visual === "transfer" ? "" : `<div class="option-grid">${options}</div>`}
+    </div>
+  `;
+}
+
+function renderMulti(screen, local) {
+  const options = local.optionOrder.map(opt => {
+    const chosen = local.multiSelected.includes(opt.id);
+    const classes = ["statement-item"];
+    if (chosen) classes.push("selected");
+    if (local.lastChecked) {
+      const shouldBe = screen.correctIds.includes(opt.id);
+      if (chosen && shouldBe) classes.push("correct");
+      if (chosen && !shouldBe) classes.push("wrong");
+      if (!chosen && shouldBe && local.feedbackType === "bad") classes.push("correct");
+    }
+    return `<button class="${classes.join(" ")}" data-multi-id="${opt.id}">${escapeHTML(opt.text)}</button>`;
+  }).join("");
+  return `
+    <div class="screen-grid">
+      <div class="statement-grid">${options}</div>
+      <div class="nav-row" style="margin-top:0;">
+        <button class="control-btn ghost" id="checkMultiBtn">Check</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderOrder(screen, local) {
+  const slots = screen.correctOrder.map((_, idx) => {
+    const itemId = local.builtOrder[idx];
+    const item = screen.pieces.find(p => p.id === itemId);
+    return `<button class="slot ${item ? "filled" : ""}" data-built-index="${idx}">
+      ${item ? escapeHTML(item.text) + ' <span class="small" style="margin-left:8px;">Tap to remove</span>' : "Tap an option below to fill this step"}
+    </button>`;
+  }).join("");
+  const bankItems = local.orderBank.filter(item => !local.builtOrder.includes(item.id)).map(item =>
+    `<button class="chip-btn" data-bank-id="${item.id}">${escapeHTML(item.text)}</button>`
+  ).join("");
+  return `
+    <div class="screen-grid">
+      <div class="diagram-card">
+        <div class="nav-row" style="margin:0 0 10px;">
+          <button class="control-btn ghost" id="playAnimBtn">Play</button>
+        </div>
+        <div id="animArea">${animatedFlower(local.playedAnimation)}</div>
+      </div>
+      <div class="builder-wrap">
+        <div class="target-slots">${slots}</div>
+        <div class="bank-grid">${bankItems}</div>
+        <div class="nav-row" style="margin-top:0;">
+          <button class="control-btn ghost" id="checkOrderBtn">Check</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderBlanks(screen, local) {
+  const parts = [];
+  let blankCounter = 0;
+  screen.sentenceParts.forEach((part, idx) => {
+    if (part === null) {
+      const blank = screen.blanks[blankCounter];
+      const chosenId = local.blanks[blank.id];
+      const chosen = screen.options.find(opt => opt.id === chosenId);
+      const isActive = local.activeBlank === blankCounter;
+      parts.push(`<button class="blank-btn ${chosen ? "filled" : "empty"} ${isActive ? "active" : ""}" data-blank-index="${blankCounter}">
+        ${chosen ? escapeHTML(chosen.text) : blank.placeholder}
+      </button>`);
+      blankCounter++;
+    } else {
+      parts.push(escapeHTML(part));
+    }
+  });
+  const options = local.blankOrder.map(opt => {
+    const selectedSomewhere = Object.values(local.blanks).includes(opt.id);
+    return `<button class="chip-btn ${selectedSomewhere ? "selected" : ""}" data-fill-id="${opt.id}">${escapeHTML(opt.text)}</button>`;
+  }).join("");
+  return `
+    <div class="screen-grid">
+      <div class="sentence-frame">${parts.join("")}</div>
+      <div class="current-blank">Now choose a word for <strong>Blank ${local.activeBlank + 1}</strong>.</div>
+      <div class="bank-grid">${options}</div>
+      <div class="nav-row" style="margin-top:0;">
+        <button class="control-btn ghost" id="checkBlanksBtn">Check</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderGuess(screen, local) {
+  const words = screen.words.map((w, idx) => {
+    if (local.guessSolved[idx]) return `<span class="guess-word done">${escapeHTML(local.guessSolved[idx])}</span>`;
+    if (idx === local.guessIndex) {
+      const reveal = local.guessReveals[idx];
+      const shown = w.answer.slice(0, reveal) + "_".repeat(Math.max(0, w.answer.length - reveal));
+      return `<span class="guess-word current">${escapeHTML(shown)}</span>`;
+    }
+    return `<span class="guess-word">_____</span>`;
+  });
+  const frame = `
+    Flower A is pollinated by ${words[0]} because its anthers hang out of the flower, so pollen grains are easily shaken free and carried by the wind, and its ${words[1]} stigma can catch ${words[2]} grains floating in the air.
+  `;
+  const done = local.completed;
+  return `
+    <div class="guess-box">
+      <div class="guess-frame">${frame}</div>
+      ${done ? `<div class="summary-chips"><span>wind</span><span>feathery</span><span>pollen</span></div>` : `
+        <div class="guess-help">Current word: <strong>${screen.words[local.guessIndex].key}</strong> — start with the letters shown.</div>
+        <div class="guess-row">
+          <input id="guessInput" type="text" autocomplete="off" spellcheck="false" placeholder="Type the whole word" value="${escapeAttr(local.guessInput)}" />
+          <button class="control-btn ghost" id="checkGuessBtn">Check word</button>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+function renderFinish() {
+  return `
+    <div class="screen-grid">
+      <div class="panel">
+        <div class="question-text">
+          <p><strong>You can now explain why Flower A is pollinated by wind.</strong></p>
+        </div>
+        <div class="summary-chips">
+          <span>exposed anthers</span>
+          <span>pollen shaken free</span>
+          <span>wind carries pollen</span>
+          <span>feathery stigma</span>
+          <span>stigma catches pollen</span>
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="control-btn primary" id="finishBtn">Finish</button>
+        <button class="control-btn ghost" id="restartBtn">Restart</button>
+      </div>
+    </div>
+  `;
+}
+
+function bindScreenEvents(screen, local) {
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  if (prevBtn) prevBtn.addEventListener("click", () => {
+    if (state.screenIndex > 0) {
+      state.screenIndex--;
+      render();
+    }
+  });
+  if (nextBtn) nextBtn.addEventListener("click", () => {
+    if (local.completed && state.screenIndex < screenDefinitions.length - 1) {
+      state.screenIndex++;
+      render();
+    }
+  });
+
+  const toggleQ = document.getElementById("toggleQuestionBtn");
+  if (toggleQ) {
+    toggleQ.addEventListener("click", () => {
+      state.questionPanelOpen = !state.questionPanelOpen;
+      render();
+    });
+  }
+
+  if (screen.type === "intro") {
+    document.getElementById("readDoneBtn").addEventListener("click", () => {
+      local.completed = true;
+      setFeedback(local, "Good. Now find the clue that rules one option out first.", "good");
+      render();
+    });
+  }
+
+  if (screen.type === "single" && screen.visual !== "transfer") {
+    document.querySelectorAll("[data-option-id]").forEach(btn => {
+      btn.addEventListener("click", () => handleSingleChoice(screen, local, btn.dataset.optionId));
+    });
+  }
+
+  if (screen.type === "single" && screen.visual === "transfer") {
+    document.querySelectorAll("[data-choice-id]").forEach(btn => {
+      btn.addEventListener("click", () => handleSingleChoice(screen, local, btn.dataset.choiceId));
+    });
+  }
+
+  if (screen.type === "multi") {
+    document.querySelectorAll("[data-multi-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.multiId;
+        if (local.multiSelected.includes(id)) {
+          local.multiSelected = local.multiSelected.filter(x => x !== id);
+        } else {
+          local.multiSelected = [...local.multiSelected, id];
+        }
+        render();
+      });
+    });
+    document.getElementById("checkMultiBtn").addEventListener("click", () => {
+      local.lastChecked = true;
+      const chosen = [...local.multiSelected].sort().join("|");
+      const correct = [...screen.correctIds].sort().join("|");
+      if (chosen === correct) {
+        local.completed = true;
+        setFeedback(local, screen.correctFeedback, "good");
+      } else {
+        applyDemeritIfNeeded(screen);
+        setFeedback(local, screen.wrongFeedback, "bad");
+      }
+      render();
+    });
+  }
+
+  if (screen.type === "order") {
+    document.getElementById("playAnimBtn").addEventListener("click", () => {
+      local.playedAnimation = true;
+      render();
+    });
+    document.querySelectorAll("[data-bank-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (local.builtOrder.length < screen.correctOrder.length) {
+          local.builtOrder.push(btn.dataset.bankId);
+          setFeedback(local, "", "");
+          render();
+        }
+      });
+    });
+    document.querySelectorAll("[data-built-index]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const idx = Number(btn.dataset.builtIndex);
+        if (local.builtOrder[idx]) {
+          local.builtOrder.splice(idx, 1);
+          render();
+        }
+      });
+    });
+    document.getElementById("checkOrderBtn").addEventListener("click", () => {
+      if (local.builtOrder.length !== screen.correctOrder.length) {
+        setFeedback(local, "Build all three steps first.", "bad");
+        render();
+        return;
+      }
+      const answer = local.builtOrder.join("|");
+      const correct = screen.correctOrder.join("|");
+      if (answer === correct) {
+        local.completed = true;
+        setFeedback(local, screen.correctFeedback, "good");
+      } else {
+        applyDemeritIfNeeded(screen);
+        setFeedback(local, screen.wrongFeedback, "bad");
+      }
+      render();
+    });
+  }
+
+  if (screen.type === "blanks") {
+    document.querySelectorAll("[data-blank-index]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        local.activeBlank = Number(btn.dataset.blankIndex);
+        render();
+      });
+    });
+    document.querySelectorAll("[data-fill-id]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const fillId = btn.dataset.fillId;
+        const blank = screen.blanks[local.activeBlank];
+        local.blanks[blank.id] = fillId;
+        if (local.activeBlank < screen.blanks.length - 1) {
+          local.activeBlank += 1;
+        }
+        setFeedback(local, "", "");
+        render();
+      });
+    });
+    document.getElementById("checkBlanksBtn").addEventListener("click", () => {
+      const allFilled = screen.blanks.every(b => !!local.blanks[b.id]);
+      if (!allFilled) {
+        setFeedback(local, "Fill both blanks first.", "bad");
+        render();
+        return;
+      }
+      const correct = screen.blanks.every(b => local.blanks[b.id] === b.answerId);
+      if (correct) {
+        local.completed = true;
+        setFeedback(local, screen.correctFeedback, "good");
+      } else {
+        local.blankWrongCount += 1;
+        applyDemeritIfNeeded(screen);
+        setFeedback(local, local.blankWrongCount === 1 ? screen.firstWrongFeedback : screen.wrongFeedback, "bad");
+      }
+      render();
+    });
+  }
+
+  if (screen.type === "guess") {
+    const input = document.getElementById("guessInput");
+    if (input) {
+      input.addEventListener("input", e => {
+        local.guessInput = e.target.value;
+      });
+      input.addEventListener("keydown", e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("checkGuessBtn").click();
+        }
+      });
+    }
+    const btn = document.getElementById("checkGuessBtn");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        const idx = local.guessIndex;
+        const target = screen.words[idx].answer.toLowerCase();
+        const typed = (local.guessInput || "").trim().toLowerCase();
+        if (typed === target) {
+          local.guessSolved[idx] = screen.words[idx].answer;
+          local.guessInput = "";
+          if (idx < screen.words.length - 1) {
+            local.guessIndex += 1;
+            setFeedback(local, "Yes. Now retrieve the next word.", "good");
+          } else {
+            local.completed = true;
+            setFeedback(local, screen.correctFeedback, "good");
+          }
+        } else {
+          local.guessReveals[idx] = Math.min(screen.words[idx].answer.length, local.guessReveals[idx] + 1);
+          setFeedback(local, "Not yet. Here is one more letter to help you retrieve it.", "bad");
+        }
+        render();
+      });
+    }
+  }
+
+  if (screen.type === "finish") {
+    document.getElementById("finishBtn").addEventListener("click", () => {
+      speechSynthesis.cancel();
+      const btn = document.getElementById("finishBtn");
+      btn.textContent = "Done";
+      btn.disabled = true;
+    });
+    document.getElementById("restartBtn").addEventListener("click", () => resetApp());
+  }
+}
+
+function handleSingleChoice(screen, local, id) {
+  local.selectedId = id;
+  if (id === screen.correctId) {
+    local.completed = true;
+    setFeedback(local, screen.correctFeedback, "good");
+  } else {
+    applyDemeritIfNeeded(screen);
+    setFeedback(local, screen.wrongFeedback, "bad");
+  }
+  render();
+}
+
+
+function flowerDiagram(highlight) {
+  if (highlight === "anther") {
+    return `
+    <svg viewBox="0 0 760 360" role="img" aria-label="Flower diagram showing exposed anthers with pollen shaking free">
+      <style>
+        .flower-outline { fill: none; stroke: #4c6a84; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+        .flower-centre { fill: #f5f9fc; stroke: #4c6a84; stroke-width: 6; }
+        .anther-stalk { stroke: #1388df; stroke-width: 10; stroke-linecap: round; }
+        .anther-body { fill: #1388df; }
+        .muted-stalk { stroke: #99a9b7; stroke-width: 8; stroke-linecap: round; }
+        .muted-body { fill: #8fa1b1; }
+        .stigma-branch { stroke: #97a5b2; stroke-width: 8; stroke-linecap: round; }
+        .label-main { font-size: 30px; font-weight: 900; fill: #17324d; }
+        .label-sub { font-size: 20px; font-weight: 700; fill: #50677d; }
+        .callout { fill: none; stroke: #6a8299; stroke-width: 5; stroke-linecap: round; }
+        .focus-ring { fill: rgba(19,136,223,0.10); stroke: #1388df; stroke-width: 5; stroke-dasharray: 10 8; }
+        .pollen-dot { fill: #f0a100; opacity: 0; }
+        .p1 { animation: antherDrift1 1.8s ease-in-out infinite; }
+        .p2 { animation: antherDrift2 2.1s ease-in-out infinite 0.25s; }
+        .p3 { animation: antherDrift3 1.9s ease-in-out infinite 0.5s; }
+        .p4 { animation: antherDrift4 2.2s ease-in-out infinite 0.15s; }
+        @keyframes antherDrift1 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          15% { opacity: 1; }
+          100% { transform: translate(-115px, -42px); opacity: 0; }
+        }
+        @keyframes antherDrift2 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          100% { transform: translate(-132px, 18px); opacity: 0; }
+        }
+        @keyframes antherDrift3 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          100% { transform: translate(-88px, -78px); opacity: 0; }
+        }
+        @keyframes antherDrift4 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          100% { transform: translate(-148px, -10px); opacity: 0; }
+        }
+      </style>
+      <rect x="8" y="8" width="744" height="344" rx="24" fill="#ffffff"/>
+
+      <g transform="translate(255 188)">
+        <path class="flower-outline" d="M0,-128 C-34,-60 -34,52 0,142 C34,52 34,-60 0,-128"/>
+        <path class="flower-outline" d="M-38,-112 C-142,-6 -132,110 -56,172"/>
+        <path class="flower-outline" d="M38,-112 C142,-6 132,110 56,172"/>
+        <path class="flower-centre" d="M-16,140 C-34,160 -40,188 -40,212 C-8,216 10,216 40,212 C40,188 34,160 16,140"/>
+
+        <line class="muted-stalk" x1="-118" y1="-16" x2="-184" y2="32"/>
+        <ellipse class="muted-body" cx="-200" cy="44" rx="24" ry="54"/>
+
+        <line class="anther-stalk" x1="118" y1="-16" x2="184" y2="32"/>
+        <ellipse class="anther-body" cx="202" cy="44" rx="24" ry="54"/>
+
+        <g transform="translate(-78,106)">
+          <line class="stigma-branch" x1="0" y1="0" x2="-34" y2="0"/>
+          <line class="stigma-branch" x1="-16" y1="-20" x2="-56" y2="-10"/>
+          <line class="stigma-branch" x1="-16" y1="20" x2="-56" y2="10"/>
+          <line class="stigma-branch" x1="-24" y1="-36" x2="-62" y2="-26"/>
+          <line class="stigma-branch" x1="-24" y1="36" x2="-62" y2="26"/>
+        </g>
+        <g transform="translate(78,106)">
+          <line class="stigma-branch" x1="0" y1="0" x2="34" y2="0"/>
+          <line class="stigma-branch" x1="16" y1="-20" x2="56" y2="-10"/>
+          <line class="stigma-branch" x1="16" y1="20" x2="56" y2="10"/>
+          <line class="stigma-branch" x1="24" y1="-36" x2="62" y2="-26"/>
+          <line class="stigma-branch" x1="24" y1="36" x2="62" y2="26"/>
+        </g>
+      </g>
+
+      <circle class="focus-ring" cx="458" cy="228" r="64"/>
+      <path class="callout" d="M516 192 L588 136"/>
+      <path class="callout" d="M520 262 L588 166"/>
+      <text class="label-main" x="600" y="140">anther</text>
+      <text class="label-sub" x="600" y="172">hangs outside</text>
+      <text class="label-sub" x="600" y="198">the flower</text>
+
+      <g transform="translate(456 222)">
+        <circle class="pollen-dot p1" cx="26" cy="-42" r="6"/>
+        <circle class="pollen-dot p2" cx="20" cy="-10" r="6"/>
+        <circle class="pollen-dot p3" cx="18" cy="22" r="6"/>
+        <circle class="pollen-dot p4" cx="22" cy="48" r="6"/>
+      </g>
+    </svg>
+    `;
+  }
+
+  if (highlight === "stigma") {
+    return `
+    <svg viewBox="0 0 760 360" role="img" aria-label="Flower diagram showing a feathery stigma catching pollen">
+      <style>
+        .flower-outline { fill: none; stroke: #4c6a84; stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+        .flower-centre { fill: #f5f9fc; stroke: #4c6a84; stroke-width: 6; }
+        .anther-stalk { stroke: #99a9b7; stroke-width: 8; stroke-linecap: round; }
+        .anther-body { fill: #8fa1b1; }
+        .stigma-core { stroke: #f0a100; stroke-width: 10; stroke-linecap: round; }
+        .stigma-feather { stroke: #f0a100; stroke-width: 9; stroke-linecap: round; }
+        .focus-ring { fill: rgba(240,161,0,0.10); stroke: #f0a100; stroke-width: 5; stroke-dasharray: 10 8; }
+        .label-main { font-size: 30px; font-weight: 900; fill: #17324d; }
+        .label-sub { font-size: 20px; font-weight: 700; fill: #50677d; }
+        .callout { fill: none; stroke: #6a8299; stroke-width: 5; stroke-linecap: round; }
+        .pollen-move { fill: #1388df; opacity: 0; }
+        .stuck-pollen { fill: #1388df; opacity: 0; }
+        .m1 { animation: stigmaFloat1 2.1s ease-in-out infinite; }
+        .m2 { animation: stigmaFloat2 2.2s ease-in-out infinite 0.35s; }
+        .m3 { animation: stigmaFloat3 2.0s ease-in-out infinite 0.6s; }
+        .m4 { animation: stigmaFloat4 2.15s ease-in-out infinite 0.15s; }
+        .s1 { animation: stigmaStick1 2.1s ease-in-out infinite; }
+        .s2 { animation: stigmaStick2 2.2s ease-in-out infinite 0.35s; }
+        .s3 { animation: stigmaStick3 2.0s ease-in-out infinite 0.6s; }
+        .s4 { animation: stigmaStick4 2.15s ease-in-out infinite 0.15s; }
+        @keyframes stigmaFloat1 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          70% { transform: translate(-112px, -30px); opacity: 1; }
+          100% { transform: translate(-128px, -34px); opacity: 0; }
+        }
+        @keyframes stigmaFloat2 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          70% { transform: translate(-122px, 6px); opacity: 1; }
+          100% { transform: translate(-136px, 8px); opacity: 0; }
+        }
+        @keyframes stigmaFloat3 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          70% { transform: translate(-98px, 32px); opacity: 1; }
+          100% { transform: translate(-118px, 38px); opacity: 0; }
+        }
+        @keyframes stigmaFloat4 {
+          0% { transform: translate(0px, 0px); opacity: 0; }
+          18% { opacity: 1; }
+          70% { transform: translate(-108px, -56px); opacity: 1; }
+          100% { transform: translate(-126px, -62px); opacity: 0; }
+        }
+        @keyframes stigmaStick1 { 0%, 62% { opacity: 0; } 70%, 100% { opacity: 1; } }
+        @keyframes stigmaStick2 { 0%, 62% { opacity: 0; } 70%, 100% { opacity: 1; } }
+        @keyframes stigmaStick3 { 0%, 62% { opacity: 0; } 70%, 100% { opacity: 1; } }
+        @keyframes stigmaStick4 { 0%, 62% { opacity: 0; } 70%, 100% { opacity: 1; } }
+      </style>
+      <rect x="8" y="8" width="744" height="344" rx="24" fill="#ffffff"/>
+
+      <g transform="translate(255 188)">
+        <path class="flower-outline" d="M0,-128 C-34,-60 -34,52 0,142 C34,52 34,-60 0,-128"/>
+        <path class="flower-outline" d="M-38,-112 C-142,-6 -132,110 -56,172"/>
+        <path class="flower-outline" d="M38,-112 C142,-6 132,110 56,172"/>
+        <path class="flower-centre" d="M-16,140 C-34,160 -40,188 -40,212 C-8,216 10,216 40,212 C40,188 34,160 16,140"/>
+
+        <line class="anther-stalk" x1="-118" y1="-16" x2="-184" y2="32"/>
+        <ellipse class="anther-body" cx="-200" cy="44" rx="24" ry="54"/>
+        <line class="anther-stalk" x1="118" y1="-16" x2="184" y2="32"/>
+        <ellipse class="anther-body" cx="202" cy="44" rx="24" ry="54"/>
+
+        <g transform="translate(-78,106)">
+          <line class="stigma-core" x1="0" y1="0" x2="-34" y2="0"/>
+          <line class="stigma-feather" x1="-16" y1="-20" x2="-56" y2="-10"/>
+          <line class="stigma-feather" x1="-16" y1="20" x2="-56" y2="10"/>
+          <line class="stigma-feather" x1="-24" y1="-36" x2="-62" y2="-26"/>
+          <line class="stigma-feather" x1="-24" y1="36" x2="-62" y2="26"/>
+          <line class="stigma-feather" x1="-32" y1="-8" x2="-66" y2="0"/>
+          <line class="stigma-feather" x1="-32" y1="8" x2="-66" y2="0"/>
+        </g>
+        <g transform="translate(78,106)">
+          <line class="stigma-core" x1="0" y1="0" x2="34" y2="0"/>
+          <line class="stigma-feather" x1="16" y1="-20" x2="56" y2="-10"/>
+          <line class="stigma-feather" x1="16" y1="20" x2="56" y2="10"/>
+          <line class="stigma-feather" x1="24" y1="-36" x2="62" y2="-26"/>
+          <line class="stigma-feather" x1="24" y1="36" x2="62" y2="26"/>
+          <line class="stigma-feather" x1="32" y1="-8" x2="66" y2="0"/>
+          <line class="stigma-feather" x1="32" y1="8" x2="66" y2="0"/>
+        </g>
+      </g>
+
+      <circle class="focus-ring" cx="358" cy="294" r="68"/>
+      <path class="callout" d="M410 270 L560 232"/>
+      <text class="label-main" x="572" y="236">feathery stigma</text>
+      <text class="label-sub" x="572" y="268">catches and holds</text>
+      <text class="label-sub" x="572" y="294">pollen grains</text>
+
+      <g transform="translate(480 210)">
+        <circle class="pollen-move m1" cx="0" cy="-34" r="6"/>
+        <circle class="pollen-move m2" cx="18" cy="2" r="6"/>
+        <circle class="pollen-move m3" cx="10" cy="42" r="6"/>
+        <circle class="pollen-move m4" cx="24" cy="-70" r="6"/>
+      </g>
+
+      <g transform="translate(356 292)">
+        <circle class="stuck-pollen s1" cx="36" cy="-24" r="6"/>
+        <circle class="stuck-pollen s2" cx="48" cy="6" r="6"/>
+        <circle class="stuck-pollen s3" cx="42" cy="28" r="6"/>
+        <circle class="stuck-pollen s4" cx="28" cy="-48" r="6"/>
+      </g>
+    </svg>
+    `;
+  }
+
+  return "";
+}
+
+function animatedFlower(playing) {
+  return `
+  <style>
+    .anim-wrap { position: relative; max-width: 360px; margin: 0 auto; }
+    .anim-wrap svg { width: 100%; height: auto; display:block; }
+    .anim-wrap .anther-left { transform-origin: 105px 117px; }
+    .anim-wrap .anther-right { transform-origin: 255px 117px; }
+    .anim-wrap.play .anther-left { animation: swayLeft 1.4s ease-in-out 2; }
+    .anim-wrap.play .anther-right { animation: swayRight 1.4s ease-in-out 2; }
+    .anim-wrap .pollen { opacity: 0; }
+    .anim-wrap.play .p1 { animation: drift1 2.3s ease forwards; }
+    .anim-wrap.play .p2 { animation: drift2 2.4s ease .15s forwards; }
+    .anim-wrap.play .p3 { animation: drift3 2.5s ease .28s forwards; }
+    .anim-wrap.play .windline1, .anim-wrap.play .windline2, .anim-wrap.play .windline3 { animation: windpulse 1.8s linear 1; }
+    @keyframes swayLeft { 0%,100% { transform: rotate(0deg); } 40% { transform: rotate(-10deg); } 70% { transform: rotate(6deg); } }
+    @keyframes swayRight { 0%,100% { transform: rotate(0deg); } 40% { transform: rotate(10deg); } 70% { transform: rotate(-6deg); } }
+    @keyframes drift1 { 0% { opacity: 0; transform: translate(0,0); } 10% { opacity: 1; } 100% { opacity: 1; transform: translate(88px,54px); } }
+    @keyframes drift2 { 0% { opacity: 0; transform: translate(0,0); } 10% { opacity: 1; } 100% { opacity: 1; transform: translate(72px,66px); } }
+    @keyframes drift3 { 0% { opacity: 0; transform: translate(0,0); } 10% { opacity: 1; } 100% { opacity: 1; transform: translate(102px,40px); } }
+    @keyframes windpulse { 0% { opacity: 0; } 25% { opacity: .85; } 100% { opacity: 0; transform: translateX(24px); } }
+  </style>
+  <div class="anim-wrap ${playing ? "play" : ""}">
+    <svg viewBox="0 0 360 280" aria-label="Animation showing pollen shaking free and moving to the stigma">
+      <rect x="0" y="0" width="360" height="280" fill="#ffffff"/>
+      <g transform="translate(180 150)">
+        <path d="M0,-110 C-24,-38 -24,38 0,112 C24,38 24,-38 0,-110" fill="#f7fbff" stroke="#43617a" stroke-width="3"/>
+        <path d="M-20,-102 C-70,-30 -66,40 -28,100" fill="none" stroke="#43617a" stroke-width="3"/>
+        <path d="M20,-102 C70,-30 66,40 28,100" fill="none" stroke="#43617a" stroke-width="3"/>
+        <path d="M-6,92 C-16,104 -18,118 -18,128 C-6,131 5,131 18,128 C18,116 16,104 6,92" fill="#f5f7f9" stroke="#43617a" stroke-width="3"/>
+        <g class="anther-left">
+          <line x1="-72" y1="-34" x2="-110" y2="-6" stroke="#43617a" stroke-width="4"/>
+          <ellipse cx="-118" cy="2" rx="10" ry="28" fill="#1186d8"/>
+        </g>
+        <g class="anther-right">
+          <line x1="72" y1="-34" x2="110" y2="-6" stroke="#43617a" stroke-width="4"/>
+          <ellipse cx="118" cy="2" rx="10" ry="28" fill="#1186d8"/>
+        </g>
+        <g transform="translate(-52,56)">
+          <line x1="0" y1="0" x2="-18" y2="0" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-9" y1="-10" x2="-26" y2="-4" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-9" y1="10" x2="-26" y2="4" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-13" y1="-16" x2="-24" y2="-13" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-13" y1="16" x2="-24" y2="13" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-17" y1="-20" x2="-28" y2="-18" stroke="#f4a000" stroke-width="4"/>
+          <line x1="-17" y1="20" x2="-28" y2="18" stroke="#f4a000" stroke-width="4"/>
+        </g>
+        <g transform="translate(52,56)">
+          <line x1="0" y1="0" x2="18" y2="0" stroke="#f4a000" stroke-width="4"/>
+          <line x1="9" y1="-10" x2="26" y2="-4" stroke="#f4a000" stroke-width="4"/>
+          <line x1="9" y1="10" x2="26" y2="4" stroke="#f4a000" stroke-width="4"/>
+          <line x1="13" y1="-16" x2="24" y2="-13" stroke="#f4a000" stroke-width="4"/>
+          <line x1="13" y1="16" x2="24" y2="13" stroke="#f4a000" stroke-width="4"/>
+          <line x1="17" y1="-20" x2="28" y2="-18" stroke="#f4a000" stroke-width="4"/>
+          <line x1="17" y1="20" x2="28" y2="18" stroke="#f4a000" stroke-width="4"/>
+        </g>
+        <g fill="#9d6700">
+          <circle class="pollen p1" cx="62" cy="6" r="5"/>
+          <circle class="pollen p2" cx="68" cy="-8" r="4.8"/>
+          <circle class="pollen p3" cx="74" cy="18" r="4.6"/>
+        </g>
+      </g>
+      <path class="windline1" d="M220 120 C250 112 270 118 300 110" fill="none" stroke="#7cc6ff" stroke-width="4" stroke-linecap="round" opacity="0"/>
+      <path class="windline2" d="M210 148 C240 140 260 146 302 140" fill="none" stroke="#7cc6ff" stroke-width="4" stroke-linecap="round" opacity="0"/>
+      <path class="windline3" d="M208 172 C238 166 258 170 298 168" fill="none" stroke="#7cc6ff" stroke-width="4" stroke-linecap="round" opacity="0"/>
+    </svg>
+  </div>
+  `;
+}
+
+function transferFlower(kind) {
+  if (kind === "wind") {
+    return `
+      <svg viewBox="0 0 240 220" aria-label="Flower with exposed anthers and feathery stigma">
+        <rect x="0" y="0" width="240" height="220" fill="#ffffff"/>
+        <g transform="translate(120 122)">
+          <path d="M0,-82 C-18,-26 -18,26 0,86 C18,26 18,-26 0,-82" fill="#f7fbff" stroke="#43617a" stroke-width="3"/>
+          <path d="M-16,-74 C-52,-20 -50,34 -24,78" fill="none" stroke="#43617a" stroke-width="3"/>
+          <path d="M16,-74 C52,-20 50,34 24,78" fill="none" stroke="#43617a" stroke-width="3"/>
+          <line x1="-56" y1="-18" x2="-90" y2="4" stroke="#43617a" stroke-width="4"/>
+          <line x1="56" y1="-18" x2="90" y2="4" stroke="#43617a" stroke-width="4"/>
+          <ellipse cx="-96" cy="8" rx="8" ry="22" fill="#1186d8"/>
+          <ellipse cx="96" cy="8" rx="8" ry="22" fill="#1186d8"/>
+          <g transform="translate(-42,42)">
+            <line x1="0" y1="0" x2="-16" y2="0" stroke="#f4a000" stroke-width="4"/>
+            <line x1="-8" y1="-8" x2="-24" y2="-4" stroke="#f4a000" stroke-width="4"/>
+            <line x1="-8" y1="8" x2="-24" y2="4" stroke="#f4a000" stroke-width="4"/>
+          </g>
+          <g transform="translate(42,42)">
+            <line x1="0" y1="0" x2="16" y2="0" stroke="#f4a000" stroke-width="4"/>
+            <line x1="8" y1="-8" x2="24" y2="-4" stroke="#f4a000" stroke-width="4"/>
+            <line x1="8" y1="8" x2="24" y2="4" stroke="#f4a000" stroke-width="4"/>
+          </g>
+        </g>
+      </svg>
+    `;
+  }
+  return `
+    <svg viewBox="0 0 240 220" aria-label="Flower with large petals and enclosed anthers">
+      <rect x="0" y="0" width="240" height="220" fill="#ffffff"/>
+      <g transform="translate(120 126)">
+        <ellipse cx="-28" cy="-22" rx="34" ry="54" fill="#ffd2dd" stroke="#b55b78" stroke-width="3"/>
+        <ellipse cx="28" cy="-22" rx="34" ry="54" fill="#ffd2dd" stroke="#b55b78" stroke-width="3"/>
+        <ellipse cx="0" cy="-42" rx="28" ry="48" fill="#ffdcea" stroke="#b55b78" stroke-width="3"/>
+        <path d="M0,-58 C-12,-18 -12,30 0,76 C12,30 12,-18 0,-58" fill="#fff6fb" stroke="#7c5064" stroke-width="3"/>
+        <ellipse cx="0" cy="-6" rx="8" ry="18" fill="#7c5064"/>
+        <ellipse cx="0" cy="34" rx="16" ry="10" fill="#d88b2d"/>
+      </g>
+    </svg>
+  `;
+}
+
+function escapeHTML(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function escapeAttr(str) {
+  return escapeHTML(str ?? "");
+}
+
+function collectReadAloudText() {
+  const screen = currentScreen();
+  const local = currentLocal();
+  const bits = [screen.instruction, screen.support];
+  if (screen.type === "intro") {
+    bits.push("Question. Based on the diagram above, is flower A likely to be pollinated by animals or wind? Give a reason to support your answer.");
+    bits.push("Clue already given. Very few insects and small animals are found there.");
+  }
+  if (screen.options) {
+    const order = local.optionOrder || [];
+    order.forEach(opt => bits.push(opt.text));
+  }
+  if (screen.type === "multi") {
+    (local.optionOrder || []).forEach(opt => bits.push(opt.text));
+  }
+  if (screen.type === "order") {
+    bits.push("Build this chain. Exposed anthers let pollen shake free. The wind carries the pollen. The feathery stigma catches the pollen.");
+  }
+  if (screen.type === "blanks") {
+    screen.options.forEach(opt => bits.push(opt.text));
+  }
+  if (screen.type === "guess") {
+    bits.push("Retrieve the words wind, feathery, and pollen one at a time.");
+  }
+  if (local.feedback) bits.push(local.feedback);
+  return bits.join(". ");
+}
+
+function speakCurrentScreen() {
+  if (!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(collectReadAloudText());
+  utter.rate = 0.96;
+  utter.pitch = 1;
+  utter.volume = 1;
+  window.speechSynthesis.speak(utter);
+}
+
+document.getElementById("toggleAudioBtn").addEventListener("click", () => {
+  state.readAloudOn = !state.readAloudOn;
+  state.audioEnabledOnce = true;
+  render();
+});
+
+document.getElementById("readNowBtn").addEventListener("click", () => {
+  state.audioEnabledOnce = true;
+  speakCurrentScreen();
+});
+
+resetApp();
+</script>
+</body>
+</html>

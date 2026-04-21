@@ -1,0 +1,1255 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ppt1s1_2</title>
+  <style>
+    :root{
+      --bg:#fffaf7;
+      --panel:#ffffff;
+      --panel-2:#fff3ef;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5d6cf;
+      --accent:#c84c74;
+      --accent-2:#2f855a;
+      --accent-3:#8b5cf6;
+      --good:#166534;
+      --bad:#b42318;
+      --good-bg:#ecfdf3;
+      --bad-bg:#fff1f3;
+      --shadow:0 10px 30px rgba(51, 35, 23, 0.08);
+      --radius:20px;
+      --tap:56px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(180deg, #fffaf7 0%, #fff7f2 100%);
+      color:var(--text);
+    }
+    .app{
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 14px 14px 22px;
+    }
+    .topbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:12px 14px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    .demerits{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:44px;
+    }
+    .demerits .label{
+      font-weight:700;
+      font-size:1rem;
+    }
+    .petals{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .petal{
+      font-size:1.4rem;
+      line-height:1;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,.08));
+    }
+    .petal.used{opacity:.23; filter:none}
+    .top-controls{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .toggle{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:#fff;
+      font-weight:600;
+    }
+    .toggle input{width:18px; height:18px}
+    button{
+      font:inherit;
+      border:none;
+      border-radius:16px;
+      cursor:pointer;
+      min-height:var(--tap);
+      padding:12px 18px;
+      transition:transform .08s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
+    }
+    button:active{transform:translateY(1px)}
+    .btn-secondary{
+      background:#fff;
+      border:1px solid var(--line);
+      color:var(--text);
+    }
+    .btn-primary{
+      background:var(--accent);
+      color:#fff;
+      font-weight:700;
+      box-shadow:0 8px 18px rgba(200,76,116,.25);
+    }
+    .btn-primary[disabled], .btn-secondary[disabled]{
+      opacity:.45;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
+    .screen{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+    .screen-head{
+      margin-bottom:16px;
+    }
+    .kicker{
+      display:inline-block;
+      font-size:.95rem;
+      font-weight:700;
+      color:var(--accent-3);
+      background:#f5f3ff;
+      border-radius:999px;
+      padding:7px 12px;
+      margin-bottom:10px;
+    }
+    .title{
+      font-size:1.6rem;
+      line-height:1.25;
+      margin:0 0 10px 0;
+    }
+    .instruction{
+      font-size:1.35rem;
+      line-height:1.35;
+      font-weight:800;
+      margin:0;
+      color:#111827;
+    }
+    .content{
+      display:grid;
+      gap:16px;
+    }
+    .two-col{
+      grid-template-columns: minmax(250px, 1fr) minmax(280px, 1.1fr);
+      align-items:start;
+    }
+    .card{
+      background:var(--panel-2);
+      border:1px solid #f1d8ce;
+      border-radius:20px;
+      padding:16px;
+    }
+    .small-note{
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.45;
+    }
+    .keyword{
+      background:#fff1a8;
+      padding:0 .18em;
+      border-radius:6px;
+    }
+    .question-stem{
+      font-size:1.18rem;
+      line-height:1.6;
+      margin:0 0 16px 0;
+    }
+    .options{
+      display:grid;
+      gap:12px;
+    }
+    .option{
+      width:100%;
+      text-align:left;
+      background:#fff;
+      border:2px solid #e5e7eb;
+      padding:14px 16px;
+      border-radius:18px;
+      font-size:1.08rem;
+      min-height:64px;
+      box-shadow:0 1px 0 rgba(0,0,0,.02);
+    }
+    .option:hover{border-color:#d0b7c7}
+    .option.selected{
+      border-color:var(--accent-3);
+      background:#f7f5ff;
+    }
+    .option.correct{
+      border-color:#16a34a;
+      background:#effcf3;
+    }
+    .option.wrong{
+      border-color:#ef4444;
+      background:#fff2f2;
+    }
+    .choice-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+      gap:12px;
+    }
+    .feedback{
+      min-height:62px;
+      border-radius:18px;
+      padding:14px 16px;
+      font-size:1.06rem;
+      line-height:1.45;
+      border:1px dashed transparent;
+    }
+    .feedback.idle{
+      background:#fafafa;
+      border-color:#ececec;
+      color:var(--muted);
+    }
+    .feedback.good{
+      background:var(--good-bg);
+      border-color:#a7f3d0;
+      color:var(--good);
+      font-weight:700;
+    }
+    .feedback.bad{
+      background:var(--bad-bg);
+      border-color:#fecdd3;
+      color:var(--bad);
+      font-weight:700;
+    }
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+    details.question-panel{
+      margin-top:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:#fff;
+      overflow:hidden;
+    }
+    details.question-panel summary{
+      cursor:pointer;
+      list-style:none;
+      padding:14px 16px;
+      font-weight:700;
+      background:#fff8f4;
+      border-bottom:1px solid transparent;
+    }
+    details.question-panel[open] summary{
+      border-bottom-color:var(--line);
+    }
+    .question-panel-body{
+      padding:16px;
+      display:grid;
+      gap:16px;
+    }
+    .exam-wrap{
+      background:#fff;
+      border:1px solid #e8e8e8;
+      border-radius:18px;
+      padding:12px;
+    }
+    .diagram-card{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:12px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      min-height:340px;
+    }
+    .diagram-actions{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .chip{
+      min-width:64px;
+      min-height:58px;
+      padding:12px 18px;
+      border-radius:16px;
+      border:2px solid #d9dce3;
+      background:#fff;
+      font-size:1.15rem;
+      font-weight:800;
+    }
+    .chip.selected{border-color:var(--accent-3); background:#f7f5ff}
+    .chip.correct{border-color:#16a34a; background:#effcf3}
+    .chip.wrong{border-color:#ef4444; background:#fff2f2}
+    .hotspot-wrap{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      width:100%;
+      min-height:320px;
+    }
+    .flower-svg{
+      display:block;
+      width:min(100%, 520px);
+      max-width:100%;
+      height:auto;
+      overflow:visible;
+      flex:0 0 auto;
+    }
+    svg{
+      max-width:100%;
+      height:auto;
+      overflow:visible;
+    }
+    .flower-label{
+      font-size:22px;
+      font-weight:800;
+      fill:#374151;
+    }
+    .flower-label-bg{
+      fill:#ffffff;
+      stroke:#d1d5db;
+      stroke-width:2;
+    }
+    .hotspot{
+      fill:transparent;
+      stroke:transparent;
+      cursor:pointer;
+    }
+    .hotspot:hover{
+      fill:rgba(200,76,116,.10);
+      stroke:rgba(200,76,116,.25);
+      stroke-width:3;
+    }
+    .hotspot.corrected{
+      fill:rgba(22,163,74,.12);
+      stroke:rgba(22,163,74,.45);
+      stroke-width:4;
+    }
+    .legend{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      color:var(--muted);
+      font-size:.96rem;
+      margin-top:8px;
+    }
+    .gameover{
+      position:fixed;
+      inset:0;
+      background:rgba(17,24,39,.72);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:99;
+    }
+    .gameover.show{display:flex}
+    .gameover-card{
+      max-width:460px;
+      width:100%;
+      background:#fff;
+      border-radius:24px;
+      padding:24px;
+      text-align:center;
+      box-shadow:0 24px 60px rgba(0,0,0,.25);
+    }
+    .gameover h2{
+      margin:0 0 12px 0;
+      font-size:1.8rem;
+    }
+    .progress{
+      color:var(--muted);
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .completion{
+      text-align:center;
+      padding:10px 0 4px;
+    }
+    .completion .big{
+      font-size:1.9rem;
+      margin:8px 0 8px;
+    }
+    .tiny{
+      font-size:.92rem;
+      color:var(--muted);
+    }
+    .stack{display:grid; gap:14px}
+    .hidden{display:none !important}
+    @media (max-width: 860px){
+      .two-col{grid-template-columns:1fr}
+      .screen{padding:14px}
+      .instruction{font-size:1.2rem}
+      .title{font-size:1.4rem}
+      .diagram-card{min-height:290px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="demerits" aria-live="polite">
+        <div class="label">Petal slips left:</div>
+        <div class="petals" id="petalStrip"></div>
+        <div class="tiny" id="demeritScope"></div>
+      </div>
+      <div class="top-controls">
+        <label class="toggle" for="readToggle">
+          <input id="readToggle" type="checkbox" />
+          Read-aloud auto-play
+        </label>
+        <button class="btn-secondary" id="readNowBtn" type="button">Read this screen</button>
+      </div>
+    </div>
+
+    <main class="screen" id="screenRoot"></main>
+  </div>
+
+  <div class="gameover" id="gameOverLayer" aria-live="assertive" aria-modal="true" role="dialog">
+    <div class="gameover-card">
+      <div style="font-size:2.5rem;margin-bottom:8px;">🌸🌸🌸</div>
+      <h2>All petal slips used.</h2>
+      <p style="font-size:1.08rem;line-height:1.5;margin:0 0 10px 0;">
+        The activity will restart so you can try again carefully.
+      </p>
+      <p class="tiny">Restarting in <span id="restartCountdown">2</span>…</p>
+    </div>
+  </div>
+
+  <script>
+    const appState = {
+      screenIndex: 0,
+      readAloud: false,
+      questionPanelOpen: false,
+      maxDemerits: 3,
+      usedDemerits: 0,
+      selected: null,
+      answeredCorrectly: false,
+      feedbackType: 'idle',
+      feedbackText: '',
+      autoRestartTimer: null,
+      autoRestartCountdownTimer: null
+    };
+
+    const screenOrder = ['intro','task','fact','findOvary','matchLabel','retry','transfer','finish'];
+
+    const screens = {
+      intro: {
+        kicker: 'Screen 1 of 7',
+        title: 'Start with the question',
+        instruction: 'Read the question. Then tap the button.',
+        nextLabel: 'Next',
+        penaltyApplies: false,
+        renderContent() {
+          return `
+            <div class="content two-col">
+              <section class="card stack">
+                <p class="question-stem">
+                  <strong>2.</strong> The diagram shows the different parts of a flower.
+                </p>
+                <p class="question-stem">
+                  In which part of the flower does <span class="keyword">fertilisation</span> take place?
+                </p>
+                <div class="choice-grid">
+                  <div class="card" style="background:#fff;border-color:#eee;">
+                    <strong>(1)</strong> W
+                  </div>
+                  <div class="card" style="background:#fff;border-color:#eee;">
+                    <strong>(2)</strong> X
+                  </div>
+                  <div class="card" style="background:#fff;border-color:#eee;">
+                    <strong>(3)</strong> Y
+                  </div>
+                  <div class="card" style="background:#fff;border-color:#eee;">
+                    <strong>(4)</strong> Z
+                  </div>
+                </div>
+                <div class="small-note">
+                  Look for the clue word first. Then think about which flower part matches it.
+                </div>
+              </section>
+              <section class="diagram-card">
+                ${renderFlowerSVG('labeled', {labels: {left:'X', topRight:'W', midRight:'Y', bottomRight:'Z'}, ovaryLabel:'Z', interactive:false, showHotspots:false, questionStyle:true})}
+              </section>
+            </div>
+          `;
+        },
+        initialState() {
+          return { selected: null, answeredCorrectly: false, feedbackText: 'Tap “I have read it” when you are ready.', feedbackType: 'idle' };
+        },
+        renderActionArea() {
+          return `
+            <div class="actions">
+              <button class="btn-primary" id="readItBtn" type="button">${appState.answeredCorrectly ? 'Read again' : 'I have read it'}</button>
+              <button class="btn-primary" id="nextBtn" type="button" ${appState.answeredCorrectly ? '' : 'disabled'}>Next</button>
+            </div>
+            ${renderFeedback()}
+          `;
+        },
+        bind(root) {
+          root.querySelector('#readItBtn').addEventListener('click', () => {
+            appState.answeredCorrectly = true;
+            appState.feedbackType = 'good';
+            appState.feedbackText = 'Good. Now start by identifying what the question wants you to find.';
+            rerenderCurrentScreen();
+          });
+        },
+        getSpeechText() {
+          return [
+            'Screen 1. Start with the question.',
+            'Read the question. Then tap the button.',
+            'The diagram shows the different parts of a flower.',
+            'In which part of the flower does fertilisation take place?',
+            'Options shown in the question are W, X, Y and Z.',
+            appState.feedbackText || ''
+          ].join(' ');
+        }
+      },
+
+      task: {
+        kicker: 'Screen 2 of 7',
+        title: 'Find the task',
+        instruction: 'Tap what this question wants you to find.',
+        penaltyApplies: true,
+        nextLabel: 'Next',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'Read the clue word carefully before you choose.'
+          };
+        },
+        buildOptions() {
+          return shuffleWithGuard([
+            {id:'task_place', text:'the part where fertilisation takes place', correct:true},
+            {id:'task_pollen', text:'the part that makes pollen', correct:false},
+            {id:'task_catches', text:'the part that catches pollen', correct:false},
+            {id:'task_attracts', text:'the part that attracts insects', correct:false}
+          ], arr => arr[0].correct);
+        },
+        renderContent() {
+          const opts = this.options;
+          return `
+            <div class="content">
+              <div class="options">
+                ${opts.map(opt => renderOptionCard(opt, appState.selected, appState.answeredCorrectly)).join('')}
+              </div>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          bindOptionButtons(root, this.options, (optId) => handleSingleCorrectSelect(this.options, optId, {
+            onCorrect: 'Yes. This question asks for the flower part where fertilisation happens.',
+            onWrong: 'Read the clue word again: fertilisation.'
+          }));
+        },
+        getSpeechText() {
+          return speechFromOptions(this.instruction, this.options);
+        }
+      },
+
+      fact: {
+        kicker: 'Screen 3 of 7',
+        title: 'Recall the science fact',
+        instruction: 'Tap the correct science fact.',
+        penaltyApplies: true,
+        nextLabel: 'Next',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'Choose the fact that helps you answer this question.'
+          };
+        },
+        buildOptions() {
+          return shuffleWithGuard([
+            {id:'ovary_fact', text:'Fertilisation takes place in the ovary.', correct:true},
+            {id:'ovary_pollination', text:'Pollination takes place in the ovary.', correct:false},
+            {id:'anther_fact', text:'Fertilisation takes place in the anther.', correct:false},
+            {id:'petal_fact', text:'Fertilisation takes place in the petal.', correct:false}
+          ], arr => arr[0].correct);
+        },
+        renderContent() {
+          return `
+            <div class="content">
+              <div class="options">
+                ${this.options.map(opt => renderOptionCard(opt, appState.selected, appState.answeredCorrectly)).join('')}
+              </div>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          bindOptionButtons(root, this.options, (optId) => handleSingleCorrectSelect(this.options, optId, {
+            onCorrect: 'Yes. Now you need to find the ovary.',
+            onWrong: 'Do not mix up fertilisation with pollination.'
+          }));
+        },
+        getSpeechText() {
+          return speechFromOptions(this.instruction, this.options);
+        }
+      },
+
+      findOvary: {
+        kicker: 'Screen 4 of 7',
+        title: 'Find the correct flower part',
+        instruction: 'Tap the ovary on the flower.',
+        penaltyApplies: true,
+        nextLabel: 'Next',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'Look at the base of the middle female part.'
+          };
+        },
+        renderContent() {
+          return `
+            <div class="content">
+              <div class="diagram-card">
+                <div class="hotspot-wrap">
+                  ${renderFlowerSVG('clean', {interactive:true, showHotspots:true, showHotspotCorrect: appState.answeredCorrectly})}
+                </div>
+              </div>
+              <div class="legend">
+                <span>Tap the part you think is the ovary.</span>
+              </div>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          root.querySelectorAll('[data-hotspot]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              const id = btn.getAttribute('data-hotspot');
+              if (appState.answeredCorrectly) return;
+              if (id === 'ovary') {
+                appState.selected = id;
+                appState.answeredCorrectly = true;
+                appState.feedbackType = 'good';
+                appState.feedbackText = 'Yes. The ovary is the swollen part at the base of the female part.';
+                rerenderCurrentScreen();
+              } else {
+                appState.selected = id;
+                appState.feedbackType = 'bad';
+                appState.feedbackText = 'Look at the base of the middle female part.';
+                applyDemeritIfNeeded();
+                rerenderCurrentScreen();
+              }
+            });
+          });
+        },
+        getSpeechText() {
+          return [
+            this.instruction,
+            'The diagram shows a flower. Tap the ovary on the flower.',
+            appState.feedbackText || ''
+          ].join(' ');
+        }
+      },
+
+      matchLabel: {
+        kicker: 'Screen 5 of 7',
+        title: 'Match the label',
+        instruction: 'Tap the label that points to the ovary.',
+        penaltyApplies: true,
+        nextLabel: 'Next',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'Trace the line from the ovary to its label.'
+          };
+        },
+        buildOptions() {
+          return shuffleWithGuard([
+            {id:'W', text:'W', correct:false},
+            {id:'X', text:'X', correct:false},
+            {id:'Y', text:'Y', correct:false},
+            {id:'Z', text:'Z', correct:true}
+          ], arr => arr[3].correct);
+        },
+        renderContent() {
+          return `
+            <div class="content">
+              <div class="diagram-card stack">
+                ${renderFlowerSVG('labeled', {labels: {left:'X', topRight:'W', midRight:'Y', bottomRight:'Z'}, ovaryLabel:'Z', interactive:false, showHotspots:false})}
+                <div class="diagram-actions">
+                  ${this.options.map(opt => renderChip(opt, appState.selected, appState.answeredCorrectly)).join('')}
+                </div>
+              </div>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          root.querySelectorAll('[data-chip-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              handleSingleCorrectSelect(this.options, btn.getAttribute('data-chip-id'), {
+                onCorrect: 'Yes. Z points to the ovary.',
+                onWrong: 'Trace the line to the swollen base part.'
+              });
+            });
+          });
+        },
+        getSpeechText() {
+          return speechFromOptions(this.instruction, this.options);
+        }
+      },
+
+      retry: {
+        kicker: 'Screen 6 of 7',
+        title: 'Answer the original item',
+        instruction: 'Answer the original question.',
+        penaltyApplies: true,
+        nextLabel: 'Next',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'Use the chain: fertilisation → ovary → label.'
+          };
+        },
+        buildOptions() {
+          return shuffleWithGuard([
+            {id:'answer_W', text:'W', correct:false},
+            {id:'answer_X', text:'X', correct:false},
+            {id:'answer_Y', text:'Y', correct:false},
+            {id:'answer_Z', text:'Z', correct:true}
+          ], arr => arr[3].correct);
+        },
+        renderContent() {
+          return `
+            <div class="content two-col">
+              <section class="card stack">
+                <p class="question-stem">
+                  In which part of the flower does <span class="keyword">fertilisation</span> take place?
+                </p>
+                <div class="choice-grid">
+                  ${this.options.map(opt => renderOptionCard(opt, appState.selected, appState.answeredCorrectly, true)).join('')}
+                </div>
+              </section>
+              <section class="diagram-card">
+                ${renderFlowerSVG('labeled', {labels: {left:'X', topRight:'W', midRight:'Y', bottomRight:'Z'}, ovaryLabel:'Z', interactive:false, showHotspots:false, questionStyle:true})}
+              </section>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          bindOptionButtons(root, this.options, (optId) => handleSingleCorrectSelect(this.options, optId, {
+            onCorrect: 'Yes. Fertilisation takes place in the ovary, so the answer is Z.',
+            onWrong: 'Use the chain again: fertilisation → ovary → label Z.'
+          }));
+        },
+        getSpeechText() {
+          return speechFromOptions(this.instruction, this.options);
+        }
+      },
+
+      transfer: {
+        kicker: 'Screen 7 of 7',
+        title: 'Try one more',
+        instruction: 'Tap the labelled part where fertilisation takes place.',
+        penaltyApplies: false,
+        nextLabel: 'Finish',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: false,
+            feedbackType: 'idle',
+            feedbackText: 'This time the labels are new. Use the same idea.'
+          };
+        },
+        buildOptions() {
+          return shuffleWithGuard([
+            {id:'P', text:'P', correct:false},
+            {id:'Q', text:'Q', correct:false},
+            {id:'R', text:'R', correct:true},
+            {id:'S', text:'S', correct:false}
+          ], arr => arr[2].correct);
+        },
+        renderContent() {
+          return `
+            <div class="content">
+              <div class="diagram-card stack">
+                ${renderFlowerSVG('labeled', {labels: {left:'P', topRight:'Q', midRight:'S', bottomRight:'R'}, ovaryLabel:'R', interactive:false, showHotspots:false})}
+                <div class="diagram-actions">
+                  ${this.options.map(opt => renderChip(opt, appState.selected, appState.answeredCorrectly)).join('')}
+                </div>
+              </div>
+              ${renderFeedback()}
+            </div>
+          `;
+        },
+        bind(root) {
+          root.querySelectorAll('[data-chip-id]').forEach(btn => {
+            btn.addEventListener('click', () => {
+              handleSingleCorrectSelect(this.options, btn.getAttribute('data-chip-id'), {
+                onCorrect: 'Yes. You found the ovary again.',
+                onWrong: 'Remember: fertilisation happens in the ovary.'
+              }, false);
+            });
+          });
+        },
+        getSpeechText() {
+          return speechFromOptions(this.instruction, this.options);
+        }
+      },
+
+      finish: {
+        kicker: 'Done',
+        title: 'Finished',
+        instruction: 'You solved it by reading the process word, recalling the flower part, and matching the label.',
+        penaltyApplies: false,
+        nextLabel: 'Restart',
+        initialState() {
+          return {
+            selected: null,
+            answeredCorrectly: true,
+            feedbackType: 'good',
+            feedbackText: 'Good job.'
+          };
+        },
+        renderContent() {
+          return `
+            <div class="content">
+              <div class="completion">
+                <div style="font-size:3rem;">🌸</div>
+                <div class="big">Great work.</div>
+                <p style="font-size:1.15rem;line-height:1.6;max-width:680px;margin:0 auto 16px;">
+                  For this type of question, read the process word first, recall the correct flower part, then match the label on the diagram.
+                </p>
+                <div class="card" style="max-width:560px;margin:0 auto;">
+                  <strong>Key idea:</strong> Fertilisation takes place in the <strong>ovary</strong>.
+                </div>
+              </div>
+            </div>
+          `;
+        },
+        renderActionArea() {
+          return `
+            <div class="actions">
+              <button class="btn-primary" id="restartBtn" type="button">Restart</button>
+            </div>
+          `;
+        },
+        bind(root) {
+          root.querySelector('#restartBtn').addEventListener('click', restartWholeInteractive);
+        },
+        getSpeechText() {
+          return [
+            'Finished.',
+            this.instruction,
+            'Key idea: Fertilisation takes place in the ovary.'
+          ].join(' ');
+        }
+      }
+    };
+
+    function shuffleWithGuard(items, accidentalPatternFn) {
+      let arr = items.map(item => ({...item}));
+      let attempts = 0;
+      do {
+        arr = [...arr].sort(() => Math.random() - 0.5);
+        attempts += 1;
+      } while ((accidentalPatternFn && accidentalPatternFn(arr)) && attempts < 20);
+      return arr;
+    }
+
+    function resetCurrentScreenState() {
+      const key = screenOrder[appState.screenIndex];
+      const screen = screens[key];
+      const init = screen.initialState ? screen.initialState() : {};
+      appState.selected = init.selected ?? null;
+      appState.answeredCorrectly = init.answeredCorrectly ?? false;
+      appState.feedbackType = init.feedbackType ?? 'idle';
+      appState.feedbackText = init.feedbackText ?? '';
+      if (screen.buildOptions) screen.options = screen.buildOptions();
+    }
+
+    function renderOptionCard(opt, selectedId, answeredCorrectly, compact=false) {
+      let cls = 'option';
+      if (selectedId === opt.id) cls += ' selected';
+      if (selectedId === opt.id && answeredCorrectly && opt.correct) cls += ' correct';
+      if (selectedId === opt.id && !answeredCorrectly && appState.feedbackType === 'bad') cls += ' wrong';
+      return `
+        <button class="${cls}" type="button" data-option-id="${opt.id}" aria-pressed="${selectedId === opt.id ? 'true' : 'false'}"
+          style="${compact ? 'text-align:center;font-size:1.18rem;font-weight:800;' : ''}">
+          ${opt.text}
+        </button>
+      `;
+    }
+
+    function renderChip(opt, selectedId, answeredCorrectly) {
+      let cls = 'chip';
+      if (selectedId === opt.id) cls += ' selected';
+      if (selectedId === opt.id && answeredCorrectly && opt.correct) cls += ' correct';
+      if (selectedId === opt.id && !answeredCorrectly && appState.feedbackType === 'bad') cls += ' wrong';
+      return `<button type="button" class="${cls}" data-chip-id="${opt.id}" aria-pressed="${selectedId === opt.id ? 'true' : 'false'}">${opt.text}</button>`;
+    }
+
+    function renderFeedback() {
+      const cls = appState.feedbackType || 'idle';
+      const text = appState.feedbackText || '';
+      return `<div class="feedback ${cls}" aria-live="polite">${text}</div>`;
+    }
+
+    function bindOptionButtons(root, options, handler) {
+      root.querySelectorAll('[data-option-id]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          handler(btn.getAttribute('data-option-id'));
+        });
+      });
+    }
+
+    function handleSingleCorrectSelect(options, optId, feedback, applyPenalty=true) {
+      if (appState.answeredCorrectly) return;
+      const opt = options.find(o => o.id === optId);
+      if (!opt) return;
+      appState.selected = optId;
+      if (opt.correct) {
+        appState.answeredCorrectly = true;
+        appState.feedbackType = 'good';
+        appState.feedbackText = feedback.onCorrect;
+      } else {
+        appState.feedbackType = 'bad';
+        appState.feedbackText = feedback.onWrong;
+        if (applyPenalty) applyDemeritIfNeeded();
+      }
+      rerenderCurrentScreen();
+    }
+
+    function applyDemeritIfNeeded() {
+      const key = screenOrder[appState.screenIndex];
+      const screen = screens[key];
+      if (!screen.penaltyApplies) return;
+      appState.usedDemerits += 1;
+      if (appState.usedDemerits >= appState.maxDemerits) {
+        rerenderPetals();
+        showGameOverAndRestart();
+      }
+    }
+
+    function renderTopBarExtras() {
+      rerenderPetals();
+      const scope = document.getElementById('demeritScope');
+      const key = screenOrder[appState.screenIndex];
+      scope.textContent = screens[key].penaltyApplies
+        ? 'Demerits apply on this teaching step.'
+        : 'No demerit on this screen.';
+      document.getElementById('readToggle').checked = appState.readAloud;
+    }
+
+    function rerenderPetals() {
+      const strip = document.getElementById('petalStrip');
+      strip.innerHTML = '';
+      for (let i = 0; i < appState.maxDemerits; i++) {
+        const span = document.createElement('span');
+        span.className = 'petal' + (i < appState.usedDemerits ? ' used' : '');
+        span.textContent = '🌸';
+        strip.appendChild(span);
+      }
+    }
+
+    function renderQuestionPanel() {
+      const key = screenOrder[appState.screenIndex];
+      if (key === 'intro' || key === 'finish') return '';
+      return `
+        <details class="question-panel" id="questionPanel" ${appState.questionPanelOpen ? 'open' : ''}>
+          <summary>${appState.questionPanelOpen ? 'Hide the full question' : 'Show the full question'}</summary>
+          <div class="question-panel-body">
+            <div class="card">
+              <p class="question-stem"><strong>2.</strong> The diagram shows the different parts of a flower.</p>
+              <p class="question-stem">In which part of the flower does <span class="keyword">fertilisation</span> take place?</p>
+              <div class="choice-grid">
+                <div class="card" style="background:#fff;border-color:#eee;"><strong>(1)</strong> W</div>
+                <div class="card" style="background:#fff;border-color:#eee;"><strong>(2)</strong> X</div>
+                <div class="card" style="background:#fff;border-color:#eee;"><strong>(3)</strong> Y</div>
+                <div class="card" style="background:#fff;border-color:#eee;"><strong>(4)</strong> Z</div>
+              </div>
+            </div>
+            <div class="exam-wrap">
+              ${renderFlowerSVG('labeled', {labels: {left:'X', topRight:'W', midRight:'Y', bottomRight:'Z'}, ovaryLabel:'Z', interactive:false, showHotspots:false, questionStyle:true})}
+            </div>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderFlowerSVG(type, opts={}) {
+      const labels = opts.labels || {left:'X', topRight:'W', midRight:'Y', bottomRight:'Z'};
+      const questionStyle = opts.questionStyle ? 'style="max-width:480px;"' : '';
+      const showHotspotCorrect = opts.showHotspotCorrect;
+      return `
+      <svg class="flower-svg" viewBox="0 0 520 390" width="520" height="390" preserveAspectRatio="xMidYMid meet" ${questionStyle} aria-label="Flower diagram" role="img">
+        <defs>
+          <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity=".08"/>
+          </filter>
+        </defs>
+
+        <path d="M118 142
+                 C104 114, 118 88, 152 82
+                 C164 56, 198 48, 228 64
+                 C248 44, 284 44, 306 66
+                 C330 52, 366 60, 380 90
+                 C414 92, 432 118, 420 150
+                 C406 186, 364 212, 318 206
+                 C288 202, 260 194, 226 202
+                 C170 214, 132 194, 118 142 Z"
+              fill="#fff5fb" stroke="#666" stroke-width="3"/>
+
+        <path d="M214 320 C194 286, 184 250, 178 202
+                 C172 156, 174 122, 190 92"
+              fill="none" stroke="#737373" stroke-width="5" stroke-linecap="round"/>
+        <path d="M192 146 C202 132, 212 132, 218 146
+                 C219 161, 205 168, 194 160 Z"
+              fill="#f4c267" stroke="#666" stroke-width="3"/>
+
+        <path d="M244 326 C232 290, 228 250, 230 180
+                 C232 130, 238 100, 248 80"
+              fill="none" stroke="#737373" stroke-width="5" stroke-linecap="round"/>
+        <path d="M236 128 C246 116, 257 117, 262 129
+                 C262 142, 248 149, 238 143 Z"
+              fill="#f4c267" stroke="#666" stroke-width="3"/>
+
+        <path d="M298 326 C312 286, 322 242, 330 192
+                 C338 145, 346 112, 356 88"
+              fill="none" stroke="#737373" stroke-width="5" stroke-linecap="round"/>
+        <path d="M342 148 C352 136, 364 137, 370 150
+                 C370 164, 354 171, 344 164 Z"
+              fill="#f4c267" stroke="#666" stroke-width="3"/>
+
+        <path d="M330 322 C352 284, 366 238, 376 184
+                 C384 146, 388 120, 392 100"
+              fill="none" stroke="#737373" stroke-width="5" stroke-linecap="round"/>
+        <path d="M385 128 C395 116, 406 118, 412 130
+                 C412 143, 399 151, 389 145 Z"
+              fill="#f4c267" stroke="#666" stroke-width="3"/>
+
+        <path d="M260 330
+                 C258 288, 258 214, 258 132
+                 C258 104, 260 84, 262 72"
+              fill="none" stroke="#555" stroke-width="6" stroke-linecap="round"/>
+        <path d="M248 67 C255 53, 269 49, 276 67
+                 C270 76, 255 77, 248 67 Z"
+              fill="#e5f7e8" stroke="#555" stroke-width="4"/>
+
+        <ellipse cx="260" cy="274" rx="26" ry="36" fill="#fff" stroke="#555" stroke-width="6"/>
+        <g fill="#111827">
+          <ellipse cx="251" cy="252" rx="4" ry="7"/>
+          <ellipse cx="268" cy="252" rx="4" ry="7"/>
+          <ellipse cx="251" cy="269" rx="4" ry="7"/>
+          <ellipse cx="268" cy="269" rx="4" ry="7"/>
+          <ellipse cx="251" cy="286" rx="4" ry="7"/>
+          <ellipse cx="268" cy="286" rx="4" ry="7"/>
+        </g>
+
+        <path d="M220 286 C190 282, 178 304, 170 324" fill="none" stroke="#5c9d62" stroke-width="5" stroke-linecap="round"/>
+        <path d="M300 286 C330 282, 342 304, 350 324" fill="none" stroke="#5c9d62" stroke-width="5" stroke-linecap="round"/>
+        <path d="M259 309 C258 337, 258 356, 258 382" fill="none" stroke="#5c9d62" stroke-width="6" stroke-linecap="round"/>
+
+        <path d="M172 324 C192 294, 218 298, 230 314
+                 C208 320, 192 332, 172 324 Z"
+              fill="#d9f0d5" stroke="#5c9d62" stroke-width="3"/>
+        <path d="M350 324 C330 294, 304 298, 292 314
+                 C314 320, 330 332, 350 324 Z"
+              fill="#d9f0d5" stroke="#5c9d62" stroke-width="3"/>
+
+        ${opts.showHotspots ? `
+          <ellipse class="hotspot ${showHotspotCorrect ? 'corrected' : ''}" data-hotspot="ovary" cx="260" cy="274" rx="42" ry="52"></ellipse>
+          <ellipse class="hotspot" data-hotspot="anther" cx="398" cy="136" rx="30" ry="24"></ellipse>
+          <ellipse class="hotspot" data-hotspot="petal" cx="150" cy="112" rx="56" ry="44"></ellipse>
+          <ellipse class="hotspot" data-hotspot="stigma" cx="262" cy="66" rx="26" ry="20"></ellipse>
+        ` : ''}
+
+        ${type === 'labeled' ? `
+          <path d="M96 138 L194 138" stroke="#555" stroke-width="3"/>
+          <rect class="flower-label-bg" x="52" y="120" rx="16" ry="16" width="40" height="34"></rect>
+          <text class="flower-label" x="72" y="144" text-anchor="middle">${labels.left}</text>
+
+          <path d="M276 78 L438 78" stroke="#555" stroke-width="3"/>
+          <rect class="flower-label-bg" x="442" y="60" rx="16" ry="16" width="40" height="34"></rect>
+          <text class="flower-label" x="462" y="84" text-anchor="middle">${labels.topRight}</text>
+
+          <path d="M387 152 L480 152" stroke="#555" stroke-width="3"/>
+          <rect class="flower-label-bg" x="484" y="134" rx="16" ry="16" width="40" height="34"></rect>
+          <text class="flower-label" x="504" y="158" text-anchor="middle">${labels.midRight}</text>
+
+          <path d="M286 274 L442 274" stroke="#555" stroke-width="3"/>
+          <rect class="flower-label-bg" x="446" y="256" rx="16" ry="16" width="40" height="34"></rect>
+          <text class="flower-label" x="466" y="280" text-anchor="middle">${labels.bottomRight}</text>
+        ` : ''}
+      </svg>`;
+    }
+
+    function renderCurrentScreen() {
+      const key = screenOrder[appState.screenIndex];
+      const screen = screens[key];
+      const root = document.getElementById('screenRoot');
+      root.innerHTML = `
+        <div class="screen-head">
+          <div class="progress">${screen.kicker}</div>
+          <div class="kicker">Flower parts</div>
+          <h1 class="title">${screen.title}</h1>
+          <p class="instruction">${screen.instruction}</p>
+        </div>
+        ${screen.renderContent()}
+        ${renderQuestionPanel()}
+        ${screen.renderActionArea ? screen.renderActionArea() : `
+          <div class="actions">
+            <button class="btn-primary" id="nextBtn" type="button" ${appState.answeredCorrectly ? '' : 'disabled'}>${screen.nextLabel || 'Next'}</button>
+          </div>
+        `}
+      `;
+
+      if (!screen.renderActionArea || key !== 'intro') {
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (!appState.answeredCorrectly) return;
+            goNext();
+          });
+        }
+      } else {
+        const nextBtn = document.getElementById('nextBtn');
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (!appState.answeredCorrectly) return;
+            goNext();
+          });
+        }
+      }
+
+      const panel = document.getElementById('questionPanel');
+      if (panel) {
+        panel.addEventListener('toggle', () => {
+          appState.questionPanelOpen = panel.open;
+          const summary = panel.querySelector('summary');
+          if (summary) summary.textContent = panel.open ? 'Hide the full question' : 'Show the full question';
+        });
+      }
+
+      screen.bind?.(root);
+      renderTopBarExtras();
+      maybeSpeakScreen();
+    }
+
+    function rerenderCurrentScreen() {
+      renderCurrentScreen();
+    }
+
+    function goNext() {
+      if (appState.screenIndex < screenOrder.length - 1) {
+        appState.screenIndex += 1;
+        resetCurrentScreenState();
+        renderCurrentScreen();
+      }
+    }
+
+    function restartWholeInteractive() {
+      stopSpeaking();
+      clearTimeout(appState.autoRestartTimer);
+      clearInterval(appState.autoRestartCountdownTimer);
+      document.getElementById('gameOverLayer').classList.remove('show');
+      appState.screenIndex = 0;
+      appState.usedDemerits = 0;
+      appState.questionPanelOpen = false;
+      resetCurrentScreenState();
+      renderCurrentScreen();
+    }
+
+    function showGameOverAndRestart() {
+      stopSpeaking();
+      const layer = document.getElementById('gameOverLayer');
+      const countdown = document.getElementById('restartCountdown');
+      let count = 2;
+      countdown.textContent = String(count);
+      layer.classList.add('show');
+      clearTimeout(appState.autoRestartTimer);
+      clearInterval(appState.autoRestartCountdownTimer);
+      appState.autoRestartCountdownTimer = setInterval(() => {
+        count -= 1;
+        if (count >= 0) countdown.textContent = String(count);
+      }, 1000);
+      appState.autoRestartTimer = setTimeout(() => {
+        restartWholeInteractive();
+      }, 2200);
+    }
+
+    function maybeSpeakScreen() {
+      if (!appState.readAloud) return;
+      speakCurrentScreen();
+    }
+
+    function speechFromOptions(instruction, options) {
+      return [
+        instruction,
+        ...options.map((o, i) => `Option ${i+1}. ${o.text}.`),
+        appState.feedbackText || ''
+      ].join(' ');
+    }
+
+    function speakCurrentScreen() {
+      const key = screenOrder[appState.screenIndex];
+      const screen = screens[key];
+      if (!screen) return;
+      const text = screen.getSpeechText ? screen.getSpeechText() : '';
+      if (!text) return;
+      stopSpeaking();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.rate = 0.95;
+      utter.pitch = 1;
+      utter.volume = 1;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function stopSpeaking() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    document.getElementById('readToggle').addEventListener('change', (e) => {
+      appState.readAloud = e.target.checked;
+      if (appState.readAloud) speakCurrentScreen();
+      else stopSpeaking();
+    });
+
+    document.getElementById('readNowBtn').addEventListener('click', () => {
+      speakCurrentScreen();
+    });
+
+    resetCurrentScreenState();
+    renderCurrentScreen();
+  </script>
+</body>
+</html>

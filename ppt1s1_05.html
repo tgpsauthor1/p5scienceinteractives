@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt1s1_5</title>
+<style>
+  :root{
+    --bg:#f6fbff;
+    --panel:#ffffff;
+    --ink:#16324f;
+    --muted:#5a7184;
+    --line:#c9dff1;
+    --accent:#0f6cbf;
+    --accent2:#f4b400;
+    --good:#1b8a5a;
+    --bad:#c5423f;
+    --soft:#eaf5ff;
+    --soft2:#fff8dd;
+    --shadow:0 10px 28px rgba(22,50,79,.08);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: Arial, Helvetica, sans-serif;
+    background:linear-gradient(180deg,#eef7ff 0%, #f8fcff 100%);
+    color:var(--ink);
+  }
+  .app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  .topbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:#ffffffee;
+    backdrop-filter: blur(8px);
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 10px rgba(22,50,79,.04);
+  }
+  .topbar-inner{
+    max-width:1100px;
+    margin:0 auto;
+    padding:12px 16px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .brand{
+    font-weight:800;
+    font-size:1.05rem;
+    letter-spacing:.2px;
+  }
+  .demerit-strip{
+    flex:1 1 360px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:260px;
+  }
+  .demerit-label{
+    font-size:.95rem;
+    font-weight:700;
+    white-space:nowrap;
+  }
+  .pod-row{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .pod{
+    width:24px;height:24px;border-radius:999px;
+    border:2px solid #d4a019;
+    background:radial-gradient(circle at 32% 32%, #ffe58f 0 32%, #f4b400 33% 100%);
+    position:relative;
+    opacity:.35;
+  }
+  .pod.active{opacity:1}
+  .pod.lost{
+    opacity:1;
+    background:radial-gradient(circle at 32% 32%, #ffd8d7 0 32%, #f18b88 33% 100%);
+    border-color:#cf5f5d;
+  }
+  .mini-note{font-size:.84rem;color:var(--muted)}
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--soft);
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    font-weight:700;
+    font-size:.95rem;
+  }
+  .switch{
+    width:48px;height:28px;border-radius:999px;
+    background:#b8cddd;
+    position:relative;cursor:pointer; flex:none;
+  }
+  .switch .knob{
+    position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;
+    background:#fff; box-shadow:0 2px 5px rgba(0,0,0,.15); transition:.2s ease;
+  }
+  .switch.on{background:var(--good)}
+  .switch.on .knob{left:23px}
+  .shell{
+    max-width:1100px;
+    margin:0 auto;
+    width:100%;
+    padding:18px 16px 36px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+  .screen-title{
+    margin:0 0 6px 0;
+    font-size:1.05rem;
+    color:#35617b;
+    font-weight:800;
+    letter-spacing:.2px;
+  }
+  .instruction-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+  .instruction{
+    margin:0;
+    font-size:1.75rem;
+    line-height:1.15;
+    font-weight:900;
+    color:#0e4f8d;
+    flex:1 1 420px;
+  }
+  .screen-read{
+    border:none;
+    background:var(--soft2);
+    color:#7a5a00;
+    font-weight:800;
+    border-radius:14px;
+    padding:12px 14px;
+    cursor:pointer;
+    font-size:1rem;
+  }
+  .lead{
+    color:var(--muted);
+    font-size:1rem;
+    line-height:1.45;
+    margin-top:10px;
+  }
+  .actions{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:16px;
+  }
+  button{
+    font:inherit;
+  }
+  .btn{
+    border:none;
+    background:var(--accent);
+    color:#fff;
+    padding:14px 18px;
+    border-radius:16px;
+    font-weight:800;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(15,108,191,.25);
+  }
+  .btn.secondary{
+    background:#fff;
+    color:var(--accent);
+    border:2px solid #9ec8ee;
+    box-shadow:none;
+  }
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+  .feedback{
+    min-height:28px;
+    font-weight:800;
+    margin-top:14px;
+    font-size:1rem;
+  }
+  .feedback.good{color:var(--good)}
+  .feedback.bad{color:var(--bad)}
+  .grid{
+    display:grid;
+    gap:14px;
+  }
+  .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .choice-card, .pill, .blank, .slot, .method-card, .statement-card, .fruit-card{
+    border:2px solid #cfe3f5;
+    border-radius:18px;
+    background:#fff;
+    padding:14px;
+    cursor:pointer;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease;
+    min-height:70px;
+  }
+  .choice-card:hover, .pill:hover, .blank:hover, .slot:hover, .method-card:hover, .statement-card:hover, .fruit-card:hover{
+    transform:translateY(-1px);
+    border-color:#7cb6e5;
+  }
+  .choice-card.selected, .pill.selected, .method-card.selected, .statement-card.selected, .fruit-card.selected{
+    border-color:var(--accent);
+    background:#eef7ff;
+    box-shadow:0 8px 20px rgba(15,108,191,.12);
+  }
+  .choice-card.correct, .statement-card.correct, .fruit-card.correct, .method-card.correct, .pill.correct, .blank.correct{
+    border-color:var(--good);
+    background:#eefbf4;
+  }
+  .choice-card.wrong, .statement-card.wrong, .fruit-card.wrong, .method-card.wrong, .pill.wrong, .blank.wrong{
+    border-color:var(--bad);
+    background:#fff2f2;
+  }
+  .small{
+    font-size:.93rem;
+    color:var(--muted);
+  }
+  .question-block{
+    background:linear-gradient(180deg,#ffffff 0,#f7fbff 100%);
+    border:1px solid #d5e8f8;
+    border-radius:20px;
+    padding:16px;
+    margin-top:12px;
+  }
+  .question-layout{
+    display:grid;
+    grid-template-columns:minmax(280px, 1.1fr) minmax(240px, .9fr);
+    gap:18px;
+    align-items:center;
+  }
+  .highlight{
+    background:#fff1a8;
+    padding:0 .18em;
+    border-radius:.25em;
+    font-weight:800;
+  }
+  .question-panel details{
+    border:1px solid #d3e6f8;
+    border-radius:18px;
+    background:#fbfdff;
+    padding:10px 14px;
+  }
+  .question-panel summary{
+    font-weight:800;
+    cursor:pointer;
+    color:#1b5d99;
+  }
+  .question-panel .inside{
+    margin-top:12px;
+  }
+  .bubble{
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:999px;
+    background:var(--soft2);
+    color:#7a5a00;
+    font-weight:800;
+    font-size:.9rem;
+    margin-right:8px;
+    margin-top:8px;
+  }
+  .option-bank, .slot-row, .method-bank, .statement-bank{
+    display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .slot{
+    min-width:200px;
+    min-height:72px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:#f8fcff;
+    cursor:default;
+  }
+  .slot.filled{
+    border-style:solid;
+    background:#eef7ff;
+    cursor:pointer;
+  }
+  .blank{
+    min-width:160px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:#fbfdff;
+  }
+  .blank.filled{
+    background:#eef7ff;
+  }
+  .method-row{
+    border:1px solid #d9e9f7;
+    border-radius:18px;
+    padding:14px;
+    background:#fcfeff;
+  }
+  .row-head{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:34px;
+    height:34px;
+    padding:0 10px;
+    border-radius:999px;
+    background:#e8f4ff;
+    font-weight:800;
+    color:#0e5fa3;
+  }
+  .fruit-head{
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+  .fruit-meta h4{margin:0 0 4px 0; font-size:1.08rem}
+  .fruit-meta p{margin:0; color:var(--muted); line-height:1.35}
+  .method-buttons{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:10px;
+  }
+  .method-btn{
+    border:2px solid #cfe3f5;
+    border-radius:16px;
+    padding:12px 10px;
+    background:#fff;
+    font-weight:800;
+    cursor:pointer;
+    min-height:58px;
+  }
+  .method-btn.selected{
+    background:#eef7ff;
+    border-color:var(--accent);
+  }
+  .sort-wrap{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:14px;
+    align-items:start;
+  }
+  .sort-col{
+    background:#fbfdff;
+    border:1px solid #d8e8f7;
+    border-radius:20px;
+    padding:14px;
+  }
+  .sort-col h4{margin:0 0 10px 0; font-size:1.05rem}
+  .sort-item{
+    margin-bottom:10px;
+    border:2px solid #d3e6f8;
+    border-radius:16px;
+    padding:10px;
+    background:#fff;
+  }
+  .choice-pair{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+    flex-wrap:wrap;
+  }
+  .mini-btn{
+    flex:1;
+    min-width:120px;
+    border:2px solid #cfe3f5;
+    background:#fff;
+    color:var(--ink);
+    border-radius:14px;
+    padding:11px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .mini-btn.selected{
+    background:#eef7ff;
+    border-color:var(--accent);
+  }
+  .method-bank .method-card{
+    flex:1 1 170px;
+    min-height:100px;
+  }
+  .statement-card{
+    min-height:110px;
+  }
+  .anim-panel{
+    background:#fbfdff;
+    border:1px solid #d6e7f7;
+    border-radius:20px;
+    padding:10px;
+  }
+  .compare-controls{
+    display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px;
+  }
+  .compare-btn{
+    border:2px solid #cfe3f5;
+    background:#fff;
+    color:var(--ink);
+    border-radius:14px;
+    padding:12px 14px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  .compare-btn.active{
+    background:#eef7ff;
+    border-color:var(--accent);
+  }
+  .center{
+    text-align:center;
+  }
+  .completion{
+    text-align:center;
+    padding:24px;
+  }
+  .confidence{
+    display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:16px;
+  }
+  .conf-btn{
+    border:2px solid #cfe3f5;
+    background:#fff;
+    color:var(--ink);
+    border-radius:18px;
+    padding:16px 18px;
+    font-weight:800;
+    cursor:pointer;
+    min-width:220px;
+  }
+  .gameover{
+    position:fixed; inset:0;
+    background:rgba(13,42,66,.65);
+    display:none; align-items:center; justify-content:center;
+    z-index:50;
+    padding:20px;
+  }
+  .gameover.show{display:flex}
+  .gameover-card{
+    max-width:480px;
+    width:100%;
+    background:#fff;
+    border-radius:24px;
+    padding:24px;
+    text-align:center;
+    box-shadow:0 20px 50px rgba(0,0,0,.25);
+  }
+  .muted{color:var(--muted)}
+  .seed-trail{
+    animation: drift 3.2s linear infinite;
+  }
+  @keyframes drift{
+    0%{transform:translateX(0) translateY(0)}
+    25%{transform:translateX(18px) translateY(-8px)}
+    50%{transform:translateX(38px) translateY(0)}
+    75%{transform:translateX(58px) translateY(-5px)}
+    100%{transform:translateX(78px) translateY(0)}
+  }
+  .water-flow{
+    animation: wave 2.8s ease-in-out infinite;
+  }
+  @keyframes wave{
+    0%,100%{transform:translateX(0)}
+    50%{transform:translateX(24px)}
+  }
+  .burst{
+    animation: burst 1.4s ease-out infinite;
+  }
+  @keyframes burst{
+    0%{transform:translate(0,0); opacity:0}
+    15%{opacity:1}
+    100%{transform:translate(30px,-14px); opacity:0}
+  }
+  .bird-move{
+    animation: fly 3.2s linear infinite;
+  }
+  @keyframes fly{
+    0%{transform:translateX(0)}
+    100%{transform:translateX(130px)}
+  }
+  @media (max-width: 860px){
+    .grid.two,.grid.three,.grid.four,.question-layout,.sort-wrap{grid-template-columns:1fr}
+    .instruction{font-size:1.5rem}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">Seed Dispersal Detective</div>
+      <div class="demerit-strip">
+        <div class="demerit-label">Lost seed pods:</div>
+        <div class="pod-row" id="podRow"></div>
+        <div class="mini-note" id="demeritNote"></div>
+      </div>
+      <div class="controls">
+        <div class="toggle">
+          <span>Read aloud</span>
+          <div class="switch" id="readToggle" role="button" tabindex="0" aria-label="Toggle read aloud">
+            <div class="knob"></div>
+          </div>
+          <span id="readLabel">Off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div id="screen" class="card"></div>
+    <div id="questionPanel" class="question-panel"></div>
+  </div>
+</div>
+
+<div class="gameover" id="gameover">
+  <div class="gameover-card">
+    <h2>All the seed pods drifted away.</h2>
+    <p class="muted">The whole interactive will restart in a moment so you can try again carefully.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const screenEl = document.getElementById('screen');
+  const panelEl = document.getElementById('questionPanel');
+  const podRow = document.getElementById('podRow');
+  const demeritNote = document.getElementById('demeritNote');
+  const readToggle = document.getElementById('readToggle');
+  const readLabel = document.getElementById('readLabel');
+  const gameoverEl = document.getElementById('gameover');
+
+  const app = {
+    current: 0,
+    questionPanelOpen: false,
+    readAloud: false,
+    feedback: '',
+    feedbackType: '',
+    maxDemerits: 5,
+    usedDemerits: 0,
+    currentScreenComplete: false,
+    currentScreenSpeakText: '',
+    states: {}
+  };
+
+  const fruitData = {
+    water: {
+      id: 'fruitWater',
+      title: 'Fruit with waterproof cover and fibrous husk',
+      short: 'waterproof cover + fibrous husk',
+      method: 'water',
+      svg: fruitSvg('water')
+    },
+    animal: {
+      id: 'fruitAnimal',
+      title: 'Fruit with juicy flesh and hard seed',
+      short: 'juicy flesh + hard seed',
+      method: 'animals',
+      svg: fruitSvg('animal')
+    },
+    wind: {
+      id: 'fruitWind',
+      title: 'Light fruit with parachute-like structure',
+      short: 'light + parachute-like structure',
+      method: 'wind',
+      svg: fruitSvg('wind')
+    },
+    split: {
+      id: 'fruitSplit',
+      title: 'Dry fruit wall with light seeds',
+      short: 'dry fruit wall + pod',
+      method: 'splitting / explosive action',
+      svg: fruitSvg('split')
+    }
+  };
+
+  const methodCards = [
+    {id:'water', title:'Water', desc:'Can float on water and travel far.'},
+    {id:'animals', title:'Animals', desc:'Can be carried when animals move.'},
+    {id:'wind', title:'Wind', desc:'Light seeds can drift long distances.'},
+    {id:'split', title:'Splitting / explosive action', desc:'Pods burst and throw seeds a short distance.'}
+  ];
+
+  function shuffle(arr){
+    const copy = arr.slice();
+    for(let i = copy.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function shuffledNotSame(arr, identityFn){
+    let tries = 0;
+    let out = shuffle(arr);
+    while(tries < 20 && out.every((item, idx) => identityFn(item) === identityFn(arr[idx]))){
+      out = shuffle(arr);
+      tries++;
+    }
+    return out;
+  }
+
+  function speak(text){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.95;
+    utter.pitch = 1;
+    utter.lang = 'en-SG';
+    window.speechSynthesis.speak(utter);
+  }
+
+  function maybeAutoSpeak(){
+    if(app.readAloud && app.currentScreenSpeakText){
+      speak(app.currentScreenSpeakText);
+    }
+  }
+
+  function updateReadToggle(){
+    readToggle.classList.toggle('on', app.readAloud);
+    readLabel.textContent = app.readAloud ? 'On' : 'Off';
+  }
+
+  function updateDemerits(){
+    podRow.innerHTML = '';
+    for(let i=0;i<app.maxDemerits;i++){
+      const div = document.createElement('div');
+      div.className = 'pod ' + (i < app.usedDemerits ? 'lost' : 'active');
+      podRow.appendChild(div);
+    }
+    const remaining = app.maxDemerits - app.usedDemerits;
+    demeritNote.textContent = remaining > 0
+      ? remaining + ' chance' + (remaining === 1 ? '' : 's') + ' left'
+      : 'Restarting...';
+  }
+
+  function addDemerit(){
+    app.usedDemerits += 1;
+    updateDemerits();
+    if(app.usedDemerits >= app.maxDemerits){
+      triggerRestart();
+    }
+  }
+
+  function triggerRestart(){
+    gameoverEl.classList.add('show');
+    if('speechSynthesis' in window) window.speechSynthesis.cancel();
+    setTimeout(() => {
+      app.current = 0;
+      app.questionPanelOpen = false;
+      app.usedDemerits = 0;
+      app.feedback = '';
+      app.feedbackType = '';
+      app.currentScreenComplete = false;
+      app.currentScreenSpeakText = '';
+      app.states = {};
+      gameoverEl.classList.remove('show');
+      updateDemerits();
+      render();
+    }, 2200);
+  }
+
+  function setFeedback(text, type){
+    app.feedback = text;
+    app.feedbackType = type;
+    const box = screenEl.querySelector('.feedback');
+    if(box){
+      box.textContent = text;
+      box.className = 'feedback ' + (type || '');
+    }
+    updateSpeakText();
+    if(app.readAloud && text){
+      speak(app.currentScreenSpeakText);
+    }
+  }
+
+  function updateSpeakText(){
+    const parts = [];
+    const title = screenEl.querySelector('.screen-title');
+    const instruction = screenEl.querySelector('.instruction');
+    if(title) parts.push(title.textContent);
+    if(instruction) parts.push(instruction.textContent);
+    screenEl.querySelectorAll('[data-read]').forEach(el => {
+      const tx = el.getAttribute('data-read');
+      if(tx) parts.push(tx);
+    });
+    if(app.feedback) parts.push(app.feedback);
+    app.currentScreenSpeakText = parts.join('. ');
+  }
+
+  function renderQuestionPanel(){
+    if(app.current === 0){
+      panelEl.innerHTML = '';
+      return;
+    }
+    panelEl.innerHTML = `
+      <details ${app.questionPanelOpen ? 'open' : ''} id="qp">
+        <summary>Show the question again</summary>
+        <div class="inside">
+          <div class="question-block">
+            <div class="question-layout">
+              <div>
+                <p data-read="The question says: Island A has plant X but no animals. Island B has no plants and animals. The islands are 5 kilometres apart. A few years later, plant X is found growing on island B on island B. Based on the characteristics of the fruits, which fruit is least likely to be from plant X?">
+                  The diagram shows two islands, A and B. Island A has plant X but no animals while island B has no plants and animals. The islands are <span class="highlight">5 km</span> apart.
+                  A few years later, plant X is <span class="highlight">found growing</span> on island B.
+                  Based on the characteristics of the fruits, which fruit is <span class="highlight">least likely</span> to be from plant X?
+                </p>
+                <div class="bubble">Think about distance</div>
+                <div class="bubble">Think about how the seed moves</div>
+              </div>
+              <div>${islandDiagramSVG()}</div>
+            </div>
+          </div>
+        </div>
+      </details>
+    `;
+    const qp = document.getElementById('qp');
+    qp.addEventListener('toggle', () => {
+      app.questionPanelOpen = qp.open;
+    });
+  }
+
+  function makeShell(title, instruction, lead, bodyHtml, showNext=true){
+    const nextDisabled = app.currentScreenComplete ? '' : 'disabled';
+    screenEl.innerHTML = `
+      <div class="screen-title">${title}</div>
+      <div class="instruction-row">
+        <h1 class="instruction">${instruction}</h1>
+        <button class="screen-read" id="screenReadBtn">🔊 Read this screen</button>
+      </div>
+      ${lead ? `<div class="lead" data-read="${escapeAttr(lead)}">${lead}</div>` : ''}
+      <div class="body">${bodyHtml}</div>
+      <div class="feedback ${app.feedbackType || ''}">${app.feedback || ''}</div>
+      <div class="actions">
+        ${showNext ? `<button class="btn" id="nextBtn" ${nextDisabled}>Next</button>` : ``}
+      </div>
+    `;
+    document.getElementById('screenReadBtn').addEventListener('click', () => speak(app.currentScreenSpeakText));
+    const nextBtn = document.getElementById('nextBtn');
+    if(nextBtn){
+      nextBtn.addEventListener('click', () => {
+        if(!app.currentScreenComplete) return;
+        app.current += 1;
+        app.feedback = '';
+        app.feedbackType = '';
+        app.currentScreenComplete = false;
+        render();
+      });
+    }
+  }
+
+  function finishStep(msg){
+    app.currentScreenComplete = true;
+    setFeedback(msg, 'good');
+    const nextBtn = document.getElementById('nextBtn');
+    if(nextBtn) nextBtn.disabled = false;
+  }
+
+  function wrongAttempt(msg, countDemerit=true){
+    if(countDemerit) addDemerit();
+    setFeedback(msg, 'bad');
+  }
+
+  function escapeAttr(text){
+    return String(text).replace(/"/g,'&quot;');
+  }
+
+  function ensureState(key, fallback){
+    if(!(key in app.states)){
+      app.states[key] = typeof fallback === 'function' ? fallback() : fallback;
+    }
+    return app.states[key];
+  }
+
+  function render(){
+    updateReadToggle();
+    updateDemerits();
+    renderQuestionPanel();
+    const fn = screens[app.current];
+    if(fn){
+      fn();
+      updateSpeakText();
+      maybeAutoSpeak();
+    }
+  }
+
+  readToggle.addEventListener('click', () => {
+    app.readAloud = !app.readAloud;
+    updateReadToggle();
+    if(app.readAloud) maybeAutoSpeak();
+    else if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  });
+  readToggle.addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' || e.key === ' '){
+      e.preventDefault();
+      readToggle.click();
+    }
+  });
+
+  function screen1(){
+    const lead = 'Read the whole question first. Notice the distance, what happened later, and what the question is really asking.';
+    makeShell(
+      'Screen 1',
+      'Read the question carefully.',
+      lead,
+      `
+      <div class="question-block">
+        <div class="question-layout">
+          <div>
+            <p data-read="Island A has plant X but no animals. Island B has no plants and animals. The islands are 5 kilometres apart. A few years later, plant X is found growing on island B on island B. Which fruit is least likely to be from plant X?">
+              Island A has plant X but no animals. Island B has no plants and animals.
+              The islands are <span class="highlight">5 km</span> apart.
+              A few years later, plant X is <span class="highlight">found growing</span> on island B.
+              Which fruit is <span class="highlight">least likely</span> to be from plant X?
+            </p>
+            <div class="bubble">5 km</div>
+            <div class="bubble">found growing</div>
+            <div class="bubble">least likely</div>
+          </div>
+          <div>${islandDiagramSVG()}</div>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn secondary" id="readDone">I have read the question</button>
+      </div>
+      `,
+      true
+    );
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('readDone').addEventListener('click', () => {
+      app.currentScreenComplete = true;
+      app.feedback = '';
+      app.feedbackType = '';
+      app.current += 1;
+      render();
+    });
+  }
+
+  function screen2(){
+    const state = ensureState('s2', {selected:new Set()});
+    const items = [
+      {id:'plantA', text:'Plant X is on island A'},
+      {id:'distance', text:'The islands are 5 km apart'},
+      {id:'years', text:'A few years later, plant X is found growing on island B'},
+      {id:'least', text:'The question asks for the least likely fruit'}
+    ];
+    makeShell(
+      'Screen 2',
+      'Tap the clues that matter most.',
+      'Pick the clues that help you judge whether a seed could really get from island A to island B.',
+      `<div class="grid two">
+        ${items.map(item => `
+          <div class="choice-card ${state.selected.has(item.id) ? 'selected' : ''}" data-id="${item.id}" data-read="${escapeAttr(item.text)}">
+            ${item.text}
+          </div>`).join('')}
+      </div>
+      <div class="actions">
+        <button class="btn secondary" id="checkS2">Check</button>
+      </div>`
+    );
+    screenEl.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const id = card.dataset.id;
+        if(state.selected.has(id)) state.selected.delete(id);
+        else state.selected.add(id);
+        render();
+      });
+    });
+    document.getElementById('checkS2').addEventListener('click', () => {
+      const needed = ['distance','years','least'];
+      const ok = needed.every(id => state.selected.has(id)) && state.selected.size === needed.length;
+      if(ok){
+        finishStep('Yes. These clues help you judge whether the seed could really get across.');
+      }else{
+        wrongAttempt('Pick the clues that help you judge whether a seed could really get across.');
+      }
+    });
+  }
+
+  function screen3(){
+    const options = ensureState('s3options', () => shuffledNotSame([
+      {id:'nameMethod', text:'Name each dispersal method.'},
+      {id:'leastAble', text:'Choose the fruit that is least able to reach island B.'},
+      {id:'commonFruit', text:'Choose the most common fruit.'}
+    ], x => x.id));
+    const state = ensureState('s3', {selected:null});
+    makeShell(
+      'Screen 3',
+      'What is the question asking you to do?',
+      'This is not just a recall question. It asks you to judge the weakest fit for the situation.',
+      `<div class="grid three">
+        ${options.map(opt => `
+          <div class="choice-card ${state.selected === opt.id ? 'selected' : ''}" data-id="${opt.id}" data-read="${escapeAttr(opt.text)}">${opt.text}</div>
+        `).join('')}
+      </div>`
+    );
+    screenEl.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.selected = card.dataset.id;
+        render();
+      });
+    });
+    if(state.selected){
+      if(state.selected === 'leastAble'){
+        finishStep('Yes. You are choosing the fruit that is least able to reach island B.');
+      }else{
+        wrongAttempt('This screen is about what the question wants you to decide.');
+      }
+    }
+  }
+
+  function screen4(){
+    const state = ensureState('s4', {answers:{}});
+    const fruits = [fruitData.water, fruitData.animal, fruitData.wind, fruitData.split];
+    makeShell(
+      'Screen 4',
+      'Match each fruit to its seed-dispersal method.',
+      'Use the fruit features to work out how the seed is most likely to move.',
+      `<div class="grid two">
+        ${fruits.map(fruit => `
+          <div class="method-row">
+            <div class="fruit-head">
+              <div>${fruit.svg}</div>
+              <div class="fruit-meta">
+                <h4 data-read="${escapeAttr(fruit.title)}">${fruit.title}</h4>
+                <p>${fruit.short}</p>
+              </div>
+            </div>
+            <div class="method-buttons">
+              ${methodCards.map(m => `
+                <button class="method-btn ${state.answers[fruit.id] === m.id ? 'selected' : ''}" data-fruit="${fruit.id}" data-method="${m.id}">
+                  ${m.title}
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="actions"><button class="btn secondary" id="checkS4">Check</button></div>`
+    );
+    screenEl.querySelectorAll('.method-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.answers[btn.dataset.fruit] = btn.dataset.method;
+        render();
+      });
+    });
+    document.getElementById('checkS4').addEventListener('click', () => {
+      const ok = fruits.every(f => {
+        const want = f.method === 'splitting / explosive action' ? 'split' : f.method;
+        return state.answers[f.id] === want;
+      });
+      if(ok){
+        finishStep('Yes. You matched the fruit features to the correct methods.');
+      }else{
+        wrongAttempt('Look closely at the fruit features before you match them.');
+      }
+    });
+  }
+
+  function screen5(){
+    const state = ensureState('s5', {viewed:new Set(), active:'water', selected:null});
+    const methods = [
+      {id:'water', label:'Water'},
+      {id:'animals', label:'Animals'},
+      {id:'wind', label:'Wind'},
+      {id:'split', label:'Splitting'}
+    ];
+    const details = {
+      water: {
+        title:'Water can carry floating fruits across sea gaps.',
+        compare:'5 km sea gap: possible',
+        facts:[
+          'A waterproof outer covering and a fibrous husk help the fruit float.',
+          'Water can carry the fruit from island A towards island B.',
+          'So water dispersal can go far enough for this question.'
+        ]
+      },
+      animals: {
+        title:'Animals can still move seeds between islands.',
+        compare:'5 km sea gap: possible',
+        facts:[
+          'Some animals can fly between places.',
+          'A hornbill can eat a mango and later drop the seed in another place.',
+          'So animal dispersal is still possible even if the islands do not have resident animals.'
+        ]
+      },
+      wind: {
+        title:'Strong wind can carry light seeds very far.',
+        compare:'In storms: even up to 200 km',
+        facts:[
+          'Light seeds with parachute-like structures can drift in the wind.',
+          'In storms, some seeds can be dispersed even up to 200 km away.',
+          'So 5 km is possible for wind dispersal.'
+        ]
+      },
+      split: {
+        title:'Splitting / explosive action is short-range only.',
+        compare:'Maximum distance: about 100 m',
+        facts:[
+          'The dry fruit wall bursts and throws the seeds out.',
+          'This method usually reaches only a short distance.',
+          'About 100 m is much shorter than 5 km, so this is the weakest fit.'
+        ]
+      }
+    };
+    state.viewed.add(state.active);
+    const detail = details[state.active];
+    makeShell(
+      'Screen 5',
+      'Compare how far each method can go.',
+      'Tap a method to watch a simple movement pattern. Then choose the shortest-range method.',
+      `<div class="compare-controls">
+        ${methods.map(m => `<button class="compare-btn ${state.active === m.id ? 'active' : ''}" data-method="${m.id}">${m.label}</button>`).join('')}
+      </div>
+      <div class="anim-panel">${compareAnimationSVG(state.active)}</div>
+      <div class="grid two" style="margin-top:12px">
+        <div class="card" style="padding:14px; border-radius:18px; box-shadow:none; background:#f7fbff">
+          <div class="screen-title" style="margin-bottom:8px">${detail.title}</div>
+          <div class="bubble" style="display:inline-block; margin-bottom:10px">${detail.compare}</div>
+          <ul style="margin:0; padding-left:20px; line-height:1.5">
+            ${detail.facts.map(f => `<li data-read="${escapeAttr(f)}">${f}</li>`).join('')}
+          </ul>
+        </div>
+        <div class="card" style="padding:14px; border-radius:18px; box-shadow:none; background:#fffdf1">
+          <div class="screen-title" style="margin-bottom:8px">Distance check</div>
+          <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px">
+            <div class="bubble">Island gap: 5 km</div>
+            <div class="bubble">${detail.compare}</div>
+          </div>
+          <p class="small" style="margin:0">Compare the method with the <strong>5 km</strong> sea gap. Ask: can it realistically go that far?</p>
+        </div>
+      </div>
+      <div class="lead" style="margin-top:12px" data-read="Which one is shortest range?">Which one is <strong>shortest-range</strong>?</div>
+      <div class="grid four">
+        ${methods.map(m => `<div class="choice-card ${state.selected === m.id ? 'selected' : ''}" data-id="${m.id}" data-read="${escapeAttr(m.label)}">${m.label}</div>`).join('')}
+      </div>
+      <div class="actions"><button class="btn secondary" id="checkS5">Check</button></div>`
+    );
+    screenEl.querySelectorAll('.compare-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.active = btn.dataset.method;
+        render();
+      });
+    });
+    screenEl.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.selected = card.dataset.id;
+        render();
+      });
+    });
+    document.getElementById('checkS5').addEventListener('click', () => {
+      if(state.selected === 'split'){
+        finishStep('Yes. Splitting throws seeds only a short distance. About 100 m is nowhere near a 5 km sea gap.');
+      }else{
+        wrongAttempt('Choose the method that usually moves seeds the shortest distance.');
+      }
+    });
+  }
+  function screen6(){
+    const state = ensureState('s6', {answers:{}});
+    const methods = [
+      {id:'water', title:'Water', detail:'Floating fruits can cross sea water.'},
+      {id:'animals', title:'Animals', detail:'A hornbill can eat a mango and later drop the seed elsewhere.'},
+      {id:'wind', title:'Wind', detail:'In storms, some light seeds can travel even up to 200 km.'},
+      {id:'split', title:'Splitting / explosive action', detail:'This usually reaches only about 100 m.'}
+    ];
+    makeShell(
+      'Screen 6',
+      'Decide which methods can travel far.',
+      'Now sort the methods using the distance facts you just compared.',
+      `<div class="sort-wrap">
+        <div class="sort-col">
+          <h4>Use the distance facts</h4>
+          ${methods.map(m => `
+            <div class="sort-item">
+              <div><strong>${m.title}</strong></div>
+              <div class="small">${m.detail}</div>
+              <div class="choice-pair">
+                <button class="mini-btn ${state.answers[m.id] === 'far' ? 'selected' : ''}" data-id="${m.id}" data-choice="far">Can travel far</button>
+                <button class="mini-btn ${state.answers[m.id] === 'short' ? 'selected' : ''}" data-id="${m.id}" data-choice="short">Short distance</button>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="anim-panel">
+          <div class="screen-title" style="margin-bottom:8px">Quick distance comparison</div>
+          <div class="bubble" style="display:inline-block; margin-bottom:10px">Island gap: 5 km</div>
+          <ul style="margin:0; padding-left:20px; line-height:1.5">
+            <li>Water: can move across sea water</li>
+            <li>Animals: flying animals can carry seeds between places</li>
+            <li>Wind: in storms, some seeds can go even up to 200 km</li>
+            <li>Splitting: usually only about 100 m</li>
+          </ul>
+        </div>
+      </div>
+      <div class="actions"><button class="btn secondary" id="checkS6">Check</button></div>`
+    );
+    screenEl.querySelectorAll('.mini-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.answers[btn.dataset.id] = btn.dataset.choice;
+        render();
+      });
+    });
+    document.getElementById('checkS6').addEventListener('click', () => {
+      const ok =
+        state.answers.water === 'far' &&
+        state.answers.animals === 'far' &&
+        state.answers.wind === 'far' &&
+        state.answers.split === 'short';
+      if(ok){
+        finishStep('Yes. Water, animals, and wind can go far enough. Splitting is short-range only.');
+      }else{
+        wrongAttempt('Sort by usual travel distance, not by how strange the fruit looks.');
+      }
+    });
+  }
+  function screen7(){
+    const options = ensureState('s7options', () => shuffledNotSame([
+      {id:'impossible', text:'Animal dispersal is impossible because the islands have no animals.'},
+      {id:'travelBetween', text:'Animal dispersal can still happen if animals travel between places.'}
+    ], x => x.id));
+    const state = ensureState('s7', {selected:null});
+    makeShell(
+      'Screen 7',
+      'Choose the better statement.',
+      'Do not get trapped by the words “no animals”. Think about whether animals can still travel between the islands.',
+      `<div class="grid two">
+        ${options.map(opt => `<div class="statement-card ${state.selected === opt.id ? 'selected' : ''}" data-id="${opt.id}" data-read="${escapeAttr(opt.text)}">${opt.text}</div>`).join('')}
+      </div>`
+    );
+    screenEl.querySelectorAll('.statement-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.selected = card.dataset.id;
+        render();
+      });
+    });
+    if(state.selected){
+      if(state.selected === 'travelBetween'){
+        finishStep('Yes. Flying animals can still carry seeds between places.');
+      }else{
+        wrongAttempt('The islands may not have resident animals, but animals can still move between places.');
+      }
+    }
+  }
+
+  function screen8(){
+    const items = ensureState('s8items', () => {
+      const arr = [
+        {id:'pod', text:'dry fruit wall / pod'},
+        {id:'method', text:'splitting / explosive action'},
+        {id:'short', text:'seeds move only a short distance'},
+        {id:'gap', text:'cannot reach island B 5 km away'},
+        {id:'least', text:'least likely'}
+      ];
+      let out = shuffle(arr);
+      while(out.map(x=>x.id).join('|') === arr.map(x=>x.id).join('|')){
+        out = shuffle(arr);
+      }
+      return out;
+    });
+    const state = ensureState('s8', {slots:[null,null,null,null,null], attempt:0});
+    makeShell(
+      'Screen 8',
+      'Build the reasoning chain.',
+      'Put the ideas in order to show why the dry pod fruit is the least likely answer.',
+      `
+      <div class="slot-row" style="margin-bottom:12px">
+        ${state.slots.map((slot, idx) => `
+          <div class="slot ${slot ? 'filled' : ''}" data-slot="${idx}" data-read="${slot ? escapeAttr(slot.text) : 'empty slot'}">${slot ? slot.text : 'Tap a filled box to remove it'}</div>
+        `).join('')}
+      </div>
+      <div class="option-bank">
+        ${items.filter(item => !state.slots.find(s => s && s.id === item.id)).map(item => `
+          <div class="pill" data-id="${item.id}" data-read="${escapeAttr(item.text)}">${item.text}</div>
+        `).join('')}
+      </div>
+      <div class="actions"><button class="btn secondary" id="checkS8">Check</button></div>
+      `
+    );
+    screenEl.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const firstEmpty = state.slots.findIndex(s => !s);
+        if(firstEmpty === -1) return;
+        const item = items.find(i => i.id === pill.dataset.id);
+        state.slots[firstEmpty] = item;
+        render();
+      });
+    });
+    screenEl.querySelectorAll('.slot.filled').forEach(slot => {
+      slot.addEventListener('click', () => {
+        const idx = Number(slot.dataset.slot);
+        state.slots[idx] = null;
+        render();
+      });
+    });
+    document.getElementById('checkS8').addEventListener('click', () => {
+      const correct = ['pod','method','short','gap','least'];
+      const student = state.slots.map(s => s ? s.id : null);
+      if(correct.every((id, idx) => student[idx] === id)){
+        finishStep('Yes. Pod → splitting → short distance → cannot cross 5 km → least likely.');
+      }else{
+        state.attempt += 1;
+        wrongAttempt(state.attempt === 1
+          ? 'Start with the fruit feature, then the method, then the distance idea.'
+          : 'This chain should end with why it is least likely.');
+      }
+    });
+  }
+
+  function screen9(){
+    const options = ensureState('s9options', () => shuffledNotSame([
+      fruitData.water,
+      fruitData.animal,
+      fruitData.wind,
+      fruitData.split
+    ], x => x.id));
+    const state = ensureState('s9', {selected:null});
+    makeShell(
+      'Screen 8',
+      'Now answer the original question again.',
+      'Choose the fruit that is the weakest fit for travelling from island A to island B.',
+      `<div class="grid two">
+        ${options.map(fruit => `
+          <div class="fruit-card ${state.selected === fruit.id ? 'selected' : ''}" data-id="${fruit.id}" data-read="${escapeAttr(fruit.title)}">
+            <div class="fruit-head">
+              <div>${fruit.svg}</div>
+              <div class="fruit-meta">
+                <h4>${fruit.title}</h4>
+                <p>${fruit.short}</p>
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </div>`
+    );
+    screenEl.querySelectorAll('.fruit-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.selected = card.dataset.id;
+        render();
+      });
+    });
+    if(state.selected){
+      if(state.selected === 'fruitSplit'){
+        finishStep('Yes. Splitting / explosive action is least likely to move the seed across 5 km.');
+      }else{
+        wrongAttempt('Check which method is short-range compared with the 5 km gap.');
+      }
+    }
+  }
+
+  function screen10(){
+    const items = ensureState('s10items', () => shuffledNotSame([
+      {id:'split', text:'splitting / explosive action'},
+      {id:'short', text:'a short'},
+      {id:'gap', text:'the 5 km gap'},
+      {id:'wind', text:'wind'},
+      {id:'long', text:'a long'}
+    ], x => x.id));
+    const state = ensureState('s10', {slots:[null,null,null], attempt:0});
+    makeShell(
+      'Screen 10',
+      'Fill the blanks to explain the choice.',
+      'Build the explanation using the correct science words.',
+      `
+      <div class="card" style="background:#fbfdff; box-shadow:none; border-color:#d9e8f7; padding:16px">
+        <p style="margin:0; line-height:1.7" data-read="This fruit is least likely because it is dispersed by blank. This method usually moves seeds only blank distance, so it is unlikely to cross blank.">
+          This fruit is least likely because it is dispersed by
+          <span class="blank ${state.slots[0] ? 'filled' : ''}" data-slot="0">${state.slots[0] ? state.slots[0].text : 'Blank 1'}</span>.
+          This method usually moves seeds only
+          <span class="blank ${state.slots[1] ? 'filled' : ''}" data-slot="1">${state.slots[1] ? state.slots[1].text : 'Blank 2'}</span>
+          distance, so it is unlikely to cross
+          <span class="blank ${state.slots[2] ? 'filled' : ''}" data-slot="2">${state.slots[2] ? state.slots[2].text : 'Blank 3'}</span>.
+        </p>
+      </div>
+      <div class="option-bank" style="margin-top:12px">
+        ${items.filter(item => !state.slots.find(s => s && s.id === item.id)).map(item => `
+          <div class="pill" data-id="${item.id}" data-read="${escapeAttr(item.text)}">${item.text}</div>
+        `).join('')}
+      </div>
+      <div class="actions"><button class="btn secondary" id="checkS10">Check</button></div>`
+    );
+    screenEl.querySelectorAll('.pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const firstEmpty = state.slots.findIndex(s => !s);
+        if(firstEmpty === -1) return;
+        const item = items.find(i => i.id === pill.dataset.id);
+        state.slots[firstEmpty] = item;
+        render();
+      });
+    });
+    screenEl.querySelectorAll('.blank.filled').forEach(blank => {
+      blank.addEventListener('click', () => {
+        state.slots[Number(blank.dataset.slot)] = null;
+        render();
+      });
+    });
+    document.getElementById('checkS10').addEventListener('click', () => {
+      const correct = ['split','short','gap'];
+      const student = state.slots.map(s => s ? s.id : null);
+      if(correct.every((id, idx) => student[idx] === id)){
+        finishStep('Yes. That explanation uses the right method, distance idea, and island gap.');
+      }else{
+        state.attempt += 1;
+        wrongAttempt(state.attempt === 1
+          ? 'Think about the method first, then how far it usually moves seeds.'
+          : 'Use the short-distance idea and the 5 km gap.');
+      }
+    });
+  }
+
+  function screen11(){
+    const options = ensureState('s11options', () => shuffledNotSame([
+      {id:'water', text:'Water-dispersed fruit', desc:'Needs water as the route'},
+      {id:'animal', text:'Animal-dispersed fruit', desc:'Animals can move across land'},
+      {id:'wind', text:'Wind-dispersed fruit', desc:'Light seeds can drift'},
+      {id:'split', text:'Fruit dispersed by splitting', desc:'Can throw seeds across a short land distance'}
+    ], x => x.id));
+    const state = ensureState('s11', {selected:null});
+    makeShell(
+      'Screen 11',
+      'Try one new situation.',
+      'Plant Y is on a hill. Another place is 20 m away on dry land. Which fruit is least likely to get there?',
+      `<div class="question-block">
+        <div class="grid two">
+          <div>
+            <div class="small">New clue</div>
+            <p data-read="Plant Y is on a hill. Another place is 20 metres away on dry land. Which fruit is least likely to get there?">
+              Plant Y is on a hill. Another place is <strong>20 m away on dry land</strong>.
+              Which fruit is <strong>least likely</strong> to get there?
+            </p>
+          </div>
+          <div>${hillScenarioSVG()}</div>
+        </div>
+      </div>
+      <div class="grid two" style="margin-top:14px">
+        ${options.map(opt => `
+          <div class="choice-card ${state.selected === opt.id ? 'selected' : ''}" data-id="${opt.id}" data-read="${escapeAttr(opt.text + '. ' + opt.desc)}">
+            <strong>${opt.text}</strong>
+            <div class="small" style="margin-top:6px">${opt.desc}</div>
+          </div>`).join('')}
+      </div>`
+    );
+    screenEl.querySelectorAll('.choice-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.selected = card.dataset.id;
+        render();
+      });
+    });
+    if(state.selected){
+      if(state.selected === 'water'){
+        app.currentScreenComplete = true;
+        setFeedback('Yes. On dry land with no water route, water dispersal is the least likely here.', 'good');
+        document.getElementById('nextBtn').disabled = false;
+      }else{
+        app.currentScreenComplete = false;
+        setFeedback('Use the new situation. Dry land changes which method is least likely.', 'bad');
+      }
+    }
+  }
+
+  function screen12(){
+    makeShell(
+      'Screen 9',
+      'You did it.',
+      'Tap the button that matches how you feel now.',
+      `<div class="completion">
+        <div style="font-size:54px; margin-bottom:8px">🌱</div>
+        <p data-read="Fruit features help you work out the dispersal method. Then the situation tells you whether the method is likely or not." style="max-width:660px; margin:0 auto; line-height:1.6">
+          Fruit features help you work out the dispersal method. Then the situation tells you whether that method is likely or not.
+        </p>
+        <div class="confidence">
+          <button class="conf-btn" id="conf1">I can explain this now</button>
+          <button class="conf-btn" id="conf2">I want one more look later</button>
+        </div>
+      </div>`,
+      false
+    );
+    const finish = (msg) => {
+      setFeedback(msg, 'good');
+    };
+    document.getElementById('conf1').addEventListener('click', () => finish('Great. You used seed features, travel distance, and the situation together.'));
+    document.getElementById('conf2').addEventListener('click', () => finish('Nice. Come back and look again at the distance screens when you want a quick review.'));
+  }
+
+  const screens = [
+    screen1, screen2, screen3, screen4, screen5, screen6, screen7, screen9, screen12
+  ];
+
+  function fruitSvg(type){
+    if(type === 'water'){
+      return `<svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+        <ellipse cx="42" cy="38" rx="22" ry="18" fill="#b8794f" stroke="#815235" stroke-width="2"/>
+        <path d="M18 53 Q43 75 67 53" fill="none" stroke="#d8c19e" stroke-width="10" stroke-linecap="round"/>
+        <path d="M23 58 Q43 72 61 58" fill="none" stroke="#f1e2c9" stroke-width="6" stroke-linecap="round"/>
+      </svg>`;
+    }
+    if(type === 'animal'){
+      return `<svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+        <path d="M15 44 C24 26, 55 18, 73 40 C59 63, 34 68, 15 44 Z" fill="#f5b06a" stroke="#aa6f36" stroke-width="2"/>
+        <ellipse cx="44" cy="46" rx="16" ry="11" fill="#7a4f27"/>
+      </svg>`;
+    }
+    if(type === 'wind'){
+      return `<svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+        <circle cx="43" cy="47" r="4.8" fill="#5b4636"/>
+        ${Array.from({length:10}).map((_,i)=>{
+          const a = (Math.PI*2/10)*i;
+          const x = 43 + Math.cos(a)*20;
+          const y = 47 + Math.sin(a)*20;
+          return `<line x1="43" y1="47" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#7b6b58" stroke-width="1.8"/>`;
+        }).join('')}
+        <path d="M60 18 q8 -7 15 0" fill="none" stroke="#8bc3f2" stroke-width="2"/>
+      </svg>`;
+    }
+    return `<svg width="88" height="88" viewBox="0 0 88 88" aria-hidden="true">
+      <path d="M22 26 C30 18, 53 18, 61 28 C68 36, 68 51, 57 60 C48 68, 35 68, 27 59 C17 49, 15 34, 22 26 Z" fill="#d0b263" stroke="#8c7230" stroke-width="2"/>
+      <path d="M44 22 L44 66" stroke="#8c7230" stroke-width="2"/>
+      <circle cx="31" cy="48" r="4" fill="#7d5d28"/>
+      <circle cx="58" cy="42" r="4" fill="#7d5d28"/>
+      <circle cx="52" cy="55" r="4" fill="#7d5d28"/>
+    </svg>`;
+  }
+
+  function islandDiagramSVG(){
+    return `<svg width="100%" viewBox="0 0 420 230" aria-hidden="true">
+      <rect x="0" y="0" width="420" height="230" fill="#eef7ff" rx="18"/>
+      <path d="M0 160 Q50 155 105 160 T210 160 T320 160 T420 160" fill="none" stroke="#76b8e8" stroke-width="4"/>
+      <path d="M0 170 Q50 165 105 170 T210 170 T320 170 T420 170" fill="none" stroke="#9fd0f2" stroke-width="3"/>
+      <path d="M36 158 C55 122, 105 112, 155 126 C180 132, 190 145, 188 158 Z" fill="#d8c08f" stroke="#8a7a5d" stroke-width="2"/>
+      <path d="M256 158 C271 135, 310 126, 364 134 C383 138, 394 145, 397 158 Z" fill="#d8c08f" stroke="#8a7a5d" stroke-width="2"/>
+      <g transform="translate(68,98)">
+        <rect x="14" y="24" width="6" height="18" fill="#7d5b3b"/>
+        <circle cx="17" cy="19" r="12" fill="#7bbf72"/>
+        <rect x="46" y="22" width="6" height="20" fill="#7d5b3b"/>
+        <circle cx="49" cy="16" r="14" fill="#7bbf72"/>
+        <rect x="84" y="20" width="7" height="22" fill="#7d5b3b"/>
+        <circle cx="87" cy="13" r="16" fill="#7bbf72"/>
+      </g>
+      <text x="92" y="188" font-size="18" font-weight="700" fill="#305675">Island A</text>
+      <text x="312" y="188" font-size="18" font-weight="700" fill="#305675">Island B</text>
+      <line x1="191" y1="150" x2="253" y2="150" stroke="#1d6fb8" stroke-width="3" marker-start="url(#a1)" marker-end="url(#a1)"/>
+      <text x="206" y="140" font-size="18" font-weight="800" fill="#1d6fb8">5 km</text>
+      <line x1="147" y1="103" x2="186" y2="83" stroke="#384c5f" stroke-width="2"/>
+      <text x="189" y="80" font-size="16" font-weight="700" fill="#384c5f">Plant X</text>
+      <defs>
+        <marker id="a1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="#1d6fb8"/>
+        </marker>
+      </defs>
+    </svg>`;
+  }
+
+  function distanceMiniSVG(){
+    return `<svg width="100%" viewBox="0 0 360 140" aria-hidden="true">
+      <rect x="18" y="65" width="100" height="38" rx="18" fill="#d8c08f" stroke="#8a7a5d"/>
+      <rect x="242" y="65" width="100" height="38" rx="18" fill="#d8c08f" stroke="#8a7a5d"/>
+      <line x1="120" y1="86" x2="240" y2="86" stroke="#1d6fb8" stroke-width="3" stroke-dasharray="8 6"/>
+      <text x="154" y="75" font-size="18" font-weight="800" fill="#1d6fb8">5 km</text>
+      <text x="47" y="126" font-size="16" font-weight="700" fill="#355c75">Island A</text>
+      <text x="271" y="126" font-size="16" font-weight="700" fill="#355c75">Island B</text>
+      <path d="M92 42 q34 -18 66 0" fill="none" stroke="#8bc3f2" stroke-width="3"/>
+      <circle cx="160" cy="40" r="5" fill="#5b4636"/>
+    </svg>`;
+  }
+
+  function compareAnimationSVG(active){
+    const label = {
+      water:'Seeds float with water.',
+      animals:'Animals can carry seeds between places.',
+      wind:'Light seeds can drift far in the wind.',
+      split:'Bursting pods throw seeds only a short distance.'
+    }[active];
+    let moving = '';
+    if(active === 'water'){
+      moving = `<g class="water-flow">
+        <ellipse cx="128" cy="145" rx="9" ry="6" fill="#b8794f" stroke="#815235" stroke-width="2"/>
+      </g>`;
+    }else if(active === 'animals'){
+      moving = `<g class="bird-move">
+        <path d="M86 56 q8 -8 16 0 q8 -8 16 0" fill="none" stroke="#3d5568" stroke-width="3"/>
+        <circle cx="102" cy="58" r="4" fill="#5b4636"/>
+      </g>`;
+    }else if(active === 'wind'){
+      moving = `<g class="seed-trail">
+        <circle cx="96" cy="76" r="4" fill="#5b4636"/>
+        ${Array.from({length:8}).map((_,i)=>{
+          const a = (Math.PI*2/8)*i;
+          const x = 96 + Math.cos(a)*15;
+          const y = 76 + Math.sin(a)*15;
+          return `<line x1="96" y1="76" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#7b6b58" stroke-width="1.4"/>`;
+        }).join('')}
+      </g>`;
+    }else{
+      moving = `<g class="burst">
+        <circle cx="115" cy="86" r="5" fill="#7d5d28"/>
+      </g>
+      <path d="M90 82 C100 72, 120 72, 130 86" fill="none" stroke="#8c7230" stroke-width="3"/>`;
+    }
+    return `<svg width="100%" viewBox="0 0 420 210" aria-hidden="true">
+      <rect x="0" y="0" width="420" height="210" rx="18" fill="#f5fbff"/>
+      <path d="M0 150 Q55 144 110 150 T220 150 T330 150 T420 150" fill="none" stroke="#76b8e8" stroke-width="4"/>
+      <path d="M0 160 Q55 154 110 160 T220 160 T330 160 T420 160" fill="none" stroke="#9fd0f2" stroke-width="3"/>
+      <path d="M28 148 C45 112, 96 100, 150 114 C178 120, 190 132, 190 148 Z" fill="#d8c08f" stroke="#8a7a5d" stroke-width="2"/>
+      <path d="M250 148 C270 124, 314 118, 385 127 C401 130, 410 137, 410 148 Z" fill="#d8c08f" stroke="#8a7a5d" stroke-width="2"/>
+      <line x1="195" y1="136" x2="246" y2="136" stroke="#1d6fb8" stroke-width="3" marker-start="url(#b1)" marker-end="url(#b1)"/>
+      <text x="207" y="126" font-size="18" font-weight="800" fill="#1d6fb8">5 km</text>
+      <defs>
+        <marker id="b1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="#1d6fb8"/>
+        </marker>
+      </defs>
+      ${moving}
+      <text x="18" y="28" font-size="18" font-weight="800" fill="#305675">${label}</text>
+      ${active === 'split' ? `<circle cx="142" cy="85" r="4" fill="#7d5d28"/><circle cx="132" cy="102" r="4" fill="#7d5d28"/>` : ''}
+    </svg>`;
+  }
+
+  function hillScenarioSVG(){
+    return `<svg width="100%" viewBox="0 0 340 160" aria-hidden="true">
+      <rect x="0" y="0" width="340" height="160" rx="16" fill="#f5fbff"/>
+      <path d="M18 120 C58 60, 105 56, 148 120 Z" fill="#b7d98b" stroke="#6e9951" stroke-width="2"/>
+      <rect x="262" y="94" width="44" height="26" rx="8" fill="#d8c08f" stroke="#8a7a5d"/>
+      <line x1="150" y1="108" x2="260" y2="108" stroke="#1d6fb8" stroke-width="3" marker-start="url(#c1)" marker-end="url(#c1)"/>
+      <text x="186" y="98" font-size="18" font-weight="800" fill="#1d6fb8">20 m</text>
+      <rect x="90" y="64" width="6" height="28" fill="#7d5b3b"/>
+      <circle cx="93" cy="57" r="14" fill="#7bbf72"/>
+      <text x="17" y="144" font-size="16" font-weight="700" fill="#355c75">hill</text>
+      <text x="249" y="144" font-size="16" font-weight="700" fill="#355c75">dry land</text>
+      <defs>
+        <marker id="c1" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto-start-reverse">
+          <path d="M0,0 L8,4 L0,8 z" fill="#1d6fb8"/>
+        </marker>
+      </defs>
+    </svg>`;
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

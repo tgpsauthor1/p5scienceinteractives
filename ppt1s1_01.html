@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ppt1s1_1</title>
+<style>
+  :root{
+    --bg:#f6fbf6;
+    --card:#ffffff;
+    --ink:#183120;
+    --muted:#5b6f61;
+    --line:#d4e6d8;
+    --green:#2f8f5b;
+    --green-dark:#1f6e43;
+    --green-soft:#e9f6ee;
+    --gold:#f2c14e;
+    --red:#c84d4d;
+    --red-soft:#fdecec;
+    --blue:#3c7ccf;
+    --shadow:0 10px 24px rgba(19, 45, 28, 0.08);
+    --radius:20px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:linear-gradient(180deg,#f7fbf5 0%, #eef8f0 100%);color:var(--ink);font-family:Arial, Helvetica, sans-serif;}
+  body{padding:16px;}
+  .app{
+    max-width:1100px;
+    margin:0 auto;
+  }
+  .topbar{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:18px;
+    padding:12px 14px;
+    box-shadow:var(--shadow);
+    margin-bottom:14px;
+  }
+  .top-left,.top-right{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+  }
+  .pill{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    background:#f7fcf8;
+    border:1.5px solid var(--line);
+    border-radius:999px;
+    font-size:15px;
+    line-height:1.2;
+  }
+  .demerit-icons{
+    display:flex;
+    gap:6px;
+    align-items:center;
+  }
+  .leaf{
+    width:20px;height:20px;display:inline-block;border-radius:100% 0 100% 0;
+    transform:rotate(-25deg);
+    background:linear-gradient(135deg, #7fd08f, #2f8f5b);
+    border:1px solid rgba(0,0,0,0.08);
+    box-shadow: inset 0 -2px 0 rgba(255,255,255,0.35);
+  }
+  .leaf.lost{background:linear-gradient(135deg, #f3cf77, #d59a2a);}
+  .toggle{
+    appearance:none;
+    width:52px;
+    height:30px;
+    background:#d9e8dc;
+    border-radius:999px;
+    position:relative;
+    cursor:pointer;
+    border:1.5px solid var(--line);
+  }
+  .toggle::after{
+    content:"";
+    position:absolute;
+    width:22px;height:22px;left:4px;top:3px;border-radius:50%;
+    background:white; box-shadow:0 2px 6px rgba(0,0,0,0.18);
+    transition:transform .2s ease;
+  }
+  .toggle:checked{background:#8fd2aa;}
+  .toggle:checked::after{transform:translateX(21px);}
+  .screen{
+    background:var(--card);
+    border:2px solid var(--line);
+    border-radius:28px;
+    box-shadow:var(--shadow);
+    padding:20px;
+  }
+  .step-tag{
+    display:inline-block;
+    padding:8px 12px;
+    border-radius:999px;
+    background:var(--green-soft);
+    color:var(--green-dark);
+    font-size:14px;
+    font-weight:700;
+    margin-bottom:10px;
+  }
+  .instruction{
+    font-size:31px;
+    line-height:1.2;
+    font-weight:800;
+    margin:0 0 12px 0;
+    letter-spacing:-0.2px;
+  }
+  .subtext{
+    font-size:18px;
+    color:var(--muted);
+    line-height:1.45;
+    margin:0 0 16px 0;
+  }
+  .grid-2{
+    display:grid;
+    grid-template-columns:minmax(320px, 1fr) minmax(320px, 1fr);
+    gap:18px;
+    align-items:start;
+  }
+  .panel{
+    background:#fbfefb;
+    border:1.6px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+  }
+  .question-card{
+    background:#fcfffc;
+    border:2px dashed #cfe3d3;
+    border-radius:22px;
+    padding:16px;
+  }
+  .question-top{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .question-number{
+    font-weight:800;
+    font-size:22px;
+    margin-right:8px;
+  }
+  .question-text{
+    font-size:18px;
+    line-height:1.5;
+  }
+  .hl{
+    background:#fff2b7;
+    border-radius:8px;
+    padding:0 4px;
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.08);
+  }
+  .svg-wrap{
+    width:100%;
+    background:linear-gradient(180deg,#ffffff, #f8fcf7);
+    border:1.6px solid var(--line);
+    border-radius:18px;
+    padding:8px;
+  }
+  .flower-svg{
+    width:100%;
+    height:auto;
+    display:block;
+  }
+  .controls{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    margin-top:16px;
+  }
+  .btn{
+    border:0;
+    border-radius:16px;
+    background:var(--green);
+    color:white;
+    font-size:18px;
+    font-weight:700;
+    padding:14px 18px;
+    cursor:pointer;
+    box-shadow:0 6px 18px rgba(47,143,91,.18);
+  }
+  .btn:hover{background:var(--green-dark);}
+  .btn.secondary{
+    background:#edf7ef;
+    color:var(--green-dark);
+    box-shadow:none;
+    border:1.5px solid var(--line);
+  }
+  .btn[disabled]{
+    opacity:.45;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+  .feedback{
+    min-height:54px;
+    margin-top:14px;
+    padding:14px 16px;
+    border-radius:16px;
+    font-size:18px;
+    line-height:1.4;
+    display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.good{background:#edf9f0;border:1.6px solid #bfe6c7;color:#195636;}
+  .feedback.bad{background:var(--red-soft);border:1.6px solid #efc2c2;color:#7a2121;}
+  .cards{
+    display:grid;
+    gap:12px;
+  }
+  .cards.two{grid-template-columns:repeat(2, minmax(150px,1fr));}
+  .cards.four{grid-template-columns:repeat(2, minmax(150px,1fr));}
+  .choice{
+    border:2px solid #dce9df;
+    background:#ffffff;
+    border-radius:18px;
+    padding:16px;
+    min-height:72px;
+    font-size:20px;
+    font-weight:700;
+    color:var(--ink);
+    text-align:center;
+    cursor:pointer;
+    transition:transform .08s ease, border-color .15s ease, background .15s ease;
+    user-select:none;
+  }
+  .choice:hover{transform:translateY(-1px);}
+  .choice.selected{
+    border-color:#65b786;
+    background:#f2fbf4;
+    box-shadow:inset 0 0 0 2px rgba(101,183,134,.15);
+  }
+  .choice.correct{
+    border-color:#3ba868;
+    background:#edf9f0;
+  }
+  .choice.wrong{
+    border-color:#d87070;
+    background:#fff3f3;
+  }
+  .diagram-hotspots{
+    display:grid;
+    grid-template-columns:repeat(2, minmax(120px,1fr));
+    gap:10px;
+    margin-top:14px;
+  }
+  .hotspot{
+    font-size:24px;
+    font-weight:800;
+    min-height:62px;
+  }
+  .fill-area{
+    display:grid;
+    gap:14px;
+  }
+  .sentence{
+    font-size:23px;
+    line-height:1.5;
+    font-weight:700;
+  }
+  .blank{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:120px;
+    min-height:54px;
+    padding:8px 12px;
+    margin:0 6px;
+    border-radius:14px;
+    border:2px dashed #b8d7bf;
+    background:#fbfffc;
+    vertical-align:middle;
+    color:var(--green-dark);
+  }
+  .blank.filled{
+    border-style:solid;
+    background:#edf9f0;
+  }
+  .bank{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .chip{
+    border:2px solid #dce9df;
+    background:#fff;
+    border-radius:999px;
+    padding:12px 16px;
+    font-size:18px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  .chip.used{opacity:.45; cursor:not-allowed;}
+  .mini{
+    font-size:15px;
+    color:var(--muted);
+  }
+  details.question-panel{
+    margin-top:16px;
+    border:1.5px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    background:#fbfefb;
+  }
+  details.question-panel summary{
+    cursor:pointer;
+    list-style:none;
+    font-size:17px;
+    font-weight:800;
+    padding:14px 16px;
+    background:#f4fbf6;
+    border-bottom:1px solid var(--line);
+  }
+  details.question-panel summary::-webkit-details-marker{display:none;}
+  .qpanel-body{padding:14px 16px;}
+  .small-question{
+    font-size:16px;
+    line-height:1.45;
+  }
+  .status-row{
+    display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:10px;
+  }
+  .overlay{
+    position:fixed; inset:0; background:rgba(13,24,16,.55); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
+  }
+  .overlay.show{display:flex;}
+  .overlay-card{
+    max-width:520px; width:100%;
+    background:#fff; border-radius:24px; padding:24px; text-align:center;
+    box-shadow:0 18px 40px rgba(0,0,0,.22);
+  }
+  .overlay-card h2{margin:0 0 10px 0; font-size:32px; line-height:1.2;}
+  .overlay-card p{margin:0; font-size:20px; line-height:1.45;}
+  .completion{
+    display:grid; gap:14px; text-align:center; justify-items:center;
+    padding:24px 18px;
+  }
+  .medal{
+    width:88px; height:88px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #fff1bf, #f2c14e 60%, #d89b1a 100%);
+    border:6px solid #ffe8a0;
+    box-shadow:0 8px 18px rgba(242,193,78,.25);
+  }
+  .footer-note{font-size:14px;color:var(--muted);margin-top:10px;}
+  .sr-only{
+    position:absolute!important; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); border:0;
+  }
+  @media (max-width: 860px){
+    .grid-2{grid-template-columns:1fr;}
+    .instruction{font-size:27px;}
+    .sentence{font-size:21px;}
+  }
+</style>
+</head>
+<body>
+<div class="app" id="app" aria-live="polite"></div>
+
+<div class="overlay" id="restartOverlay" aria-hidden="true">
+  <div class="overlay-card">
+    <h2>Out of chances</h2>
+    <p>All demerits used. Restarting the whole interactive…</p>
+  </div>
+</div>
+
+<script>
+(() => {
+  const TOTAL_DEMERITS = 4; // teacher-approved structure
+  const state = {
+    screenIndex: 0,
+    remainingDemerits: TOTAL_DEMERITS,
+    readAloudOn: false,
+    feedback: '',
+    feedbackType: '',
+    selected: null,
+    multiSelected: new Set(),
+    fillSlots: ['', ''],
+    fillActive: 0,
+    attempts: {},
+    progressDone: new Set(),
+    selectionCache: {},
+    revealQuestionPanel: false,
+    shuffled: {},
+    finished: false
+  };
+
+  const stableShuffles = {};
+  const app = document.getElementById('app');
+  const overlay = document.getElementById('restartOverlay');
+  let currentUtterance = null;
+
+  function shuffleArray(input, key){
+    if (!stableShuffles[key]){
+      const arr = [...input];
+      for (let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      stableShuffles[key] = arr;
+    }
+    return [...stableShuffles[key]];
+  }
+
+  function speak(text){
+    if (!state.readAloudOn || !('speechSynthesis' in window)) return;
+    try{
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text.replace(/\s+/g,' ').trim());
+      utter.rate = 0.97;
+      utter.pitch = 1;
+      utter.lang = 'en-SG';
+      currentUtterance = utter;
+      window.speechSynthesis.speak(utter);
+    } catch (e){
+      console.warn('Read aloud unavailable', e);
+    }
+  }
+
+  function stopSpeaking(){
+    if ('speechSynthesis' in window){
+      window.speechSynthesis.cancel();
+    }
+  }
+
+  function spendDemerit(){
+    state.remainingDemerits -= 1;
+    render();
+    if (state.remainingDemerits <= 0){
+      triggerRestart();
+    }
+  }
+
+  function triggerRestart(){
+    stopSpeaking();
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    setTimeout(() => {
+      overlay.classList.remove('show');
+      overlay.setAttribute('aria-hidden', 'true');
+      restartWholeInteractive();
+    }, 1800);
+  }
+
+  function restartWholeInteractive(){
+    state.screenIndex = 0;
+    state.remainingDemerits = TOTAL_DEMERITS;
+    state.feedback = '';
+    state.feedbackType = '';
+    state.selected = null;
+    state.multiSelected = new Set();
+    state.fillSlots = ['', ''];
+    state.fillActive = 0;
+    state.attempts = {};
+    state.progressDone = new Set();
+    state.selectionCache = {};
+    state.finished = false;
+    state.revealQuestionPanel = false;
+    Object.keys(stableShuffles).forEach(k => delete stableShuffles[k]);
+    render();
+  }
+
+  function nextScreen(){
+    stopSpeaking();
+    state.feedback = '';
+    state.feedbackType = '';
+    state.selected = null;
+    state.multiSelected = new Set();
+    state.fillSlots = ['', ''];
+    state.fillActive = 0;
+    state.revealQuestionPanel = true;
+    if (state.screenIndex < screens.length - 1){
+      state.screenIndex += 1;
+      render();
+    }
+  }
+
+  function markDone(id){
+    state.progressDone.add(id);
+  }
+
+  function topBar(){
+    const totalSteps = screens.length;
+    const current = state.screenIndex + 1;
+    return `
+      <div class="topbar">
+        <div class="top-left">
+          <div class="pill"><strong>Progress</strong> <span>${current} / ${totalSteps}</span></div>
+          <div class="pill">
+            <strong>Leaves left</strong>
+            <div class="demerit-icons" aria-label="Remaining demerits">
+              ${Array.from({length: TOTAL_DEMERITS}).map((_,i)=> `<span class="leaf ${i >= state.remainingDemerits ? 'lost' : ''}"></span>`).join('')}
+            </div>
+          </div>
+        </div>
+        <div class="top-right">
+          <label class="pill" for="readAloudToggle">
+            <strong>Read-aloud</strong>
+            <input id="readAloudToggle" class="toggle" type="checkbox" ${state.readAloudOn ? 'checked' : ''} />
+            <span>${state.readAloudOn ? 'On' : 'Off'}</span>
+          </label>
+        </div>
+      </div>
+    `;
+  }
+
+  function questionText(highlight=false){
+    return `
+      <div class="question-card">
+        <div class="question-top">
+          <div class="question-number">1.</div>
+          <div class="question-text">
+            The diagram shows two flowers from the same plant.<br><br>
+            Pollination occurs when the ${highlight ? '<span class="hl">pollen grains</span>' : 'pollen grains'} are
+            ${highlight ? '<span class="hl">transferred</span>' : 'transferred'} 
+            ${highlight ? '<span class="hl">from</span>' : 'from'} ______
+            ${highlight ? '<span class="hl">to</span>' : 'to'} ______.
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function questionPanel(showHighlight=false){
+    return `
+      <details class="question-panel" ${state.revealQuestionPanel ? 'open' : ''}>
+        <summary>Show the question again</summary>
+        <div class="qpanel-body">
+          <div class="small-question">
+            The diagram shows two flowers from the same plant.<br><br>
+            Pollination occurs when the ${showHighlight ? '<span class="hl">pollen grains</span>' : 'pollen grains'} are 
+            ${showHighlight ? '<span class="hl">transferred</span>' : 'transferred'} 
+            ${showHighlight ? '<span class="hl">from</span>' : 'from'} ______ 
+            ${showHighlight ? '<span class="hl">to</span>' : 'to'} ______.
+          </div>
+          <div class="footer-note">Use the diagram to help you think.</div>
+        </div>
+      </details>
+    `;
+  }
+
+  function flowerSVG(options = {}){
+    const { withLetters = true, withLabelLines = true, showKeyLabels = false, transfer = null, altMode = 'main' } = options;
+    const idPrefix = altMode === 'transfer' ? 't' : altMode === 'small' ? 's' : 'm';
+
+    const transferArrow = transfer
+      ? `<defs>
+          <marker id="${idPrefix}arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+            <path d="M0,0 L12,6 L0,12 z" fill="#3c7ccf"></path>
+          </marker>
+        </defs>
+        <path d="${transfer.path}" stroke="#3c7ccf" stroke-width="4" fill="none" marker-end="url(#${idPrefix}arrow)" stroke-linecap="round" stroke-dasharray="10 8"></path>`
+      : '';
+
+    return `
+      <svg class="flower-svg" viewBox="0 0 900 430" role="img" aria-label="Two flower diagrams with labelled parts">
+        ${transferArrow}
+        <rect x="0" y="0" width="900" height="430" rx="18" fill="#fdfefd"></rect>
+
+        ${drawFlower(230, 280, 'A', 'B', withLetters, withLabelLines)}
+        ${drawFlower(650, 280, 'C', 'D', withLetters, withLabelLines)}
+
+        ${showKeyLabels ? `
+          <line x1="44" y1="95" x2="176" y2="95" stroke="#2f2f2f" stroke-width="2.5"></line>
+          <text x="10" y="103" font-size="26" font-weight="700" fill="#1f1f1f">stigma</text>
+
+          <line x1="54" y1="185" x2="176" y2="171" stroke="#2f2f2f" stroke-width="2.5"></line>
+          <text x="10" y="193" font-size="26" font-weight="700" fill="#1f1f1f">anther</text>
+
+          <line x1="68" y1="260" x2="176" y2="233" stroke="#2f2f2f" stroke-width="2.5"></line>
+          <text x="10" y="268" font-size="26" font-weight="700" fill="#1f1f1f">petals</text>
+        ` : ''}
+
+      </svg>
+    `;
+  }
+
+  function drawFlower(cx, cy, topLetter, sideLetter, withLetters, withLabelLines){
+    const stigmaTop = {x: cx, y: cy - 165};
+    const antherSide = {x: cx + 70, y: cy - 48};
+
+    return `
+      <g>
+        <!-- sepals -->
+        <path d="M${cx-20},${cy+8} C${cx-40},${cy-14} ${cx-54},${cy-34} ${cx-44},${cy-74} C${cx-25},${cy-49} ${cx-10},${cy-13} ${cx-4},${cy+18} Z" fill="#7ea96f" opacity="0.9"></path>
+        <path d="M${cx+16},${cy+8} C${cx+36},${cy-14} ${cx+50},${cy-34} ${cx+40},${cy-74} C${cx+21},${cy-49} ${cx+8},${cy-13} ${cx+2},${cy+18} Z" fill="#7ea96f" opacity="0.9"></path>
+        <path d="M${cx-2},${cy+12} C${cx-15},${cy-11} ${cx-16},${cy-38} ${cx-8},${cy-78} C${cx},${cy-52} ${cx+10},${cy-11} ${cx+1},${cy+14} Z" fill="#91b47a"></path>
+
+        <!-- petals -->
+        <path d="M${cx-10},${cy+2} C${cx-72},${cy-34} ${cx-96},${cy-125} ${cx-65},${cy-188} C${cx-22},${cy-178} ${cx+3},${cy-98} ${cx+10},${cy+3} Z" fill="#ffffff" stroke="#4f5b4f" stroke-width="2.2"></path>
+        <path d="M${cx+10},${cy+2} C${cx+72},${cy-34} ${cx+96},${cy-125} ${cx+65},${cy-188} C${cx+22},${cy-178} ${cx-3},${cy-98} ${cx-10},${cy+3} Z" fill="#ffffff" stroke="#4f5b4f" stroke-width="2.2"></path>
+        <path d="M${cx},${cy+6} C${cx-28},${cy-16} ${cx-26},${cy-92} ${cx},${cy-146} C${cx+26},${cy-92} ${cx+28},${cy-16} ${cx},${cy+6} Z" fill="#fffdf7" stroke="#4f5b4f" stroke-width="2.2"></path>
+
+        <!-- stem -->
+        <path d="M${cx-3},${cy+10} C${cx-6},${cy+34} ${cx-4},${cy+60} ${cx},${cy+95}" stroke="#4d7b50" stroke-width="7" fill="none" stroke-linecap="round"></path>
+
+        <!-- style -->
+        <path d="M${cx},${cy+6} C${cx+4},${cy-20} ${cx+2},${cy-52} ${cx},${cy-86} C${cx-1},${cy-116} ${cx+3},${cy-142} ${cx+4},${cy-160}" stroke="#5d7e54" stroke-width="4" fill="none" stroke-linecap="round"></path>
+
+        <!-- stigma -->
+        <path d="M${cx-8},${cy-160} 
+                 C${cx-16},${cy-173} ${cx-35},${cy-183} ${cx-58},${cy-185}
+                 M${cx-8},${cy-160}
+                 C${cx+1},${cy-172} ${cx+22},${cy-186} ${cx+46},${cy-191}
+                 M${cx-8},${cy-160}
+                 C${cx-3},${cy-170} ${cx-7},${cy-184} ${cx-16},${cy-197}
+                 M${cx-8},${cy-160}
+                 C${cx-4},${cy-171} ${cx+10},${cy-183} ${cx+29},${cy-193}" 
+              stroke="#4d4d4d" stroke-width="4.2" fill="none" stroke-linecap="round"></path>
+        ${stigmaFeathers(cx, cy)}
+
+        <!-- stamens -->
+        <path d="M${cx-20},${cy+2} C${cx-32},${cy-29} ${cx-52},${cy-66} ${cx-91},${cy-88}" stroke="#5d7e54" stroke-width="4" fill="none" stroke-linecap="round"></path>
+        <path d="M${cx+22},${cy+2} C${cx+34},${cy-29} ${cx+50},${cy-66} ${cx+93},${cy-88}" stroke="#5d7e54" stroke-width="4" fill="none" stroke-linecap="round"></path>
+        <path d="M${cx-3},${cy+2} C${cx-14},${cy-25} ${cx-22},${cy-65} ${cx-16},${cy-104}" stroke="#5d7e54" stroke-width="3.6" fill="none" stroke-linecap="round"></path>
+        <path d="M${cx+2},${cy+2} C${cx+14},${cy-24} ${cx+21},${cy-63} ${cx+15},${cy-104}" stroke="#5d7e54" stroke-width="3.6" fill="none" stroke-linecap="round"></path>
+
+        <!-- anthers -->
+        <ellipse cx="${cx-100}" cy="${cy-92}" rx="16" ry="6.5" fill="#e9d27b" stroke="#5c5230" stroke-width="2.2" transform="rotate(-18 ${cx-100} ${cy-92})"></ellipse>
+        <ellipse cx="${cx+106}" cy="${cy-92}" rx="16" ry="6.5" fill="#e9d27b" stroke="#5c5230" stroke-width="2.2" transform="rotate(18 ${cx+106} ${cy-92})"></ellipse>
+        <ellipse cx="${cx-16}" cy="${cy-112}" rx="12" ry="5.5" fill="#e9d27b" stroke="#5c5230" stroke-width="2.1" transform="rotate(-76 ${cx-16} ${cy-112})"></ellipse>
+        <ellipse cx="${cx+16}" cy="${cy-112}" rx="12" ry="5.5" fill="#e9d27b" stroke="#5c5230" stroke-width="2.1" transform="rotate(76 ${cx+16} ${cy-112})"></ellipse>
+
+        ${withLabelLines ? `
+          <line x1="${cx+106}" y1="${cy-204}" x2="${stigmaTop.x+14}" y2="${stigmaTop.y-14}" stroke="#2e2e2e" stroke-width="2.5"></line>
+          <line x1="${cx+106}" y1="${cy-57}" x2="${antherSide.x+14}" y2="${antherSide.y}" stroke="#2e2e2e" stroke-width="2.5"></line>
+        ` : ''}
+
+        ${withLetters ? `
+          <text x="${cx+118}" y="${cy-197}" font-size="26" font-weight="800" fill="#1f1f1f">${topLetter}</text>
+          <text x="${cx+118}" y="${cy-49}" font-size="26" font-weight="800" fill="#1f1f1f">${sideLetter}</text>
+        ` : ''}
+      </g>
+    `;
+  }
+
+  function stigmaFeathers(cx, cy){
+    const lines = [
+      {x1:cx-56, y1:cy-183, x2:cx-72, y2:cy-194},
+      {x1:cx-43, y1:cy-188, x2:cx-60, y2:cy-201},
+      {x1:cx-28, y1:cy-188, x2:cx-44, y2:cy-203},
+      {x1:cx+3,  y1:cy-187, x2:cx+21, y2:cy-200},
+      {x1:cx+18, y1:cy-191, x2:cx+35, y2:cy-204},
+      {x1:cx+31, y1:cy-193, x2:cx+49, y2:cy-203},
+      {x1:cx-16, y1:cy-196, x2:cx-20, y2:cy-214},
+      {x1:cx+28, y1:cy-193, x2:cx+45, y2:cy-199}
+    ];
+    return lines.map(p =>
+      `<line x1="${p.x1}" y1="${p.y1}" x2="${p.x2}" y2="${p.y2}" stroke="#4d4d4d" stroke-width="2.3" stroke-linecap="round"></line>`
+    ).join('');
+  }
+
+  function feedbackBox(){
+    if (!state.feedback) return `<div class="feedback"></div>`;
+    return `<div class="feedback show ${state.feedbackType}">${state.feedback}</div>`;
+  }
+
+  function attachGlobalEvents(){
+    const toggle = document.getElementById('readAloudToggle');
+    if (toggle){
+      toggle.addEventListener('change', (e) => {
+        state.readAloudOn = e.target.checked;
+        render();
+      });
+    }
+
+    const details = app.querySelector('details.question-panel');
+    if (details){
+      details.addEventListener('toggle', () => {
+        state.revealQuestionPanel = details.open;
+      });
+    }
+
+    app.querySelectorAll('[data-next]').forEach(btn => btn.addEventListener('click', nextScreen));
+    app.querySelectorAll('[data-start]').forEach(btn => btn.addEventListener('click', () => {
+      markDone('screen1');
+      nextScreen();
+    }));
+  }
+
+  const optionTexts = {
+    ac: 'A to C',
+    ad: 'A to D',
+    bc: 'B to C',
+    bd: 'B to D',
+    qs: 'Q to S',
+    qr: 'Q to R',
+    ps: 'P to S',
+    pr: 'P to R',
+  };
+
+  const screens = [
+    {
+      id: 'screen1',
+      title: 'Read the question. Then tap to begin.',
+      build(){
+        const screenText = 'Read the question. Then tap to begin. Pollination. Pollen grains. Transferred. From. To.';
+        setTimeout(() => speak(screenText), 150);
+        return `
+          ${topBar()}
+          <section class="screen">
+            <div class="step-tag">Step 1 of 5</div>
+            <h1 class="instruction">Read the question. Then tap to begin.</h1>
+            <p class="subtext">Start by noticing the important words in the question.</p>
+            <div class="grid-2">
+              <div class="panel">
+                ${questionText(true)}
+                <div class="controls">
+                  <button class="btn" data-start> I have read it </button>
+                </div>
+              </div>
+              <div class="panel">
+                <div class="svg-wrap">
+                  ${flowerSVG({withLetters:true, withLabelLines:true, showKeyLabels:true})}
+                </div>
+                <div class="footer-note">The diagram is redrawn clearly so students can focus on the science.</div>
+              </div>
+            </div>
+          </section>
+        `;
+      },
+      bind(){ attachGlobalEvents(); }
+    },
+    {
+      id: 'screen2',
+      title: 'Tap both labels that point to the stigma.',
+      build(){
+        setTimeout(() => speak('Tap both labels that point to the stigma.'), 150);
+        const selected = state.multiSelected;
+        return `
+          ${topBar()}
+          <section class="screen">
+            <div class="step-tag">Step 2 of 5</div>
+            <h1 class="instruction">Tap both labels that point to the stigma.</h1>
+            <p class="subtext">Look for the feathery top part of each flower.</p>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="svg-wrap">
+                  ${flowerSVG({withLetters:true, withLabelLines:true, showKeyLabels:false})}
+                </div>
+                <div class="diagram-hotspots">
+                  ${['A','B','C','D'].map(letter => `
+                    <button class="choice hotspot ${selected.has(letter) ? 'selected' : ''}" data-hotspot="${letter}" type="button">${letter}</button>
+                  `).join('')}
+                </div>
+                <div class="controls">
+                  <button class="btn secondary" data-check-multi type="button">Check</button>
+                  <button class="btn" data-next ${state.progressDone.has('screen2') ? '' : 'disabled'}>Next</button>
+                </div>
+                ${feedbackBox()}
+              </div>
+              <div class="panel">
+                <p class="sentence">Stigma = the feathery part that receives pollen grains.</p>
+                ${questionPanel(false)}
+              </div>
+            </div>
+          </section>
+        `;
+      },
+      bind(){
+        attachGlobalEvents();
+        app.querySelectorAll('[data-hotspot]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const value = btn.getAttribute('data-hotspot');
+            if (state.multiSelected.has(value)) state.multiSelected.delete(value);
+            else state.multiSelected.add(value);
+            render();
+          });
+        });
+        const check = app.querySelector('[data-check-multi]');
+        check.addEventListener('click', () => {
+          const picked = [...state.multiSelected].sort().join('');
+          const correct = 'AC';
+          if (picked === correct){
+            markDone('screen2');
+            state.feedback = 'Yes. A and C point to the feathery stigma.';
+            state.feedbackType = 'good';
+          } else {
+            state.feedback = 'Look at the feathery top part on each flower.';
+            state.feedbackType = 'bad';
+            spendDemerit();
+          }
+          render();
+        });
+      }
+    },
+    {
+      id: 'screen3',
+      title: 'Complete the rule for pollination.',
+      build(){
+        setTimeout(() => speak('Complete the rule for pollination. Pollen grains are transferred from the blank to the blank.'), 150);
+        const bank = shuffleArray(['anther','stigma','petals'], 'screen3-bank');
+        return `
+          ${topBar()}
+          <section class="screen">
+            <div class="step-tag">Step 3 of 5</div>
+            <h1 class="instruction">Complete the rule for pollination.</h1>
+            <p class="subtext">Choose the source part first. Then choose the receiving part.</p>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="fill-area">
+                  <div class="sentence">
+                    Pollen grains are transferred from the
+                    <button class="blank ${state.fillSlots[0] ? 'filled' : ''}" data-slot="0" type="button">${state.fillSlots[0] || 'Blank 1'}</button>
+                    to the
+                    <button class="blank ${state.fillSlots[1] ? 'filled' : ''}" data-slot="1" type="button">${state.fillSlots[1] || 'Blank 2'}</button>.
+                  </div>
+                  <div class="mini">Tap a blank, then tap a word.</div>
+                  <div class="bank">
+                    ${bank.map(word => {
+                      const used = state.fillSlots.includes(word);
+                      return `<button class="chip ${used ? 'used' : ''}" type="button" data-chip="${word}" ${used ? 'disabled' : ''}>${word}</button>`;
+                    }).join('')}
+                  </div>
+                </div>
+                <div class="controls">
+                  <button class="btn secondary" data-check-fill type="button">Check</button>
+                  <button class="btn" data-next ${state.progressDone.has('screen3') ? '' : 'disabled'}>Next</button>
+                </div>
+                ${feedbackBox()}
+              </div>
+              <div class="panel">
+                <div class="svg-wrap">
+                  ${flowerSVG({withLetters:true, withLabelLines:true, showKeyLabels:true})}
+                </div>
+                ${questionPanel(false)}
+              </div>
+            </div>
+          </section>
+        `;
+      },
+      bind(){
+        attachGlobalEvents();
+        app.querySelectorAll('[data-slot]').forEach(btn => btn.addEventListener('click', () => {
+          state.fillActive = Number(btn.getAttribute('data-slot'));
+          render();
+        }));
+        app.querySelectorAll('[data-chip]').forEach(btn => btn.addEventListener('click', () => {
+          const value = btn.getAttribute('data-chip');
+          state.fillSlots[state.fillActive] = value;
+          if (state.fillActive === 0 && !state.fillSlots[1]) state.fillActive = 1;
+          render();
+        }));
+        app.querySelector('[data-check-fill]').addEventListener('click', () => {
+          if (state.fillSlots[0] === 'anther' && state.fillSlots[1] === 'stigma'){
+            markDone('screen3');
+            state.feedback = 'Yes. Pollination means anther first, then stigma.';
+            state.feedbackType = 'good';
+          } else {
+            state.feedback = 'Start with the part that gives the pollen grains.';
+            state.feedbackType = 'bad';
+            spendDemerit();
+          }
+          render();
+        });
+      }
+    },
+    {
+      id: 'screen4',
+      title: 'Tap the answer choice that shows pollination.',
+      build(){
+        setTimeout(() => speak('Tap the answer choice that shows pollination.'), 150);
+        const opts = shuffleArray(['ac','ad','bc','bd'], 'screen4-options');
+        return `
+          ${topBar()}
+          <section class="screen">
+            <div class="step-tag">Step 4 of 5</div>
+            <h1 class="instruction">Tap the answer choice that shows pollination.</h1>
+            <p class="subtext">The pollen grain must start from the anther and end at the stigma.</p>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="cards four">
+                  ${opts.map(id => `
+                    <button class="choice ${state.selected === id ? 'selected' : ''}" type="button" data-single4="${id}">
+                      ${optionTexts[id]}
+                    </button>
+                  `).join('')}
+                </div>
+                <div class="controls">
+                  <button class="btn" data-next ${state.progressDone.has('screen4') ? '' : 'disabled'}>Next</button>
+                </div>
+                ${feedbackBox()}
+              </div>
+              <div class="panel">
+                <div class="svg-wrap">
+                  ${flowerSVG({withLetters:true, withLabelLines:true, showKeyLabels:false})}
+                </div>
+                ${questionPanel(false)}
+              </div>
+            </div>
+          </section>
+        `;
+      },
+      bind(){
+        attachGlobalEvents();
+        app.querySelectorAll('[data-single4]').forEach(btn => btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-single4');
+          state.selected = id;
+          if (id === 'bc'){
+            markDone('screen4');
+            state.feedback = 'Yes. B is the anther and C is the stigma.';
+            state.feedbackType = 'good';
+          } else {
+            state.feedback = 'Check both ends. The pollen must start at the anther and end at the stigma.';
+            state.feedbackType = 'bad';
+            spendDemerit();
+          }
+          render();
+        }));
+      }
+    },
+    {
+      id: 'screen8',
+      title: 'You’re done.',
+      build(){
+        setTimeout(() => speak('You are done. You used the rule anther to stigma to answer a pollination question.'), 150);
+        return `
+          ${topBar()}
+          <section class="screen">
+            <div class="step-tag">Step 5 of 5</div>
+            <div class="completion">
+              <div class="medal" aria-hidden="true"></div>
+              <h1 class="instruction" style="text-align:center;">You’re done.</h1>
+              <p class="subtext" style="max-width:650px;">
+                You used the rule <strong>anther → stigma</strong> to answer a pollination question.
+              </p>
+              <div class="controls">
+                <button class="btn" data-restart type="button">Restart activity</button>
+              </div>
+            </div>
+          </section>
+        `;
+      },
+      bind(){
+        attachGlobalEvents();
+        const btn = app.querySelector('[data-restart]');
+        btn.addEventListener('click', restartWholeInteractive);
+      }
+    }
+  ];
+
+  function transferFlowerSVG(){
+    return `
+      <svg class="flower-svg" viewBox="0 0 900 430" role="img" aria-label="Two flowers labelled P, Q, R and S">
+        <rect x="0" y="0" width="900" height="430" rx="18" fill="#fdfefd"></rect>
+        ${drawFlower(230, 280, 'P', 'Q', true, true)}
+        ${drawFlower(650, 280, 'R', 'S', true, true)}
+      </svg>
+    `;
+  }
+
+  function render(){
+    const screen = screens[state.screenIndex];
+    app.innerHTML = screen.build();
+    screen.bind();
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
